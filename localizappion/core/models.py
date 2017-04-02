@@ -19,22 +19,55 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
+    def strings_count(self):
+        return self.strings.count()
 
-class Text(models.Model):
-    project = models.ForeignKey(Project)
-    key = models.CharField(primary_key=True, max_length=256)
+
+class String(models.Model):
+    project = models.ForeignKey(Project, related_name='strings')
+    key = models.CharField(max_length=256)
     value = models.TextField()
+
+    def __str__(self):
+        return self.key
 
 
 class Translation(models.Model):
-    text = models.ForeignKey(Text)
+    string = models.ForeignKey(String)
     language = models.ForeignKey(Language)
     value = models.TextField()
+
+    def key(self):
+        return self.string.key
+
+    def default(self):
+        return self.string.value
+
+    def language_code(self):
+        return self.language.code
+
+    def project(self):
+        return self.string.project
 
 
 class Suggestion(models.Model):
+    translator = models.ForeignKey(User, related_name='suggestions')
     language = models.ForeignKey(Language)
-    text = models.ForeignKey(Text)
+    string = models.ForeignKey(String)
     value = models.TextField()
-    votes = models.ManyToManyField(User)
+    votes = models.ManyToManyField(User, blank=True, related_name='voted_suggestion')
 
+    def key(self):
+        return self.string.key
+
+    def default(self):
+        return self.string.value
+
+    def language_code(self):
+        return self.language.code
+
+    def project(self):
+        return self.string.project
+
+    def votes_count(self):
+        return self.votes.count()
