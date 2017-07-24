@@ -1,5 +1,7 @@
-/db.sqlite3
+/*.sqlite
+/google_translate.json
 
-*.pyc
-
+/*.egg-info
 /.idea
+
+/strings*.xml

@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block breadcrumb %}
+    <li><a href="{{ url_for('index') }}">L10N</a></li>
+    <li><a href="{{ url_for('projects') }}">Projects</a></li>
+    <li><a href="{{ url_for('project_detail', project_id=string.project.id) }}">{{ string.project.name }}</a></li>
+    <li><a href="{{ url_for('project_strings', project_id=string.project.id) }}">Strings</a></li>
+    <li>String detail</li>
+{% endblock %}
+{% block body %}
+    <h2>Name: <code>{{ string.name }}</code></h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Language</th>
+                <th>Value</th>
+                <th>Votes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Default</td>
+                <td><samp>{{ string.value }}</samp></td>
+                <td></td>
+            </tr>
+            {% for suggestion in string.suggestions %}
+                <tr>
+                    <td>{{ suggestion.language.name }}</td>
+                    <td><samp>{{ suggestion.value }}</samp></td>
+                    <td>{{ suggestion.votes|length }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

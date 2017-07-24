@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="list-group">
+        <a class="list-group-item" href="{{ url_for('language_list') }}">
+            <span class="badge">{{ language_count }}</span>
+            Languages
+        </a>
+        <a class="list-group-item" href="{{ url_for('projects') }}">
+            <span class="badge">{{ project_count }}</span>
+            Projects
+        </a>
+    </div>
+{% endblock %}
