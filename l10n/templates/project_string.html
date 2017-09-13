@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block breadcrumb %}
-    <li><a href="{{ url_for('index') }}">L10N</a></li>
+    <li><a href="{{ url_for('index') }}">Localizappion</a></li>
     <li><a href="{{ url_for('projects') }}">Projects</a></li>
     <li><a href="{{ url_for('project_detail', project_id=string.project.id) }}">{{ string.project.name }}</a></li>
     <li><a href="{{ url_for('project_strings', project_id=string.project.id) }}">Strings</a></li>

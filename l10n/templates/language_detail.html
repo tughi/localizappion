@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block breadcrumb %}
-    <li><a href="{{ url_for('index') }}">L10N</a></li>
+    <li><a href="{{ url_for('index') }}">Localizappion</a></li>
     <li><a href="{{ url_for('language_list') }}">Languages</a></li>
     <li>{{ language.name | default('New language', True) }}</li>
 {% endblock %}
