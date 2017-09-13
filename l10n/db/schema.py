@@ -46,7 +46,7 @@ class String(Base):
     project = relationship(Project, back_populates='strings')
 
 
-Project.strings = relationship(String, order_by=String.position, back_populates='project')
+Project.strings = relationship(String, order_by=String.position, back_populates='project', cascade='delete')
 
 
 class Translator(Base):
@@ -91,7 +91,7 @@ class Suggestion(Base):
         )
 
 
-String.suggestions = relationship(Suggestion)
+String.suggestions = relationship(Suggestion, cascade='delete')
 
 
 class Vote(Base):
@@ -108,4 +108,4 @@ class Vote(Base):
     translator = relationship(Translator)
 
 
-Suggestion.votes = relationship(Vote)
+Suggestion.votes = relationship(Vote, cascade='delete')

@@ -1,4 +1,4 @@
-Flask==0.12.1
-google-cloud-translate==0.24.0
+Flask==0.12.2
+google-cloud-translate==1.2.0
 lxml==3.7.3
 SQLAlchemy==1.1.9
