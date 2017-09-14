@@ -3,6 +3,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import INTEGER
 from sqlalchemy import PrimaryKeyConstraint
 from sqlalchemy import TEXT
+from sqlalchemy import BOOLEAN
 from sqlalchemy import TIMESTAMP
 from sqlalchemy import UniqueConstraint
 from sqlalchemy import VARCHAR
@@ -70,6 +71,7 @@ class Suggestion(Base):
     value = Column(TEXT, nullable=False)
     google_translation = Column(TEXT, nullable=False)
     insert_time = Column(TIMESTAMP, nullable=False)
+    accepted = Column(BOOLEAN, nullable=True)
 
     string = relationship(String)
     language = relationship(Language)
