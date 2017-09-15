@@ -1,7 +1,5 @@
 import json
-import logging
 import re
-import sys
 import uuid
 from datetime import datetime
 from functools import wraps
@@ -40,11 +38,6 @@ app.config.update(dict(
 db = create_scoped_session('sqlite:///db.sqlite')
 
 google_translate_client = google_translate.Client()
-
-logger = logging.getLogger('l10n')
-logger.setLevel(logging.INFO)
-logger.addHandler(logging.StreamHandler(sys.stderr))
-logger.propagate = False
 
 
 @app.teardown_appcontext
@@ -448,12 +441,12 @@ def new_suggestion(translator):
         return json_response(dict(error=error.message), 500)
 
 
-@app.route('/api/v1/projects/<uuid:project_uuid>/languages/<string:language>/status', methods=['GET'])
-@requires_translator
-def get_translation_status(translator, project_uuid, language):
-    project = db.query(Project).filter(Project.uuid == str(project_uuid)).one()
-
-    logger.info('Translator {0} requested status of {1} on {2}'.format(translator.name, language, project.name))
+@app.route('/api/v1/projects/<uuid:project_uuid>/languages/<string:language>/status/<uuid:translator_uuid>', methods=['GET'])
+def get_translation_status(project_uuid, language, translator_uuid):
+    try:
+        project = db.query(Project).filter(Project.uuid == str(project_uuid)).one()
+    except NoResultFound:
+        return json_response(dict(error='Project not found'), 404)
 
     strings = db.query(String.id).filter(String.project == project).count()
 
@@ -466,35 +459,35 @@ def get_translation_status(translator, project_uuid, language):
             return json_response(dict(error='Language not found'), 404)
 
     if project.language.code == language.code:
-        validated = strings
-        voted = strings
-    else:
-        validated = db.execute('''
-            select count(1)
-                from (
-                    select distinct string.id
-                        from suggestion left join string on suggestion.string_id = string.id
-                        where suggestion.accepted = 1 and suggestion.language_id = :language_id and string.project_id = :project_id
-                ) as validated
-        ''', dict(language_id=language.id, project_id=project.id)).first()[0]
+        return json_response(dict(error='Language not found'), 404)
 
-        voted = db.execute('''
-            select count(1)
-                from (
-                    select suggestion_id, string_id, votes
-                        from ( 
-                            select suggestion.id as suggestion_id, suggestion.string_id, sum(vote.value) as votes
-                                from suggestion left outer join vote on vote.suggestion_id = suggestion.id left join string on suggestion.string_id = string.id
-                                where suggestion.accepted = 1 and suggestion.language_id = :language_id and string.project_id = :project_id
-                                group by suggestion.id
-                        ) as suggestion_with_votes
-                        where votes >= :required_votes
-                        group by string_id
-                ) as voted
-        ''', dict(language_id=language.id, project_id=project.id, required_votes=3)).first()[0]
+    validated = db.execute('''
+        select count(1)
+            from (
+                select distinct string.id
+                    from suggestion left join string on suggestion.string_id = string.id
+                    where suggestion.accepted = 1 and suggestion.language_id = :language_id and string.project_id = :project_id
+            ) as validated
+    ''', dict(language_id=language.id, project_id=project.id)).first()[0]
+
+    voted = db.execute('''
+        select count(1)
+            from (
+                select suggestion_id, string_id, votes
+                    from ( 
+                        select suggestion.id as suggestion_id, suggestion.string_id, sum(vote.value) as votes
+                            from suggestion left outer join vote on vote.suggestion_id = suggestion.id left join string on suggestion.string_id = string.id
+                            where suggestion.accepted = 1 and suggestion.language_id = :language_id and string.project_id = :project_id
+                            group by suggestion.id
+                    ) as suggestion_with_votes
+                    where votes >= :required_votes
+                    group by string_id
+            ) as voted
+    ''', dict(language_id=language.id, project_id=project.id, required_votes=3)).first()[0]
 
     return json_response(dict(
-        language=language.code,
+        language_code=language.code,
+        language_name=language.name,
         strings=strings,
         validated=validated,
         voted=voted,
