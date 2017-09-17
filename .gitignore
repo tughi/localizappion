@@ -1,9 +1,5 @@
 *.pyc
 
-/*.sqlite
 /google_translate.json
 
-/*.egg-info
 /.idea
-
-/strings*.xml
