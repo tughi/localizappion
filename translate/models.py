@@ -15,7 +15,7 @@ class Language(models.Model):
     plurals_other = models.TextField()
 
     def __str__(self):
-        return self.name
+        return self.code
 
 
 class Project(models.Model):
@@ -34,6 +34,9 @@ class String(models.Model):
     value_one = models.TextField(blank=True)
     value_other = models.TextField()
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         unique_together = (
             ('project', 'name'),
@@ -45,7 +48,7 @@ class Translator(models.Model):
     alias = models.TextField(blank=True)
 
     def __str__(self):
-        return str(self.uuid)
+        return self.alias or str(self.uuid)
 
 
 PLURAL_FORMS = (

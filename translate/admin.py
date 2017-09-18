@@ -6,8 +6,27 @@ from .models import String
 from .models import Suggestion
 from .models import Translator
 
-admin.site.register(Language)
-admin.site.register(Project)
-admin.site.register(String)
-admin.site.register(Translator)
-admin.site.register(Suggestion)
+
+@admin.register(Language)
+class LanguageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'code')
+
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('name', 'uuid')
+
+
+@admin.register(Translator)
+class TranslatorAdmin(admin.ModelAdmin):
+    list_display = ('uuid', 'alias')
+
+
+@admin.register(String)
+class StringAdmin(admin.ModelAdmin):
+    list_display = ('name', 'value_other', 'value_one', 'project')
+
+
+@admin.register(Suggestion)
+class SuggestionAdmin(admin.ModelAdmin):
+    list_display = ('string', 'language', 'value', 'plural_form')
