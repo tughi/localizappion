@@ -4,6 +4,7 @@ from .models import Language
 from .models import Project
 from .models import String
 from .models import Suggestion
+from .models import SuggestionVote
 from .models import Translator
 
 
@@ -17,11 +18,6 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'uuid')
 
 
-@admin.register(Translator)
-class TranslatorAdmin(admin.ModelAdmin):
-    list_display = ('uuid', 'alias')
-
-
 @admin.register(String)
 class StringAdmin(admin.ModelAdmin):
     list_display = ('name', 'value_other', 'value_one', 'project')
@@ -30,3 +26,13 @@ class StringAdmin(admin.ModelAdmin):
 @admin.register(Suggestion)
 class SuggestionAdmin(admin.ModelAdmin):
     list_display = ('string', 'language', 'value', 'plural_form')
+
+
+@admin.register(SuggestionVote)
+class SuggestionVoteAdmin(admin.ModelAdmin):
+    list_display = ('translator', 'suggestion', 'value')
+
+
+@admin.register(Translator)
+class TranslatorAdmin(admin.ModelAdmin):
+    list_display = ('uuid', 'alias')

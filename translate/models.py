@@ -79,3 +79,17 @@ class Suggestion(models.Model):
         unique_together = (
             ('string', 'language', 'value', 'plural_form'),
         )
+
+
+class SuggestionVote(models.Model):
+    translator = models.ForeignKey(Translator, on_delete=models.PROTECT)
+    suggestion = models.ForeignKey(Suggestion, on_delete=models.CASCADE, related_name='votes')
+    value = models.IntegerField(default=1)
+
+    def __str__(self):
+        return str(self.translator)
+
+    class Meta:
+        unique_together = (
+            ('translator', 'suggestion'),
+        )
