@@ -14,12 +14,18 @@ class Language(models.Model):
     plurals_many = models.TextField(blank=True)
     plurals_other = models.TextField()
 
+    def __str__(self):
+        return self.name
+
 
 class Project(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     name = models.TextField()
 
     languages = models.ManyToManyField(Language, related_name='+')
+
+    def __str__(self):
+        return self.name
 
 
 class String(models.Model):
@@ -36,7 +42,10 @@ class String(models.Model):
 
 class Translator(models.Model):
     uuid = models.UUIDField(unique=True, editable=False)
-    alias = models.TextField()
+    alias = models.TextField(blank=True)
+
+    def __str__(self):
+        return str(self.uuid)
 
 
 PLURAL_FORMS = (
@@ -53,10 +62,14 @@ class Suggestion(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     translator = models.ForeignKey(Translator, on_delete=models.PROTECT)
     string = models.ForeignKey(String, on_delete=models.CASCADE)
+    language = models.ForeignKey(Language, on_delete=models.PROTECT)
     value = models.TextField()
     plural_form = models.TextField(choices=PLURAL_FORMS, default='other')
 
+    google_translation = models.TextField(blank=True)
+    accepted = models.BooleanField()
+
     class Meta:
         unique_together = (
-            ('string', 'value', 'plural_form'),
+            ('string', 'language', 'value', 'plural_form'),
         )
