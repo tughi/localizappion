@@ -1,0 +1,14 @@
+{% extends './__base__.html' %}
+
+{% block content %}
+<p>{{ project.name }} learns {{ language.name }}.</p>
+
+<div class="progress">
+    <div class="progress-bar progress-bar-success" style="width: {{ voted_suggestions }}%">
+        <span class="sr-only">{{ voted_suggestions }}% Voted suggestions</span>
+    </div>
+    <div class="progress-bar progress-bar-warning" style="width: {{ submitted_suggestions }}%">
+        <span class="sr-only">{{ submitted_suggestions }}% Submitted suggestions</span>
+    </div>
+</div>
+{% endblock %}
