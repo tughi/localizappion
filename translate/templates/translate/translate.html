@@ -11,4 +11,38 @@
         <span class="sr-only">{{ submitted_suggestions }}% Submitted suggestions</span>
     </div>
 </div>
+
+<hr>
+
+<form>
+    <p>How do you say the following in {{ language.name }}?</p>
+    <ul class="list-group">
+        <li class="list-group-item">{{ string.value_other }}</li>
+    </ul>
+
+    {% with suggestions=string.suggestions.all %}
+    {% if suggestions %}
+    <p>Submitted suggestions:</p>
+    <div class="list-group">
+        {% for suggestion in suggestions %}
+        <a href="#" class="list-group-item">{{ suggestion.value }}</a>
+        {% endfor %}
+    </div>
+    <p>Do you have another suggestion?</p>
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="Suggestion">
+    </div>
+    {% else %}
+    <p>Your suggestion:</p>
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="Suggestion">
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Submit</button>
+        <button type="button" class="btn btn-default">Skip</button>
+    </div>
+</form>
 {% endblock %}

@@ -100,6 +100,9 @@ def translate(request, translator_uuid, project_uuid, language_code):
     except Language.DoesNotExist:
         return render(request, 'translate/language_not_found.html', context=dict(project=project), status=404)
 
+    # TODO: pick a string to translate
+    string = project.strings.get(pk=1)
+
     suggestions_required, suggestions_submitted, suggestions_voted = get_progress(project, language)
 
     voted_suggestions = int(100. * suggestions_voted / suggestions_required)
@@ -110,6 +113,7 @@ def translate(request, translator_uuid, project_uuid, language_code):
         language=language,
         voted_suggestions=voted_suggestions,
         submitted_suggestions=submitted_suggestions,
+        string=string,
     )
 
     return render(request, 'translate/translate.html', context=context)
