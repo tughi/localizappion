@@ -34,6 +34,8 @@ class String(models.Model):
     value_one = models.TextField(blank=True)
     value_other = models.TextField()
 
+    last_access_time = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.name
 

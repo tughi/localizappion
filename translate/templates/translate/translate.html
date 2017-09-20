@@ -1,48 +1,50 @@
 {% extends './__base__.html' %}
 
 {% block content %}
-<p>{{ project.name }} learns {{ language.name }}.</p>
+<p>{{ project.name }} learns {{ language.name }}...</p>
 
 <div class="progress">
-    <div class="progress-bar progress-bar-success" style="width: {{ voted_suggestions }}%">
-        <span class="sr-only">{{ voted_suggestions }}% Voted suggestions</span>
+    <div class="progress-bar progress-bar-success" style="width: {{ progress.percentage_voted }}%">
+        <span class="sr-only">{{ progress.percentage_voted }}% Voted suggestions</span>
     </div>
-    <div class="progress-bar progress-bar-warning" style="width: {{ submitted_suggestions }}%">
-        <span class="sr-only">{{ submitted_suggestions }}% Submitted suggestions</span>
+    <div class="progress-bar progress-bar-warning" style="width: {{ progress.percentage_submitted_only }}%">
+        <span class="sr-only">{{ progress.percentage_submitted_only }}% Submitted suggestions</span>
     </div>
 </div>
 
 <hr>
 
-<form>
+<form method="post">
+    {% csrf_token %}
+
+    <input type="hidden" name="string_id" value="{{ string.id }}">
+
     <p>How do you say the following in {{ language.name }}?</p>
     <ul class="list-group">
         <li class="list-group-item">{{ string.value_other }}</li>
     </ul>
 
-    {% with suggestions=string.suggestions.all %}
     {% if suggestions %}
-    <p>Submitted suggestions:</p>
+    <p>Select the best suggestion:</p>
     <div class="list-group">
         {% for suggestion in suggestions %}
-        <a href="#" class="list-group-item">{{ suggestion.value }}</a>
+        <a href="#" class="list-group-item {{ suggestion.voted|yesno:'list-group-item-success,' }}">{{ suggestion.value }}</a>
         {% endfor %}
     </div>
-    <p>Do you have another suggestion?</p>
+    <p>Or do you have a better suggestion?</p>
     <div class="form-group">
         <input type="text" class="form-control" placeholder="Suggestion">
     </div>
     {% else %}
     <p>Your suggestion:</p>
     <div class="form-group">
-        <input type="text" class="form-control" placeholder="Suggestion">
+        <input type="text" name="value" class="form-control" placeholder="Suggestion">
     </div>
     {% endif %}
-    {% endwith %}
 
     <div class="form-group">
-        <button type="submit" class="btn btn-success">Submit</button>
         <button type="button" class="btn btn-default">Skip</button>
+        <button type="submit" class="btn btn-success pull-right">Submit</button>
     </div>
 </form>
 {% endblock %}
