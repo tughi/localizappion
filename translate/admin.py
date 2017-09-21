@@ -25,7 +25,7 @@ class StringAdmin(admin.ModelAdmin):
 
 @admin.register(Suggestion)
 class SuggestionAdmin(admin.ModelAdmin):
-    list_display = ('string', 'language', 'value', 'plural_form')
+    pass
 
 
 @admin.register(SuggestionVote)

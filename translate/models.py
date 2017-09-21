@@ -75,7 +75,7 @@ class Suggestion(models.Model):
     accepted = models.BooleanField()
 
     def __str__(self):
-        return self.string.name
+        return '{0} =({1}::{2})= {3}'.format(self.string.name, self.language.code, self.plural_form, self.value)
 
     class Meta:
         unique_together = (
@@ -95,3 +95,5 @@ class SuggestionVote(models.Model):
         unique_together = (
             ('translator', 'suggestion'),
         )
+
+# TODO: add vote whenever a new suggestion is inserted

@@ -4,8 +4,9 @@ from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import render
 
-from .models import Language, Suggestion
+from .models import Language
 from .models import Project
+from .models import Suggestion
 from .models import String
 
 
@@ -43,11 +44,19 @@ def translate(request, translator_uuid, project_uuid, language_code):
     except Language.DoesNotExist:
         return render(request, 'translate/language_not_found.html', context=dict(project=project), status=404)
 
-    string = project.strings.order_by('last_access_time').first()
+    # FIXME: this query ignores plural forms
+    string = project.strings.difference(
+        String.objects.filter(
+            project=project,
+            suggestions__language=language,
+            suggestions__votes__translator__uuid=translator_uuid
+        )
+    ).order_by('last_access_time').first()
+
     string.last_access_time = datetime.now()
     string.save()
 
-    suggestions = Suggestion.objects.filter(string=string, plural_form='other')
+    suggestions = Suggestion.objects.filter(string=string, language=language, plural_form='other')
     for suggestion in suggestions:
         suggestion.voted = suggestion.votes.filter(translator__uuid=translator_uuid).count() > 0
 
@@ -73,9 +82,9 @@ class Progress:
             suggestions = {}
             for suggestion in string.suggestions.filter(language=language).annotate(votes_value=Sum('votes__value')):
                 if suggestion.plural_form in suggestions:
-                    suggestions[suggestion.plural_form] = suggestion.votes_value > 1 or suggestions[suggestion.plural_form]
+                    suggestions[suggestion.plural_form] = (suggestion.votes_value or 0) > 1 or suggestions[suggestion.plural_form]
                 else:
-                    suggestions[suggestion.plural_form] = suggestion.votes_value > 1
+                    suggestions[suggestion.plural_form] = (suggestion.votes_value or 0) > 1
 
             self.required_suggestions += 1
             if 'other' in suggestions:
