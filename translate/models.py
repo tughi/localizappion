@@ -111,4 +111,10 @@ class SuggestionVote(models.Model):
             ('translator', 'suggestion'),
         )
 
-# TODO: add vote whenever a new suggestion is inserted
+
+def __on_suggestion_post_saved__(sender, instance, created, **kwargs):
+    if sender == Suggestion and created:
+        SuggestionVote.objects.create(translator=instance.translator, suggestion=instance)
+
+
+models.signals.post_save.connect(__on_suggestion_post_saved__, Suggestion)
