@@ -2,6 +2,15 @@ import uuid
 
 from django.db import models
 
+PLURAL_FORMS = (
+    ('zero', "Zero"),
+    ('one', "One"),
+    ('two', "Two"),
+    ('few', "Few"),
+    ('many', "Many"),
+    ('other', "Other")
+)
+
 
 class Language(models.Model):
     code = models.SlugField(unique=True)
@@ -13,6 +22,22 @@ class Language(models.Model):
     plurals_few = models.TextField(blank=True)
     plurals_many = models.TextField(blank=True)
     plurals_other = models.TextField()
+
+    @property
+    def plural_forms(self):
+        plural_forms = []
+        if self.plurals_zero:
+            plural_forms.append('zero')
+        if self.plurals_one:
+            plural_forms.append('one')
+        if self.plurals_two:
+            plural_forms.append('two')
+        if self.plurals_few:
+            plural_forms.append('few')
+        if self.plurals_many:
+            plural_forms.append('many')
+        plural_forms.append('other')
+        return tuple(plural_forms)
 
     def __str__(self):
         return self.code
@@ -51,16 +76,6 @@ class Translator(models.Model):
 
     def __str__(self):
         return self.alias or str(self.uuid)
-
-
-PLURAL_FORMS = (
-    ('zero', "Zero"),
-    ('one', "One"),
-    ('two', "Two"),
-    ('few', "Few"),
-    ('many', "Many"),
-    ('other', "Other")
-)
 
 
 class Suggestion(models.Model):

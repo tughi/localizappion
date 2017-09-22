@@ -6,8 +6,8 @@ from django.shortcuts import render
 
 from .models import Language
 from .models import Project
-from .models import Suggestion
 from .models import String
+from .models import Suggestion
 
 
 def status(request, translator_uuid, project_uuid, language_code):
@@ -57,8 +57,6 @@ def translate(request, translator_uuid, project_uuid, language_code):
     string.save()
 
     suggestions = Suggestion.objects.filter(string=string, language=language, plural_form='other')
-    for suggestion in suggestions:
-        suggestion.voted = suggestion.votes.filter(translator__uuid=translator_uuid).count() > 0
 
     context = dict(
         project=project,
@@ -93,40 +91,13 @@ class Progress:
                     self.voted_suggestions += 1
 
             if string.value_one:
-                if language.plurals_zero:
-                    self.required_suggestions += 1
-                    if 'zero' in suggestions:
-                        self.submitted_suggestions += 1
-                        if suggestions['zero']:
-                            self.voted_suggestions += 1
-
-                if language.plurals_one:
-                    self.required_suggestions += 1
-                    if 'one' in suggestions:
-                        self.submitted_suggestions += 1
-                        if suggestions['one']:
-                            self.voted_suggestions += 1
-
-                if language.plurals_two:
-                    self.required_suggestions += 1
-                    if 'two' in suggestions:
-                        self.submitted_suggestions += 1
-                        if suggestions['two']:
-                            self.voted_suggestions += 1
-
-                if language.plurals_few:
-                    self.required_suggestions += 1
-                    if 'few' in suggestions:
-                        self.submitted_suggestions += 1
-                        if suggestions['few']:
-                            self.voted_suggestions += 1
-
-                if language.plurals_many:
-                    self.required_suggestions += 1
-                    if 'many' in suggestions:
-                        self.submitted_suggestions += 1
-                        if suggestions['many']:
-                            self.voted_suggestions += 1
+                for plural_form in language.plural_forms:
+                    if plural_form != 'other':
+                        self.required_suggestions += 1
+                        if plural_form in suggestions:
+                            self.submitted_suggestions += 1
+                            if suggestions[plural_form]:
+                                self.voted_suggestions += 1
 
     @property
     def percentage_voted(self):
