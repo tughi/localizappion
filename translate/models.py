@@ -87,7 +87,7 @@ class Suggestion(models.Model):
     plural_form = models.TextField(choices=PLURAL_FORMS, default='other')
 
     google_translation = models.TextField(blank=True)
-    accepted = models.BooleanField()
+    accepted = models.BooleanField(default=False)
 
     def __str__(self):
         return '{0} =({1}::{2})= {3}'.format(self.string.name, self.language.code, self.plural_form, self.value)

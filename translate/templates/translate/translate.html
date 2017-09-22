@@ -18,6 +18,7 @@
     {% csrf_token %}
 
     <input type="hidden" name="string_id" value="{{ string.id }}">
+    <input type="hidden" name="plural_form" value="{{ plural_form }}">
 
     <p>How do you say the following in {{ language.name }}?</p>
     <ul class="list-group">
@@ -28,23 +29,33 @@
     <p>Select the best suggestion:</p>
     <div class="list-group">
         {% for suggestion in suggestions %}
-        <a href="#" class="list-group-item {{ suggestion.voted|yesno:'list-group-item-success,' }}">{{ suggestion.value }}</a>
+        <a href="#" class="existing-suggestion list-group-item {{ suggestion.voted|yesno:'list-group-item-success,' }}">{{ suggestion.value }}</a>
         {% endfor %}
     </div>
     <p>Or do you have a better suggestion?</p>
-    <div class="form-group">
-        <input type="text" class="form-control" placeholder="Suggestion">
-    </div>
     {% else %}
     <p>Your suggestion:</p>
-    <div class="form-group">
-        <input type="text" name="value" class="form-control" placeholder="Suggestion">
-    </div>
     {% endif %}
+    <div class="form-group">
+        <input type="text" name="suggestion" class="form-control" placeholder="Suggestion">
+    </div>
 
     <div class="form-group">
         <button type="button" class="btn btn-default">Skip</button>
         <button type="submit" class="btn btn-success pull-right">Submit</button>
     </div>
 </form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.existing-suggestion').on('click', function (event) {
+            console.log('Suggestion clicked!');
+        });
+
+        $('form').on('submit', function (event) {
+            // event.preventDefault();
+        });
+    });
+</script>
+
 {% endblock %}

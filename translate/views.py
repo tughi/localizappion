@@ -2,9 +2,10 @@ from datetime import datetime
 
 from django.db.models import Sum
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
-from .models import Language
+from .models import Language, Translator, SuggestionVote
 from .models import Project
 from .models import String
 from .models import Suggestion
@@ -44,29 +45,73 @@ def translate(request, translator_uuid, project_uuid, language_code):
     except Language.DoesNotExist:
         return render(request, 'translate/language_not_found.html', context=dict(project=project), status=404)
 
-    # FIXME: this query ignores plural forms
-    string = project.strings.difference(
-        String.objects.filter(
-            project=project,
-            suggestions__language=language,
-            suggestions__votes__translator__uuid=translator_uuid
-        )
-    ).order_by('last_access_time').first()
+    if request.method == 'POST':
+        string = String.objects.get(pk=request.POST['string_id'])
 
-    string.last_access_time = datetime.now()
-    string.save()
+        suggestion_value = request.POST['suggestion']
+        if suggestion_value:
+            translator = Translator.objects.filter(uuid=translator_uuid).first()
+            plural_form = request.POST['plural_form']
 
-    suggestions = Suggestion.objects.filter(string=string, language=language, plural_form='other')
+            suggestion = Suggestion.objects.filter(string=string, language=language, value=suggestion_value, plural_form=plural_form).first()
+            if suggestion:
+                SuggestionVote.objects.create(translator=translator, suggestion=suggestion)
+            else:
+                Suggestion.objects.create(translator=translator, string=string, language=language, value=suggestion_value, plural_form=plural_form)
 
-    context = dict(
-        project=project,
-        language=language,
-        progress=Progress(project, language),
-        string=string,
-        suggestions=suggestions,
-    )
+        return redirect(reverse('translate', kwargs=dict(translator_uuid=translator_uuid, project_uuid=project_uuid, language_code=language_code)))
+    else:
+        plural_form = 'other'
+        string = project.strings.difference(
+            String.objects.filter(
+                project=project,
+                suggestions__language=language,
+                suggestions__plural_form=plural_form,
+                suggestions__votes__translator__uuid=translator_uuid
+            )
+        ).order_by('last_access_time').first()
 
-    return render(request, 'translate/translate.html', context=context)
+        if not string:
+            for plural_form in language.plural_forms:
+                if plural_form != 'other':
+                    string = project.strings.exclude(value_one='').difference(
+                        String.objects.exclude(value_one='').filter(
+                            project=project,
+                            suggestions__language=language,
+                            suggestions__plural_form=plural_form,
+                            suggestions__votes__translator__uuid=translator_uuid
+                        )
+                    ).order_by('last_access_time').first()
+
+                if string:
+                    break
+
+        if string:
+            string.last_access_time = datetime.now()
+            string.save()
+
+            suggestions = Suggestion.objects.filter(string=string, language=language, plural_form=plural_form)
+
+            context = dict(
+                project=project,
+                language=language,
+                progress=Progress(project, language),
+                string=string,
+                plural_form=plural_form,
+                suggestions=suggestions,
+            )
+
+            return render(request, 'translate/translate.html', context=context)
+        else:
+            # TODO: populate template with useful info
+
+            context = dict(
+                project=project,
+                language=language,
+                progress=Progress(project, language),
+            )
+
+            return render(request, 'translate/translate_review.html', context=context)
 
 
 class Progress:
@@ -101,8 +146,8 @@ class Progress:
 
     @property
     def percentage_voted(self):
-        return int(100. * self.voted_suggestions / self.required_suggestions)
+        return 100. * self.voted_suggestions / self.required_suggestions
 
     @property
     def percentage_submitted_only(self):
-        return int(100. * (self.submitted_suggestions - self.voted_suggestions) / self.required_suggestions)
+        return 100. * (self.submitted_suggestions - self.voted_suggestions) / self.required_suggestions
