@@ -14,6 +14,7 @@
 
 <hr>
 
+{% if string %}
 <form method="post">
     {% csrf_token %}
 
@@ -57,5 +58,9 @@
         });
     });
 </script>
+{% else %}
+<p>You suggested a translation for each text!</p>
+<p>Thanks to your suggestions and the ones from other users like you, {{ project.name }} will speak {{ language.name }} like a pro very soon.</p>
+{% endif %}
 
 {% endblock %}

@@ -91,27 +91,19 @@ def translate(request, translator_uuid, project_uuid, language_code):
             string.save()
 
             suggestions = Suggestion.objects.filter(string=string, language=language, plural_form=plural_form)
-
-            context = dict(
-                project=project,
-                language=language,
-                progress=Progress(project, language),
-                string=string,
-                plural_form=plural_form,
-                suggestions=suggestions,
-            )
-
-            return render(request, 'translate/translate.html', context=context)
         else:
-            # TODO: populate template with useful info
+            suggestions = None
 
-            context = dict(
-                project=project,
-                language=language,
-                progress=Progress(project, language),
-            )
+        context = dict(
+            project=project,
+            language=language,
+            progress=Progress(project, language),
+            string=string,
+            plural_form=plural_form,
+            suggestions=suggestions,
+        )
 
-            return render(request, 'translate/translate_review.html', context=context)
+        return render(request, 'translate/translate.html', context=context)
 
 
 class Progress:
