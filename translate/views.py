@@ -51,6 +51,9 @@ def translate(request, translator_uuid, project_uuid, language_code):
         suggestion_value = request.POST['suggestion']
         if suggestion_value:
             translator = Translator.objects.filter(uuid=translator_uuid).first()
+            if not translator:
+                translator = Translator.objects.create(uuid=translator_uuid)
+
             plural_form = request.POST['plural_form']
 
             suggestion = Suggestion.objects.filter(string=string, language=language, value=suggestion_value, plural_form=plural_form).first()
