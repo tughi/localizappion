@@ -48,7 +48,7 @@ def translate(request, translator_uuid, project_uuid, language_code):
     if request.method == 'POST':
         string = String.objects.get(pk=request.POST['string_id'])
 
-        suggestion_value = request.POST['suggestion']
+        suggestion_value = request.POST['value']
         if suggestion_value:
             translator = Translator.objects.filter(uuid=translator_uuid).first()
             if not translator:

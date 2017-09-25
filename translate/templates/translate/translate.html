@@ -20,6 +20,7 @@
 
     <input type="hidden" name="string_id" value="{{ string.id }}">
     <input type="hidden" name="plural_form" value="{{ plural_form }}">
+    <input type="hidden" name="value" value="">
 
     <p>How do you say the following in {{ language.name }}?</p>
     <ul class="list-group">
@@ -27,13 +28,17 @@
     </ul>
 
     {% if suggestions %}
-    <p>Select the best suggestion:</p>
-    <div class="list-group">
+    {% if suggestions|length > 1 %}
+    <p>Vote the best suggestion:</p>
+    {% else %}
+    <p>Vote suggestion:</p>
+    {% endif %}
+    <div class="existing-suggestions list-group">
         {% for suggestion in suggestions %}
         <a href="#" class="existing-suggestion list-group-item {{ suggestion.voted|yesno:'list-group-item-success,' }}">{{ suggestion.value }}</a>
         {% endfor %}
     </div>
-    <p>Or do you have a better suggestion?</p>
+    <p>Or do you have a better one?</p>
     {% else %}
     <p>Your suggestion:</p>
     {% endif %}
@@ -43,20 +48,35 @@
 
     <div class="form-group">
         <button type="button" class="btn btn-default">Skip</button>
-        <button type="submit" class="btn btn-success pull-right">Submit</button>
+        <button type="submit" class="btn btn-success pull-right" disabled>Submit</button>
     </div>
 </form>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('.existing-suggestion').on('click', function (event) {
-            console.log('Suggestion clicked!');
-        });
+    $('input[name="value"]').on('change', function (event) {
+        var $input = $(event.target);
+        var value = $input.val().trim();
+        $input.closest('form').find('button[type="submit"]').prop('disabled', value === '');
+    })
 
-        $('form').on('submit', function (event) {
-            // event.preventDefault();
-        });
+    $('.existing-suggestion').on('click', function (event) {
+        var $item = $(event.target).closest('.list-group-item');
+        if ($item.find('.badge').length) {
+            $item.find('.badge').remove();
+            $('input[name="value"]').val('').change();
+        } else {
+            var $group = $(event.target).closest('.list-group');
+            $group.find('.badge').remove();
+            $('input[name="suggestion"]').val('');
+            $('input[name="value"]').val($item.text()).change();
+            $item.prepend($('<span class="badge">✓</span>'));
+        }
     });
+
+    $('input[name="suggestion"]').on('keyup', function (event) {
+        $('.existing-suggestions').find('.badge').remove();
+        $('input[name="value"]').val($(event.target).val()).change();
+    })
 </script>
 {% else %}
 <p>You suggested a translation for each text!</p>
