@@ -10,6 +10,8 @@ from .models import Project
 from .models import String
 from .models import Suggestion
 
+REQUIRED_VOTES = 3
+
 
 def status(request, translator_uuid, project_uuid, language_code):
     try:
@@ -121,9 +123,9 @@ class Progress:
             suggestions = {}
             for suggestion in string.suggestions.filter(language=language).annotate(votes_value=Sum('votes__value')):
                 if suggestion.plural_form in suggestions:
-                    suggestions[suggestion.plural_form] = (suggestion.votes_value or 0) > 1 or suggestions[suggestion.plural_form]
+                    suggestions[suggestion.plural_form] = (suggestion.votes_value or 0) >= REQUIRED_VOTES or suggestions[suggestion.plural_form]
                 else:
-                    suggestions[suggestion.plural_form] = (suggestion.votes_value or 0) > 1
+                    suggestions[suggestion.plural_form] = (suggestion.votes_value or 0) >= REQUIRED_VOTES
 
             self.required_suggestions += 1
             if 'other' in suggestions:
