@@ -14,14 +14,14 @@ PLURAL_FORMS = (
 
 class Language(models.Model):
     code = models.SlugField(unique=True)
-    name = models.TextField()
+    name = models.CharField(max_length=64)
 
-    plurals_zero = models.TextField(blank=True)
-    plurals_one = models.TextField(blank=True)
-    plurals_two = models.TextField(blank=True)
-    plurals_few = models.TextField(blank=True)
-    plurals_many = models.TextField(blank=True)
-    plurals_other = models.TextField()
+    plurals_zero = models.CharField(max_length=128, blank=True)
+    plurals_one = models.CharField(max_length=128, blank=True)
+    plurals_two = models.CharField(max_length=128, blank=True)
+    plurals_few = models.CharField(max_length=128, blank=True)
+    plurals_many = models.CharField(max_length=128, blank=True)
+    plurals_other = models.CharField(max_length=128)
 
     @property
     def plural_forms(self):
@@ -45,7 +45,7 @@ class Language(models.Model):
 
 class Project(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
-    name = models.TextField()
+    name = models.CharField(max_length=64)
 
     languages = models.ManyToManyField(Language, related_name='+')
 
@@ -55,7 +55,7 @@ class Project(models.Model):
 
 class String(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='strings')
-    name = models.TextField()
+    name = models.CharField(max_length=64)
     value_one = models.TextField(blank=True)
     value_other = models.TextField()
 
@@ -72,7 +72,7 @@ class String(models.Model):
 
 class Translator(models.Model):
     uuid = models.UUIDField(unique=True, editable=False)
-    alias = models.TextField(blank=True)
+    alias = models.CharField(max_length=32, blank=True)
 
     def __str__(self):
         return self.alias or str(self.uuid)
@@ -84,7 +84,7 @@ class Suggestion(models.Model):
     string = models.ForeignKey(String, on_delete=models.CASCADE, related_name='suggestions')
     language = models.ForeignKey(Language, on_delete=models.PROTECT)
     value = models.TextField()
-    plural_form = models.TextField(choices=PLURAL_FORMS, default='other')
+    plural_form = models.CharField(max_length=8, choices=PLURAL_FORMS, default='other')
 
     google_translation = models.TextField(blank=True)
     accepted = models.BooleanField(default=False)
