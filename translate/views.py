@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 
 from django.db.models import Sum
@@ -11,6 +12,8 @@ from .models import String
 from .models import Suggestion
 
 REQUIRED_VOTES = 3
+
+MARKER_REGEX = re.compile(r'<xliff:g([^>]*)>([^<]+)</xliff:g>')
 
 
 def status(request, translator_uuid, project_uuid, language_code):
@@ -91,14 +94,6 @@ def translate(request, translator_uuid, project_uuid, language_code):
                 if string:
                     break
 
-        if string:
-            string.last_access_time = datetime.now()
-            string.save()
-
-            suggestions = Suggestion.objects.filter(string=string, language=language, plural_form=plural_form)
-        else:
-            suggestions = None
-
         context = dict(
             translator_uuid=translator_uuid,
             project=project,
@@ -106,8 +101,39 @@ def translate(request, translator_uuid, project_uuid, language_code):
             progress=Progress(project, language),
             string=string,
             plural_form=plural_form,
-            suggestions=suggestions,
         )
+
+        if string:
+            string.last_access_time = datetime.now()
+            string.save()
+
+            # TODO: decide which value of the string is selected based on the plural quantity examples
+
+            string_value = string.value_other
+            string_markers = []
+            string_quantity_marker = None
+
+            while True:
+                marker_match = MARKER_REGEX.search(string_value)
+
+                if not marker_match:
+                    break
+
+                string_markers.append(marker_match.group(2))
+                string_value = string_value.replace(marker_match.group(0), string_markers[-1])
+
+                if marker_match.group(1).find('id="quantity"') >= 0:
+                    string_quantity_marker = string_markers[-1]
+
+            for string_marker in string_markers:
+                string_value = string_value.replace(string_marker, '<code>{0}</code>'.format(string_marker))
+
+            context.update(dict(
+                string_value=string_value,
+                string_markers=string_markers,
+                string_quantity_marker=string_quantity_marker,
+                suggestions=Suggestion.objects.filter(string=string, language=language, plural_form=plural_form),
+            ))
 
         return render(request, 'translate/translate.html', context=context)
 

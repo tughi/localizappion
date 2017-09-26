@@ -24,7 +24,25 @@
 
     <p>How do you say the following in {{ language.name }}?</p>
     <ul class="list-group">
-        <li class="list-group-item">{{ string.value_other }}</li>
+        <li class="string-value list-group-item">{{ string_value|safe }}</li>
+        {% if string_quantity_marker %}
+        <li class="list-group-item list-group-item-info">
+            If <code>{{ string_quantity_marker }}</code> is replaced with one of:
+            {% if plural_form == 'zero' %}
+            {{ language.plurals_zero }}
+            {% elif plural_form == 'one' %}
+            {{ language.plurals_one }}
+            {% elif plural_form == 'two' %}
+            {{ language.plurals_two }}
+            {% elif plural_form == 'few' %}
+            {{ language.plurals_few }}
+            {% elif plural_form == 'many' %}
+            {{ language.plurals_many }}
+            {% elif plural_form == 'other' %}
+            {{ language.plurals_other }}
+            {% endif %}
+        </li>
+        {% endif %}
     </ul>
 
     {% if suggestions %}
@@ -45,6 +63,12 @@
     <div class="form-group">
         <input type="text" name="suggestion" class="form-control" placeholder="Suggestion">
     </div>
+
+    {% if string_markers %}
+    <div class="alert alert-warning">
+        Please include all highlighted markers.
+    </div>
+    {% endif %}
 
     <div class="form-group">
         <a href="{% url 'translate' translator_uuid project.uuid language.code %}" class="btn btn-default">Skip</a>
