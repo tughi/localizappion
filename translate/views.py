@@ -98,6 +98,7 @@ def translate(request, translator_uuid, project_uuid, language_code):
             suggestions = None
 
         context = dict(
+            translator_uuid=translator_uuid,
             project=project,
             language=language,
             progress=Progress(project, language),
