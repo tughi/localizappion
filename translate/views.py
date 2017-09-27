@@ -107,10 +107,12 @@ def translate(request, translator_uuid, project_uuid, language_code):
             string.last_access_time = datetime.now()
             string.save()
 
-            # TODO: decide which value of the string is selected based on the plural quantity examples
+            string_quantity_marker_examples = language.get_examples(plural_form) if string.value_one else None
+            if string_quantity_marker_examples:
+                string_quantity_marker_examples = re.sub(r'([0-9]+)', r'<code>\1</code>', string_quantity_marker_examples)
 
             string_value = string.value_other
-            string_markers = []
+            string_markers = {}
             string_quantity_marker = None
 
             while True:
@@ -119,11 +121,13 @@ def translate(request, translator_uuid, project_uuid, language_code):
                 if not marker_match:
                     break
 
-                string_markers.append(marker_match.group(2))
-                string_value = string_value.replace(marker_match.group(0), string_markers[-1])
+                string_marker = marker_match.group(2)
+                string_markers[string_marker] = None
+                string_value = string_value.replace(marker_match.group(0), string_marker)
 
                 if marker_match.group(1).find('id="quantity"') >= 0:
-                    string_quantity_marker = string_markers[-1]
+                    string_quantity_marker = string_marker
+                    string_markers[string_marker] = language.get_examples(plural_form)
 
             for string_marker in string_markers:
                 string_value = string_value.replace(string_marker, '<code>{0}</code>'.format(string_marker))
@@ -132,6 +136,7 @@ def translate(request, translator_uuid, project_uuid, language_code):
                 string_value=string_value,
                 string_markers=string_markers,
                 string_quantity_marker=string_quantity_marker,
+                string_quantity_marker_examples=string_quantity_marker_examples,
                 suggestions=Suggestion.objects.filter(string=string, language=language, plural_form=plural_form),
             ))
 

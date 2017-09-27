@@ -39,6 +39,21 @@ class Language(models.Model):
         plural_forms.append('other')
         return tuple(plural_forms)
 
+    def get_examples(self, plural_form):
+        if plural_form == 'zero':
+            return self.plurals_zero
+        if plural_form == 'one':
+            return self.plurals_one
+        if plural_form == 'two':
+            return self.plurals_two
+        if plural_form == 'few':
+            return self.plurals_few
+        if plural_form == 'many':
+            return self.plurals_many
+        if plural_form == 'other':
+            return self.plurals_other
+        return None
+
     def __str__(self):
         return self.code
 
