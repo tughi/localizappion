@@ -5,6 +5,7 @@ from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from google.cloud import translate as google_translate
 
 from .models import Language, Translator, SuggestionVote
 from .models import Project
@@ -180,3 +181,21 @@ class Progress:
     @property
     def percentage_submitted_only(self):
         return 100. * (self.submitted_suggestions - self.voted_suggestions) / self.required_suggestions
+
+
+def translate_suggestions(request):
+    suggestion = Suggestion.objects.filter(google_translation='').first()
+    if suggestion:
+        google_translate_client = google_translate.Client()
+
+        suggestion_google_translation = google_translate_client.translate(
+            values=suggestion.value,
+            target_language='en',
+            format_='text',
+            source_language=suggestion.language.code,
+        )  # type: dict
+
+        suggestion.google_translation = suggestion_google_translation['translatedText']
+        suggestion.save()
+
+    return JsonResponse(dict(success=True))
