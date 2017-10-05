@@ -21,7 +21,7 @@ class Language(models.Model):
     plurals_two = models.CharField(max_length=128, blank=True)
     plurals_few = models.CharField(max_length=128, blank=True)
     plurals_many = models.CharField(max_length=128, blank=True)
-    plurals_other = models.CharField(max_length=128)
+    plurals_other = models.CharField(max_length=128, blank=True)
 
     @property
     def plural_forms(self):
@@ -36,7 +36,8 @@ class Language(models.Model):
             plural_forms.append('few')
         if self.plurals_many:
             plural_forms.append('many')
-        plural_forms.append('other')
+        if self.plurals_other:
+            plural_forms.append('other')
         return tuple(plural_forms)
 
     def get_examples(self, plural_form):
@@ -113,7 +114,7 @@ class Suggestion(models.Model):
         )
 
 
-class SuggestionVote(models.Model):
+class Vote(models.Model):
     translator = models.ForeignKey(Translator, on_delete=models.PROTECT)
     suggestion = models.ForeignKey(Suggestion, on_delete=models.CASCADE, related_name='votes')
     value = models.IntegerField(default=1)
@@ -129,7 +130,7 @@ class SuggestionVote(models.Model):
 
 def __on_suggestion_post_saved__(sender, instance, created, **kwargs):
     if sender == Suggestion and created:
-        SuggestionVote.objects.create(translator=instance.translator, suggestion=instance)
+        Vote.objects.create(translator=instance.translator, suggestion=instance)
 
 
 models.signals.post_save.connect(__on_suggestion_post_saved__, Suggestion)

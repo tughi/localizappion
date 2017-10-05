@@ -7,10 +7,12 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from google.cloud import translate as google_translate
 
-from .models import Language, Translator, SuggestionVote
+from .models import Language
 from .models import Project
 from .models import String
 from .models import Suggestion
+from .models import Translator
+from .models import Vote
 
 REQUIRED_VOTES = 3
 
@@ -64,7 +66,7 @@ def translate(request, translator_uuid, project_uuid, language_code):
 
             suggestion = Suggestion.objects.filter(string=string, language=language, value=suggestion_value, plural_form=plural_form).first()
             if suggestion:
-                SuggestionVote.objects.create(translator=translator, suggestion=suggestion)
+                Vote.objects.create(translator=translator, suggestion=suggestion)
             else:
                 Suggestion.objects.create(translator=translator, string=string, language=language, value=suggestion_value, plural_form=plural_form)
 

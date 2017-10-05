@@ -4,7 +4,7 @@ from .models import Language
 from .models import Project
 from .models import String
 from .models import Suggestion
-from .models import SuggestionVote
+from .models import Vote
 from .models import Translator
 
 
@@ -28,8 +28,8 @@ class SuggestionAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(SuggestionVote)
-class SuggestionVoteAdmin(admin.ModelAdmin):
+@admin.register(Vote)
+class VoteAdmin(admin.ModelAdmin):
     list_display = ('translator', 'suggestion', 'value')
 
 
