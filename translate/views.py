@@ -7,12 +7,12 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from google.cloud import translate as google_translate
 
-from .models import Language
-from .models import Project
-from .models import String
-from .models import Suggestion
-from .models import Translator
-from .models import Vote
+from localizappion.core.models import Language
+from localizappion.core.models import Project
+from localizappion.core.models import String
+from localizappion.core.models import Suggestion
+from localizappion.core.models import Translator
+from localizappion.core.models import Vote
 
 REQUIRED_VOTES = 3
 

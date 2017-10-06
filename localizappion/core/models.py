@@ -58,6 +58,9 @@ class Language(models.Model):
     def __str__(self):
         return self.code
 
+    class Meta:
+        db_table = 'localizappion_language'
+
 
 class Project(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
@@ -67,6 +70,9 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        db_table = 'localizappion_project'
 
 
 class String(models.Model):
@@ -81,6 +87,7 @@ class String(models.Model):
         return self.name
 
     class Meta:
+        db_table = 'localizappion_string'
         unique_together = (
             ('project', 'name'),
         )
@@ -92,6 +99,9 @@ class Translator(models.Model):
 
     def __str__(self):
         return self.alias or str(self.uuid)
+
+    class Meta:
+        db_table = 'localizappion_translator'
 
 
 class Suggestion(models.Model):
@@ -109,6 +119,7 @@ class Suggestion(models.Model):
         return '{0} =({1}::{2})= {3}'.format(self.string.name, self.language.code, self.plural_form, self.value)
 
     class Meta:
+        db_table = 'localizappion_suggestion'
         unique_together = (
             ('string', 'language', 'value', 'plural_form'),
         )
@@ -123,6 +134,7 @@ class Vote(models.Model):
         return str(self.translator)
 
     class Meta:
+        db_table = 'localizappion_vote'
         unique_together = (
             ('translator', 'suggestion'),
         )

@@ -22,7 +22,7 @@ def plurals(*args):
 
 
 def forwards_func(apps, schema_editor):
-    Language = apps.get_model('translate', 'Language')
+    Language = apps.get_model('core', 'Language')
     db_alias = schema_editor.connection.alias
     Language.objects.using(db_alias).bulk_create([
         Language(
@@ -59,7 +59,7 @@ def forwards_func(apps, schema_editor):
             name="Czech",
             plurals_one=plurals(1),
             plurals_few=plurals(Range(2, 4)),
-            plurals_other=plurals(0, Range(5, 19), 100, 1000, 100000, 1000000)
+            plurals_other=plurals(0, Range(5, 19), 100, 1000, 10000, 100000, 1000000)
         ),
         Language(
             code="da",
@@ -114,7 +114,7 @@ def forwards_func(apps, schema_editor):
             name="Croatian",
             plurals_one=plurals(1, 21, 31, 41, 51, 61, 71, 81, 101, 1001),
             plurals_few=plurals(Range(2, 4), Range(22, 24), Range(32, 34), Range(42, 44), Range(52, 54), 62, 102, 1002),
-            plurals_other=plurals(0, Range(5, 19), 100, 1000, 100000, 1000000)
+            plurals_other=plurals(0, Range(5, 19), 100, 1000, 10000, 100000, 1000000)
         ),
         Language(
             code="hu",
@@ -188,7 +188,7 @@ def forwards_func(apps, schema_editor):
             name="Polish",
             plurals_one=plurals(1),
             plurals_few=plurals(Range(2, 4), Range(22, 24), Range(32, 34), Range(42, 44), Range(52, 54), 62, 102, 1002),
-            plurals_many=plurals(0, Range(5, 19), 100, 1000, 100000, 1000000)
+            plurals_many=plurals(0, Range(5, 19), 100, 1000, 10000, 100000, 1000000)
         ),
         Language(
             code="pt",
@@ -215,7 +215,7 @@ def forwards_func(apps, schema_editor):
             name="Slovak",
             plurals_one=plurals(1),
             plurals_few=plurals(Range(2, 4)),
-            plurals_other=plurals(0, Range(5, 19), 100, 1000, 100000, 1000000)
+            plurals_other=plurals(0, Range(5, 19), 100, 1000, 10000, 100000, 1000000)
         ),
         Language(
             code="sl",
@@ -268,7 +268,7 @@ def forwards_func(apps, schema_editor):
 
 
 def reverse_func(apps, schema_editor):
-    Language = apps.get_model('translate', 'Language')
+    Language = apps.get_model('core', 'Language')
     db_alias = schema_editor.connection.alias
     Language.objects.using(db_alias).filter(code='ar').delete()
     Language.objects.using(db_alias).filter(code='be').delete()
@@ -312,7 +312,7 @@ def reverse_func(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('translate', '0001_initial'),
+        ('core', '0001_initial'),
     ]
 
     operations = [
