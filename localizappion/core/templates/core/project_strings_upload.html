@@ -1,0 +1,88 @@
+{% extends './__base__.html' %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block content %}
+<form class="strings" method="post">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Changes</h3>
+        </div>
+        <div class="container-fluid">
+            {% for change in changes %}
+            <input type="hidden" class="form-control" name="changes[{{ loop.index0 }}].action" value="{{ change.action }}">
+            <input type="hidden" class="form-control" name="changes[{{ loop.index0 }}].name" value="{{ change.name }}">
+            <input type="hidden" class="form-control" name="changes[{{ loop.index0 }}].value" value="{{ change.value }}">
+            <input type="hidden" class="form-control" name="changes[{{ loop.index0 }}].position" value="{{ change.position }}">
+            {% if change.action == 'add' %}
+            <div class="row bg-success">
+                <div class="col-xs-12 col-sm-6">
+                    <samp class="text-success"><strong>+&nbsp;{{ change.name }}</strong></samp>
+                </div>
+                <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+                    <samp class="text-success">{{ change.value_one }}</samp>
+                </div>
+                <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+                    <samp class="text-success">{{ change.value_other }}</samp>
+                </div>
+            </div>
+            {% elif change.action == 'merge' %}
+            <input type="hidden" class="form-control" name="changes[{{ loop.index0 }}].old_value" value="{{ change.old_value }}">
+            <div class="row bg-warning">
+                <div class="col-xs-12 col-sm-6">
+                    <samp class="text-warning"><strong>!&nbsp;{{ change.name }}</strong></samp>
+                </div>
+                <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+                    <samp class="text-success">{{ change.value_one }}</samp>
+                </div>
+                <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+                    <samp class="text-success">{{ change.value_other }}</samp>
+                </div>
+                <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-6">
+                    <samp class="text-danger">{{ change.old_value_one }}</samp>
+                </div>
+                <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-6">
+                    <samp class="text-danger">{{ change.old_value_other }}</samp>
+                </div>
+                <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-6">
+                    <select class="form-control" name="changes[{{ loop.index0 }}].resolution" required>
+                        <option value=""></option>
+                        <option value="remove_suggestions">Remove suggestions</option>
+                        <option value="keep_suggestions">Keep suggestions</option>
+                    </select>
+                </div>
+            </div>
+            {% elif change.action == 'remove' %}
+            <div class="row bg-danger">
+                <div class="col-xs-12 col-sm-6">
+                    <samp class="text-danger"><strong>-&nbsp;{{ change.name }}</strong></samp>
+                </div>
+                <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+                    <samp class="text-danger">{{ change.value_one }}</samp>
+                </div>
+                <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+                    <samp class="text-danger">{{ change.value_other }}</samp>
+                </div>
+            </div>
+            {% elif change.action == 'update' %}
+            <div class="row bg-info">
+                <div class="col-xs-12 col-sm-6">
+                    <samp class="text-info"><strong>=&nbsp;{{ change.name }}</strong></samp>
+                </div>
+                <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+                    <samp class="text-info">{{ change.value_one }}</samp>
+                </div>
+                <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+                    <samp class="text-info">{{ change.value_other }}</samp>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="panel-footer">
+            <input type="submit" value="Commit" class="btn btn-danger">
+        </div>
+    </div>
+</form>
+{% endblock %}

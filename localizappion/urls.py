@@ -18,6 +18,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^translate/', include('translate.urls')),
+    url(r'^', include('localizappion.core.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^translate/', include('translate.urls')),
 ]
