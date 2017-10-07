@@ -80,6 +80,7 @@ class String(models.Model):
     name = models.CharField(max_length=64)
     value_one = models.TextField(blank=True)
     value_other = models.TextField()
+    position = models.IntegerField(default=0)
 
     last_access_time = models.DateTimeField(auto_now=True)
 
