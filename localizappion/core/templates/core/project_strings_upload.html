@@ -3,17 +3,14 @@
 {% block title %}{{ project.name }}{% endblock %}
 
 {% block content %}
-<form class="strings" method="post">
+<form action="{% url 'project_strings_commit' project.uuid %}" method="post">
+    {% csrf_token %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Changes</h3>
         </div>
         <div class="container-fluid">
             {% for change in changes %}
-            <input type="hidden" class="form-control" name="changes[{{ loop.index0 }}].action" value="{{ change.action }}">
-            <input type="hidden" class="form-control" name="changes[{{ loop.index0 }}].name" value="{{ change.name }}">
-            <input type="hidden" class="form-control" name="changes[{{ loop.index0 }}].value" value="{{ change.value }}">
-            <input type="hidden" class="form-control" name="changes[{{ loop.index0 }}].position" value="{{ change.position }}">
             {% if change.action == 'add' %}
             <div class="row bg-success">
                 <div class="col-xs-12 col-sm-6">
@@ -27,7 +24,6 @@
                 </div>
             </div>
             {% elif change.action == 'merge' %}
-            <input type="hidden" class="form-control" name="changes[{{ loop.index0 }}].old_value" value="{{ change.old_value }}">
             <div class="row bg-warning">
                 <div class="col-xs-12 col-sm-6">
                     <samp class="text-warning"><strong>!&nbsp;{{ change.name }}</strong></samp>
@@ -45,10 +41,10 @@
                     <samp class="text-danger">{{ change.old_value_one }}</samp>
                 </div>
                 <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-6">
-                    <select class="form-control" name="changes[{{ loop.index0 }}].resolution" required>
+                    <select class="form-control" name="{{ change.name }}" required>
                         <option value=""></option>
-                        <option value="remove_suggestions">Remove suggestions</option>
                         <option value="keep_suggestions">Keep suggestions</option>
+                        <option value="remove_suggestions">Remove suggestions</option>
                     </select>
                 </div>
             </div>

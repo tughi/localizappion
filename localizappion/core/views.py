@@ -1,9 +1,14 @@
 from xml.etree import ElementTree
 
 from django import views
+from django.db import transaction
+from django.shortcuts import redirect
 from django.shortcuts import render
 
 from .models import Project
+from .models import String
+from .models import Suggestion
+from .models import Vote
 
 
 class ProjectStringsView(views.View):
@@ -12,12 +17,6 @@ class ProjectStringsView(views.View):
         return render(request, 'core/project_strings.html', dict(
             project=Project.objects.get(uuid=project_uuid)
         ))
-
-
-class UploadStringsXmlView(views.View):
-    class UploadError(Exception):
-        def __init__(self, message):
-            self.message = message
 
     @staticmethod
     def post(request, project_uuid=None):
@@ -31,10 +30,10 @@ class UploadStringsXmlView(views.View):
                 resources = ElementTree.fromstring(strings_xml_content)
             except ElementTree.ParseError:
                 # TODO: log the parse error
-                raise UploadStringsXmlView.UploadError("Not a valid strings.xml file")
+                raise UploadError("Not a valid strings.xml file")
 
             if resources.tag != 'resources':
-                raise UploadStringsXmlView.UploadError("Not a valid strings.xml file")
+                raise UploadError("Not a valid strings.xml file")
 
             new_strings = {}
 
@@ -47,7 +46,7 @@ class UploadStringsXmlView(views.View):
                         if element_child.tail:
                             string_value += element_child.tail
                     else:
-                        raise UploadStringsXmlView.UploadError("Unsupported string tag: {0}".format(element_child.tag))
+                        raise UploadError("Unsupported string tag: {0}".format(element_child.tag))
                 return {
                     'value_' + plural: string_value.strip(),
                 }
@@ -97,8 +96,8 @@ class UploadStringsXmlView(views.View):
                         changes.append(dict(
                             action='update',
                             name=old_string.name,
-                            value_one=old_string.value_one,
-                            value_other=old_string.value_other,
+                            value_one=new_string['value_one'],
+                            value_other=new_string['value_other'],
                             position=new_string['position'],
                         ))
                     del new_strings[old_string.name]
@@ -106,9 +105,72 @@ class UploadStringsXmlView(views.View):
 
             changes.sort(key=lambda item: (item['position'], item['action']))
 
+            request.session['PROJECT_STRINGS_CHANGES'] = changes
+
             return render(request, 'core/project_strings_upload.html', dict(
                 project=project,
                 changes=changes,
             ))
-        except UploadStringsXmlView.UploadError as upload_error:
+        except UploadError as upload_error:
             return render(request, 'core/project_strings_upload_error.html', dict(project=project, message=upload_error.message))
+
+
+class ProjectStringsCommitView(views.View):
+    @staticmethod
+    def post(request, project_uuid):
+        project = Project.objects.get(uuid=project_uuid)
+
+        changes = request.session['PROJECT_STRINGS_CHANGES']
+
+        try:
+            with transaction.atomic():
+                for change in changes:
+                    action = change['action']
+                    if action == 'add':
+                        String.objects.create(
+                            project=project,
+                            name=change['name'],
+                            value_one=change['value_one'],
+                            value_other=change['value_other'],
+                            position=change['position'],
+                        )
+                    elif action == 'merge':
+                        merge_action = request.POST[change['name']]
+                        if merge_action == 'keep_suggestions':
+                            Vote.objects.filter(
+                                suggestion__string__project=project,
+                                suggestion__string__name=change['name'],
+                            ).delete()
+                        elif merge_action == 'remove_suggestions':
+                            Suggestion.objects.filter(
+                                string__project=project,
+                                string__name=change['name'],
+                            ).delete()
+                        else:
+                            raise UploadError("Unsupported merge action: {0}".format(merge_action))
+                        String.objects.filter(project=project, name=change['name']).update(
+                            value_one=change['value_one'],
+                            value_other=change['value_other'],
+                            position=change['position'],
+                        )
+                    elif action == 'remove':
+                        String.objects.filter(project=project, name=change['name']).delete()
+                    elif action == 'update':
+                        String.objects.filter(project=project, name=change['name']).update(
+                            value_one=change['value_one'],
+                            value_other=change['value_other'],
+                            position=change['position'],
+                        )
+                    else:
+                        raise UploadError("Unsupported action: {0}".format(action))
+        except UploadError as upload_error:
+            return render(request, 'core/project_strings_upload_error.html', dict(project=project, message=upload_error.message))
+
+        del request.session['PROJECT_STRINGS_CHANGES']
+
+        return redirect('project_strings', project_uuid=project.uuid)
+
+
+class UploadError(Exception):
+    def __init__(self, message):
+        self.message = message
