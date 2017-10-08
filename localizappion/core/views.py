@@ -1,7 +1,7 @@
 from xml.etree import ElementTree
 
 from django import views
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 
 from .models import Project
 
@@ -14,20 +14,28 @@ class ProjectStringsView(views.View):
         ))
 
 
-class ImportStringsXmlView(views.View):
+class UploadStringsXmlView(views.View):
+    class UploadError(Exception):
+        def __init__(self, message):
+            self.message = message
+
     @staticmethod
     def post(request, project_uuid=None):
         project = Project.objects.get(uuid=project_uuid)
-        project_strings = set(project.strings.values_list('name', flat=True))
 
         strings_xml = request.FILES['strings_xml']
         strings_xml_content = bytes.decode(strings_xml.read(), 'utf-8')
 
-        resources = ElementTree.fromstring(strings_xml_content)
-        if resources.tag != 'resources':
-            # TODO: fail with error: not a valid strings.xml file
-            pass
-        else:
+        try:
+            try:
+                resources = ElementTree.fromstring(strings_xml_content)
+            except ElementTree.ParseError:
+                # TODO: log the parse error
+                raise UploadStringsXmlView.UploadError("Not a valid strings.xml file")
+
+            if resources.tag != 'resources':
+                raise UploadStringsXmlView.UploadError("Not a valid strings.xml file")
+
             new_strings = {}
 
             def load_new_string(element, plural='other'):
@@ -39,8 +47,7 @@ class ImportStringsXmlView(views.View):
                         if element_child.tail:
                             string_value += element_child.tail
                     else:
-                        # TODO: fail with error: unsupported tag
-                        pass
+                        raise UploadStringsXmlView.UploadError("Unsupported string tag: {0}".format(element_child.tag))
                 return {
                     'value_' + plural: string_value.strip(),
                 }
@@ -72,7 +79,7 @@ class ImportStringsXmlView(views.View):
                         name=old_string.name,
                         value_one=old_string.value_one,
                         value_other=old_string.value_other,
-                        position=old_string.position
+                        position=old_string.position,
                     ))
                 else:
                     new_string = new_strings[old_string.name]
@@ -84,7 +91,7 @@ class ImportStringsXmlView(views.View):
                             value_other=new_string['value_other'],
                             old_value_one=old_string.value_one,
                             old_value_other=old_string.value_other,
-                            position=new_string['position']
+                            position=new_string['position'],
                         ))
                     else:
                         changes.append(dict(
@@ -92,17 +99,16 @@ class ImportStringsXmlView(views.View):
                             name=old_string.name,
                             value_one=old_string.value_one,
                             value_other=old_string.value_other,
-                            position=new_string['position']
+                            position=new_string['position'],
                         ))
                     del new_strings[old_string.name]
             changes.extend(new_strings.values())
 
             changes.sort(key=lambda item: (item['position'], item['action']))
 
-            context = {
-                'project': project,
-                'changes': changes,
-            }
-            return render(request, 'core/project_strings_upload.html', context)
-
-        return redirect(url_for('project_strings', project_uuid=project_uuid))
+            return render(request, 'core/project_strings_upload.html', dict(
+                project=project,
+                changes=changes,
+            ))
+        except UploadStringsXmlView.UploadError as upload_error:
+            return render(request, 'core/project_strings_upload_error.html', dict(project=project, message=upload_error.message))

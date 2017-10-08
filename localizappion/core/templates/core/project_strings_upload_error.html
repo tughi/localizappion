@@ -1,0 +1,14 @@
+{% extends './__base__.html' %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block content %}
+<div class="alert alert-danger" role="alert">
+    <p>
+        <strong>Oh snap!</strong>
+    </p>
+    <p>
+        {{ message }}
+    </p>
+</div>
+{% endblock %}
