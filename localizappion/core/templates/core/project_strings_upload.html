@@ -1,6 +1,12 @@
 {% extends './__base__.html' %}
 
-{% block title %}{{ project.name }}{% endblock %}
+{% block navbar %}
+<ul class="nav navbar-nav">
+    <li>
+        <a href="{% url 'project_strings' project.uuid %}">{{ project.strings.count }} String{{ project.strings.count|pluralize }}</a>
+    </li>
+</ul>
+{% endblock %}
 
 {% block content %}
 <form action="{% url 'project_strings_commit' project.uuid %}" method="post">
@@ -77,7 +83,8 @@
         </div>
 
         <div class="panel-footer">
-            <input type="submit" value="Commit" class="btn btn-danger">
+            <a href="{% url 'project_strings' project.uuid %}" class="btn btn-default">Cancel</a>
+            <input type="submit" value="Commit" class="btn btn-danger pull-right">
         </div>
     </div>
 </form>

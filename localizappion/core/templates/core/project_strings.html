@@ -1,6 +1,17 @@
 {% extends './__base__.html' %}
 
-{% block title %}{{ project.name }}{% endblock %}
+{% block navbar %}
+<ul class="nav navbar-nav">
+    <li class="active">
+        <a href="{% url 'project_strings' project.uuid %}">Strings</a>
+    </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+    <li>
+        <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#upload-dialog">Upload</button>
+    </li>
+</ul>
+{% endblock %}
 
 {% block content %}
 <div class="table-responsive">
@@ -29,15 +40,31 @@
 </div>
 
 <div class="panel panel-default">
-    <div class="panel-heading">Updated strings.xml</div>
     <div class="panel-body">
-        <form action="{% url 'project_strings' project.uuid %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-group">
-                <input type="file" name="strings_xml" required>
-            </div>
-            <button type="submit" class="btn btn-default">Upload</button>
-        </form>
+        {{ project.strings.count }} String{{ project.strings.count|pluralize }}
     </div>
+</div>
+
+<div id="upload-dialog" class="modal fade" tabindex="-1" role="dialog">
+    <form action="{% url 'project_strings' project.uuid %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Upload strings</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Only Android resource files are supported.</p>
+                    <div class="form-group">
+                        <input type="file" name="strings_xml" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 {% endblock %}
