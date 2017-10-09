@@ -68,6 +68,8 @@ class Project(models.Model):
 
     languages = models.ManyToManyField(Language, related_name='+')
 
+    strings_upload_time = models.DateTimeField(null=True, blank=True)
+
     def __str__(self):
         return self.name
 

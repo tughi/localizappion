@@ -1,3 +1,4 @@
+from datetime import datetime
 from xml.etree import ElementTree
 
 from django import views
@@ -163,6 +164,8 @@ class ProjectStringsCommitView(views.View):
                         )
                     else:
                         raise UploadError("Unsupported action: {0}".format(action))
+            project.strings_upload_time = datetime.now()
+            project.save()
         except UploadError as upload_error:
             return render(request, 'core/project_strings_upload_error.html', dict(project=project, message=upload_error.message))
 

@@ -14,6 +14,13 @@
 {% endblock %}
 
 {% block content %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        {{ project.strings.count }} string{{ project.strings.count|pluralize }}
+        {% if project.strings_upload_time %}last uploaded {{ project.strings_upload_time|timesince }} ago{% endif %}.
+    </div>
+</div>
+
 <div class="table-responsive">
     <table class="table table-hover">
         <thead>
@@ -26,23 +33,17 @@
         {% for string in project.strings.all %}
         {% if string.value_one %}
         <tr>
-            <td><samp>{{ string.name }}</samp><span class="text-info"> :: one</span></td>
+            <td><code>{{ string.name }}</code><nobr> :: </nobr><code class="text-warning">one</code></td>
             <td>{{ string.value_one }}</td>
         </tr>
         {% endif %}
         <tr>
-            <td><samp>{{ string.name }}</samp>{% if string.value_one %}<span class="text-info"> :: other</span>{% endif %}</td>
+            <td><code>{{ string.name }}</code>{% if string.value_one %}<nobr> :: </nobr><code class="text-warning">other</code>{% endif %}</td>
             <td>{{ string.value_other }}</td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
-</div>
-
-<div class="panel panel-default">
-    <div class="panel-body">
-        {{ project.strings.count }} String{{ project.strings.count|pluralize }}
-    </div>
 </div>
 
 <div id="upload-dialog" class="modal fade" tabindex="-1" role="dialog">
