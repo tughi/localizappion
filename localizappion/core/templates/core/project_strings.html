@@ -16,7 +16,7 @@
 <div class="panel panel-default">
     <div class="panel-body">
         {{ project.strings.count }} string{{ project.strings.count|pluralize }}
-        {% if project.strings_upload_time %}last uploaded {{ project.strings_upload_time|timesince }} ago{% endif %}.
+        {% if project.strings_upload_time %}uploaded on {{ project.strings_upload_time|date }}, {{ project.strings_upload_time|time }}{% endif %}
     </div>
 </div>
 
