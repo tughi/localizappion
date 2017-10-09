@@ -15,5 +15,5 @@ def string_value(value, markers):
         for marker, marker_details in markers.items():
             marker = escape(marker)
             marker_name = marker_details['name'] or ''
-            value = value.replace(marker, '<span class="text-danger" title="{1}">{0}</span>'.format(marker, marker_name))
+            value = value.replace(marker, '<strong title="{1}">{0}</strong>'.format(marker, marker_name))
     return mark_safe(value)

@@ -92,9 +92,10 @@ class ProjectStringsView(views.View):
                             name=old_string.name,
                             value_one=new_string['value_one'],
                             value_other=new_string['value_other'],
+                            markers=new_string['markers'],
                             old_value_one=old_string.value_one,
                             old_value_other=old_string.value_other,
-                            markers=new_string['markers'],
+                            old_markers=old_string.markers,
                             position=new_string['position'],
                         ))
                     else:
