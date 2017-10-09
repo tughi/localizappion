@@ -5,10 +5,8 @@
     <li class="active">
         <a href="{% url 'project_strings' project.uuid %}">Strings</a>
     </li>
-</ul>
-<ul class="nav navbar-nav navbar-right">
     <li>
-        <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#upload-dialog">Upload</button>
+        <a data-toggle="modal" data-target="#upload-dialog"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
     </li>
 </ul>
 {% endblock %}
@@ -33,12 +31,22 @@
         {% for string in project.strings.all %}
         {% if string.value_one %}
         <tr>
-            <td><code>{{ string.name }}</code><nobr> :: </nobr><code class="text-warning">one</code></td>
+            <td>
+                <code>{{ string.name }}</code>
+                <nobr> ::</nobr>
+                <code class="text-warning bg-warning">one</code>
+            </td>
             <td>{{ string.value_one }}</td>
         </tr>
         {% endif %}
         <tr>
-            <td><code>{{ string.name }}</code>{% if string.value_one %}<nobr> :: </nobr><code class="text-warning">other</code>{% endif %}</td>
+            <td>
+                <code>{{ string.name }}</code>
+                {% if string.value_one %}
+                <nobr> ::</nobr>
+                <code class="text-warning bg-warning">other</code>
+                {% endif %}
+            </td>
             <td>{{ string.value_other }}</td>
         </tr>
         {% endfor %}

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Localizappion{% if project %} :: {{ project.name }}{% endif %}</title>
+    <title>Localizappion :: {{ project.name }}</title>
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
@@ -20,16 +20,16 @@
                 <nav class="navbar navbar-default">
                     <div class="container-fluid">
                         <div class="navbar-header">
-                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-controls"
                                     aria-expanded="false">
                                 <span class="sr-only">Toggle navigation</span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#">{{ project.name }}</a>
+                            <span class="navbar-brand">{{ project.name }}</span>
                         </div>
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <div class="collapse navbar-collapse" id="navbar-controls">
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
                                     {% if user.is_authenticated %}
