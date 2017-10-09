@@ -22,10 +22,10 @@ def plurals(*args):
 
 
 def forwards_func(apps, schema_editor):
-    Language = apps.get_model('core', 'Language')
+    language_model = apps.get_model('core', 'Language')
     db_alias = schema_editor.connection.alias
-    Language.objects.using(db_alias).bulk_create([
-        Language(
+    language_model.objects.using(db_alias).bulk_create([
+        language_model(
             code="ar",
             name="Arabic",
             plurals_zero=plurals(0),
@@ -35,105 +35,105 @@ def forwards_func(apps, schema_editor):
             plurals_many=plurals(Range(11, 26), 111, 1011),
             plurals_other=plurals(Range(100, 102), Range(200, 202), Range(300, 302), Range(400, 402), Range(500, 502), 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="be",
             name="Belarusian",
             plurals_one=plurals(1, 21, 31, 41, 51, 61, 71, 81, 101, 1001),
             plurals_few=plurals(Range(2, 4), Range(22, 24), Range(32, 34), Range(42, 44), Range(52, 54), 62, 102, 1002),
             plurals_many=plurals(0, Range(5, 19), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="bg",
             name="Bulgarian",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="ca",
             name="Catalan",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="cs",
             name="Czech",
             plurals_one=plurals(1),
             plurals_few=plurals(Range(2, 4)),
             plurals_other=plurals(0, Range(5, 19), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="da",
             name="Danish",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="de",
             name="German",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="el",
             name="Greek",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="es",
             name="Spanish",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="et",
             name="Estonian",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="fi",
             name="Finnish",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="fr",
             name="French",
             plurals_one=plurals(0, 1),
             plurals_other=plurals(Range(2, 17), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="hi",
             name="Hindi",
             plurals_one=plurals(0, 1),
             plurals_other=plurals(Range(2, 17), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="hr",
             name="Croatian",
             plurals_one=plurals(1, 21, 31, 41, 51, 61, 71, 81, 101, 1001),
             plurals_few=plurals(Range(2, 4), Range(22, 24), Range(32, 34), Range(42, 44), Range(52, 54), 62, 102, 1002),
             plurals_other=plurals(0, Range(5, 19), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="hu",
             name="Hungarian",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="in",
             name="Indonesian",
             plurals_other=plurals(Range(0, 15), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="it",
             name="Italian",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="iw",
             name="Hebrew",
             plurals_one=plurals(1),
@@ -141,83 +141,83 @@ def forwards_func(apps, schema_editor):
             plurals_many=plurals(20, 30, 40, 50, 60, 70, 80, 90, 100, 1000, 10000, 100000, 1000000),
             plurals_other=plurals(0, Range(3, 17), 101, 1001)
         ),
-        Language(
+        language_model(
             code="ja",
             name="Japanese",
             plurals_other=plurals(Range(0, 15), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="ko",
             name="Korean",
             plurals_other=plurals(Range(0, 15), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="lt",
             name="Lithuanian",
             plurals_one=plurals(1, 21, 31, 41, 51, 61, 71, 81, 101, 1001),
             plurals_few=plurals(Range(2, 9), Range(22, 29), 102, 1002),
             plurals_other=plurals(0, Range(10, 20), 30, 40, 50, 60, 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="lv",
             name="Latvian",
             plurals_zero=plurals(0, Range(10, 20), 30, 40, 50, 60, 100, 1000, 10000, 100000, 1000000),
             plurals_one=plurals(1, 21, 31, 41, 51, 61, 71, 81, 101, 1001),
             plurals_other=plurals(Range(2, 9), Range(22, 29), 102, 1002)
         ),
-        Language(
+        language_model(
             code="nb",
             name="Norwegian Bokmål",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="nl",
             name="Dutch",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="nn",
             name="Norwegian Nynorsk",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="pl",
             name="Polish",
             plurals_one=plurals(1),
             plurals_few=plurals(Range(2, 4), Range(22, 24), Range(32, 34), Range(42, 44), Range(52, 54), 62, 102, 1002),
             plurals_many=plurals(0, Range(5, 19), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="pt",
             name="Portuguese",
             plurals_one=plurals(0, 1),
             plurals_other=plurals(Range(2, 17), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="ro",
             name="Romanian",
             plurals_one=plurals(1),
             plurals_few=plurals(0, Range(2, 16), 101, 1001),
             plurals_other=plurals(Range(20, 35), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="ru",
             name="Russian",
             plurals_one=plurals(1, 21, 31, 41, 51, 61, 71, 81, 101, 1001),
             plurals_few=plurals(Range(2, 4), Range(22, 24), Range(32, 34), Range(42, 44), Range(52, 54), 62, 102, 1002),
             plurals_many=plurals(0, Range(5, 19), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="sk",
             name="Slovak",
             plurals_one=plurals(1),
             plurals_few=plurals(Range(2, 4)),
             plurals_other=plurals(0, Range(5, 19), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="sl",
             name="Slovenian",
             plurals_one=plurals(1, 101, 201, 301, 401, 501, 601, 701, 1001),
@@ -225,41 +225,41 @@ def forwards_func(apps, schema_editor):
             plurals_few=plurals(3, 4, 103, 104, 203, 204, 303, 304, 403, 404, 503, 504, 603, 604, 703, 704, 1003),
             plurals_other=plurals(0, Range(5, 19), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="sv",
             name="Swedish",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="th",
             name="Thai",
             plurals_other=plurals(Range(0, 15), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="tr",
             name="Turkish",
             plurals_one=plurals(1),
             plurals_other=plurals(0, Range(2, 16), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="uk",
             name="Ukrainian",
             plurals_one=plurals(1, 21, 31, 41, 51, 61, 71, 81, 101, 1001),
             plurals_few=plurals(Range(2, 4), Range(22, 24), Range(32, 34), Range(42, 44), Range(52, 54), 62, 102, 1002),
             plurals_many=plurals(0, Range(5, 19), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="vi",
             name="Vietnamese",
             plurals_other=plurals(Range(0, 15), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="zh-Hans",
             name="Chinese (Simplified Han)",
             plurals_other=plurals(Range(0, 15), 100, 1000, 10000, 100000, 1000000)
         ),
-        Language(
+        language_model(
             code="zh-Hant",
             name="Chinese (Traditional Han)",
             plurals_other=plurals(Range(0, 15), 100, 1000, 10000, 100000, 1000000)
@@ -268,46 +268,46 @@ def forwards_func(apps, schema_editor):
 
 
 def reverse_func(apps, schema_editor):
-    Language = apps.get_model('core', 'Language')
+    language_model = apps.get_model('core', 'Language')
     db_alias = schema_editor.connection.alias
-    Language.objects.using(db_alias).filter(code='ar').delete()
-    Language.objects.using(db_alias).filter(code='be').delete()
-    Language.objects.using(db_alias).filter(code='bg').delete()
-    Language.objects.using(db_alias).filter(code='ca').delete()
-    Language.objects.using(db_alias).filter(code='cs').delete()
-    Language.objects.using(db_alias).filter(code='da').delete()
-    Language.objects.using(db_alias).filter(code='de').delete()
-    Language.objects.using(db_alias).filter(code='el').delete()
-    Language.objects.using(db_alias).filter(code='es').delete()
-    Language.objects.using(db_alias).filter(code='et').delete()
-    Language.objects.using(db_alias).filter(code='fi').delete()
-    Language.objects.using(db_alias).filter(code='fr').delete()
-    Language.objects.using(db_alias).filter(code='hi').delete()
-    Language.objects.using(db_alias).filter(code='hr').delete()
-    Language.objects.using(db_alias).filter(code='hu').delete()
-    Language.objects.using(db_alias).filter(code='in').delete()
-    Language.objects.using(db_alias).filter(code='it').delete()
-    Language.objects.using(db_alias).filter(code='iw').delete()
-    Language.objects.using(db_alias).filter(code='ja').delete()
-    Language.objects.using(db_alias).filter(code='ko').delete()
-    Language.objects.using(db_alias).filter(code='lt').delete()
-    Language.objects.using(db_alias).filter(code='lv').delete()
-    Language.objects.using(db_alias).filter(code='nb').delete()
-    Language.objects.using(db_alias).filter(code='nl').delete()
-    Language.objects.using(db_alias).filter(code='nn').delete()
-    Language.objects.using(db_alias).filter(code='pl').delete()
-    Language.objects.using(db_alias).filter(code='pt').delete()
-    Language.objects.using(db_alias).filter(code='ro').delete()
-    Language.objects.using(db_alias).filter(code='ru').delete()
-    Language.objects.using(db_alias).filter(code='sk').delete()
-    Language.objects.using(db_alias).filter(code='sl').delete()
-    Language.objects.using(db_alias).filter(code='sv').delete()
-    Language.objects.using(db_alias).filter(code='th').delete()
-    Language.objects.using(db_alias).filter(code='tr').delete()
-    Language.objects.using(db_alias).filter(code='uk').delete()
-    Language.objects.using(db_alias).filter(code='vi').delete()
-    Language.objects.using(db_alias).filter(code='zh-Hans').delete()
-    Language.objects.using(db_alias).filter(code='zh-Hant').delete()
+    language_model.objects.using(db_alias).filter(code='ar').delete()
+    language_model.objects.using(db_alias).filter(code='be').delete()
+    language_model.objects.using(db_alias).filter(code='bg').delete()
+    language_model.objects.using(db_alias).filter(code='ca').delete()
+    language_model.objects.using(db_alias).filter(code='cs').delete()
+    language_model.objects.using(db_alias).filter(code='da').delete()
+    language_model.objects.using(db_alias).filter(code='de').delete()
+    language_model.objects.using(db_alias).filter(code='el').delete()
+    language_model.objects.using(db_alias).filter(code='es').delete()
+    language_model.objects.using(db_alias).filter(code='et').delete()
+    language_model.objects.using(db_alias).filter(code='fi').delete()
+    language_model.objects.using(db_alias).filter(code='fr').delete()
+    language_model.objects.using(db_alias).filter(code='hi').delete()
+    language_model.objects.using(db_alias).filter(code='hr').delete()
+    language_model.objects.using(db_alias).filter(code='hu').delete()
+    language_model.objects.using(db_alias).filter(code='in').delete()
+    language_model.objects.using(db_alias).filter(code='it').delete()
+    language_model.objects.using(db_alias).filter(code='iw').delete()
+    language_model.objects.using(db_alias).filter(code='ja').delete()
+    language_model.objects.using(db_alias).filter(code='ko').delete()
+    language_model.objects.using(db_alias).filter(code='lt').delete()
+    language_model.objects.using(db_alias).filter(code='lv').delete()
+    language_model.objects.using(db_alias).filter(code='nb').delete()
+    language_model.objects.using(db_alias).filter(code='nl').delete()
+    language_model.objects.using(db_alias).filter(code='nn').delete()
+    language_model.objects.using(db_alias).filter(code='pl').delete()
+    language_model.objects.using(db_alias).filter(code='pt').delete()
+    language_model.objects.using(db_alias).filter(code='ro').delete()
+    language_model.objects.using(db_alias).filter(code='ru').delete()
+    language_model.objects.using(db_alias).filter(code='sk').delete()
+    language_model.objects.using(db_alias).filter(code='sl').delete()
+    language_model.objects.using(db_alias).filter(code='sv').delete()
+    language_model.objects.using(db_alias).filter(code='th').delete()
+    language_model.objects.using(db_alias).filter(code='tr').delete()
+    language_model.objects.using(db_alias).filter(code='uk').delete()
+    language_model.objects.using(db_alias).filter(code='vi').delete()
+    language_model.objects.using(db_alias).filter(code='zh-Hans').delete()
+    language_model.objects.using(db_alias).filter(code='zh-Hant').delete()
 
 
 class Migration(migrations.Migration):
