@@ -1,4 +1,5 @@
 {% extends './__base__.html' %}
+{% load strings %}
 
 {% block navbar %}
 <ul class="nav navbar-nav">
@@ -32,22 +33,22 @@
         {% if string.value_one %}
         <tr>
             <td>
-                <code>{{ string.name }}</code>
+                <code class="text-info bg-info">{{ string.name }}</code>
                 <nobr> ::</nobr>
                 <code class="text-warning bg-warning">one</code>
             </td>
-            <td>{{ string.value_one }}</td>
+            <td>{{ string.value_one|string_value:string.markers }}</td>
         </tr>
         {% endif %}
         <tr>
             <td>
-                <code>{{ string.name }}</code>
+                <code class="text-info bg-info">{{ string.name }}</code>
                 {% if string.value_one %}
                 <nobr> ::</nobr>
                 <code class="text-warning bg-warning">other</code>
                 {% endif %}
             </td>
-            <td>{{ string.value_other }}</td>
+            <td>{{ string.value_other|string_value:string.markers }}</td>
         </tr>
         {% endfor %}
         </tbody>

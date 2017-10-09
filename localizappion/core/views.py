@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from xml.etree import ElementTree
 
@@ -31,25 +32,27 @@ class ProjectStringsView(views.View):
                 resources = ElementTree.fromstring(strings_xml_content)
             except ElementTree.ParseError:
                 # TODO: log the parse error
-                raise UploadError("Not a valid strings.xml file")
+                raise UploadError("Not a valid XML file")
 
             if resources.tag != 'resources':
-                raise UploadError("Not a valid strings.xml file")
+                raise UploadError("Unexpected root tag: {0}".format(resources.tag))
 
             new_strings = {}
 
             def load_new_string(element, plural='other'):
+                markers = {}
                 string_value = element.text or ''
                 for element_child in element:
                     if element_child.tag == '{urn:oasis:names:tc:xliff:document:1.2}g':
-                        # TODO: use element_child.text as marker
+                        markers[element_child.text] = dict(name=element_child.get('id'))
                         string_value += element_child.text
                         if element_child.tail:
                             string_value += element_child.tail
                     else:
                         raise UploadError("Unsupported string tag: {0}".format(element_child.tag))
                 return {
-                    'value_' + plural: string_value.strip(),
+                    'value_' + plural: string_value.strip().replace('\\\'', '\'').replace('\\"', '"').replace('\\n', '\n'),
+                    'markers': json.dumps(markers) if markers else '',
                 }
 
             for resource in resources:
@@ -91,6 +94,7 @@ class ProjectStringsView(views.View):
                             value_other=new_string['value_other'],
                             old_value_one=old_string.value_one,
                             old_value_other=old_string.value_other,
+                            markers=new_string['markers'],
                             position=new_string['position'],
                         ))
                     else:
@@ -99,6 +103,7 @@ class ProjectStringsView(views.View):
                             name=old_string.name,
                             value_one=new_string['value_one'],
                             value_other=new_string['value_other'],
+                            markers=new_string['markers'],
                             position=new_string['position'],
                         ))
                     del new_strings[old_string.name]
@@ -133,6 +138,7 @@ class ProjectStringsCommitView(views.View):
                             name=change['name'],
                             value_one=change['value_one'],
                             value_other=change['value_other'],
+                            markers=change['markers'],
                             position=change['position'],
                         )
                     elif action == 'merge':
@@ -152,6 +158,7 @@ class ProjectStringsCommitView(views.View):
                         String.objects.filter(project=project, name=change['name']).update(
                             value_one=change['value_one'],
                             value_other=change['value_other'],
+                            markers=change['markers'],
                             position=change['position'],
                         )
                     elif action == 'remove':
@@ -160,6 +167,7 @@ class ProjectStringsCommitView(views.View):
                         String.objects.filter(project=project, name=change['name']).update(
                             value_one=change['value_one'],
                             value_other=change['value_other'],
+                            markers=change['markers'],
                             position=change['position'],
                         )
                     else:
