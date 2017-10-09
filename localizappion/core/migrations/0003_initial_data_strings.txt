@@ -1,0 +1,165 @@
+action__cancel                                         | Cancel
+action__create                                         | Create
+action__delete                                         | Delete
+action__done                                           | Done
+action__help                                           | Help
+action__invert_selection                               | Invert selection
+action__no                                             | No
+action__save                                           | Save
+action__share                                          | Share
+action__yes                                            | Yes
+entries__by_author                                     | by %1$s
+entries__empty                                         | Nothing to read here
+entries_menu__create_exclusion_rule                    | Create exclusion rule
+entries_menu__mark_all_as_read                         | Mark all as read
+entries_menu__mark_as_pinned                           | Mark as pinned
+entries_menu__mark_as_read                             | Mark as read
+entries_menu__show_read_entries                        | Show read entries
+entries_menu__sort                                     | Sort…
+entries_menu__sort_by_date_asc                         | by date, ascending
+entries_menu__sort_by_date_desc                        | by date, descending
+entries_menu__sort_by_title                            | by title
+entries_menu__update_now                               | Update now
+entry_rule                                             | Entry rule
+entry_rule__exclude_entries_with_matching_content      | Exclude entries with matching content
+entry_rule__exclude_entries_with_matching_title        | Exclude entries with matching title
+entry_rule__global_rule                                | Global rule
+entry_rule__include_entries_with_matching_content      | Include entries with matching content
+entry_rule__include_entries_with_matching_title        | Include entries with matching title
+entry_rule__mask                                       | Mask
+entry_rule__no_matching_entries_found                  | No matching entries found
+entry_rules                                            | Entry rules
+entry_rules__empty                                     | This feed has no entry rules
+entry_rules__feed_rules                                | Feed rules
+entry_rules__global_rules                              | Global rules
+entry_rule__wildcard                                   | Wildcard
+entry_viewer__share_link                               | Share link
+entry_viewer__show_original                            | Show original
+entry_viewer__view_image                               | View image
+feed__all_entries                                      | All entries
+feed_preferences                                       | Feed preferences
+feed_preferences__category                             | Category
+feed_preferences__color                                | Color
+feed_preferences__color__amber                         | Amber
+feed_preferences__color__blue                          | Blue
+feed_preferences__color__blue_grey                     | Blue Grey
+feed_preferences__color__brown                         | Brown
+feed_preferences__color__cyan                          | Cyan
+feed_preferences__color__deep_orange                   | Deep Orange
+feed_preferences__color__deep_purple                   | Deep Purple
+feed_preferences__color__green                         | Green
+feed_preferences__color__indigo                        | Indigo
+feed_preferences__color__light_blue                    | Light Blue                                     
+feed_preferences__color__light_green                   | Light Green
+feed_preferences__color__lime                          | Lime
+feed_preferences__color__none                          | None
+feed_preferences__color__orange                        | Orange
+feed_preferences__color__pink                          | Pink
+feed_preferences__color__purple                        | Purple
+feed_preferences__color__red                           | Red
+feed_preferences__color__teal                          | Teal
+feed_preferences__color__yellow                        | Yellow
+feed_preferences__delete_feed__confirmation            | Feed deleted
+feed_preferences__delete_feed__dialog_message          | Are you sure you want to delete this feed and all its entries?
+feed_preferences__entries_limit                        | Entries limit
+feed_preferences__show_original                        | Always show original content in the embedded viewer
+feed_preferences__time_interval                        | Time interval
+feed_preferences__title                                | Title
+feed_preferences__update_every_12_hours                | 12 hours
+feed_preferences__update_every_15_minutes              | 15 minutes
+feed_preferences__update_every_1_hour                  | 1 hour
+feed_preferences__update_every_24_hours                | 24 hours
+feed_preferences__update_every_2_hours                 | 2 hours
+feed_preferences__update_every_30_minutes              | 30 minutes
+feed_preferences__update_every_3_hours                 | 3 hours
+feed_preferences__update_every_45_minutes              | 45 minutes
+feed_preferences__update_every_4_hours                 | 4 hours
+feed_preferences__update_every_6_hours                 | 6 hours
+feed_preferences__update_every_8_hours                 | 8 hours
+feed_preferences__update_mode                          | Update Mode
+feed_preferences__update_mode__disabled                | Disabled
+feed_preferences__update_mode__disabled__description   | The application does not update this feed in the background
+feed_preferences__update_mode__repeating               | Repeating
+feed_preferences__url                                  | URL
+feed_subscriber                                        | Add a subscription
+feed_subscriber__add_feed__confirmation                | Feed added
+feed_subscriber__no_feeds_found                        | No feeds found
+feed_subscriber__search_hint                           | URL
+feed_update_details                                    | Update details
+feed_update_details__duration_millis                   | <b>Duration:</b> %1$dms
+feed_update_details__duration_minutes                  | <b>Duration:</b> %1$dm %2$ds %3$dms
+feed_update_details__duration_seconds                  | <b>Duration:</b> %1$ds %2$dms
+feed_update_details__fail_message                      | <b>Fail message:</b> %1$s
+feed_update_details__finish_time                       | <b>Finish time:</b> %1$s
+feed_update_details__http_response_code                | <b>HTTP response code:</b> %1$d
+feed_update_details__http_response_message             | <b>HTTP response message:</b> %1$s
+feed_update_details__new_entries                       | <b>New entries:</b> %1$d
+feed_update_details__start_time                        | <b>Start time:</b> %1$s
+feed_update_details__total_entries                     | <b>Total entries:</b> %1$d
+feed_update_history                                    | Feed update history
+feed_update_history__new_entries__one                  | %1$d new entry
+feed_update_history__new_entries__other                | %1$d new entries
+feed_update_history__no_new_entries                    | No new entries
+feed_updater__parser_error                             | Failed to parse feed content: %1$s
+feed_updater__unexpected_http_response                 | Unexpected HTTP response code
+new_category                                           | New category
+new_category__name                                     | Name
+notification__new_entries__one                         | %1$d new entry
+notification__new_entries__other                       | %1$d new entries
+notification__updated_feeds__one                       | %1$d updated feed
+notification__updated_feeds__other                     | %1$d updated feeds
+opml_export                                            | Export feeds
+opml_export__export_feeds__one                         | Export %1$d feed
+opml_export__export_feeds__other                       | Export %1$d feeds
+opml_export__no_feeds_found                            | No feeds found to export
+opml_import                                            | Import feeds
+opml_import__busy__message                             | Importing feeds. Please wait…
+opml_import__import_feeds__one                         | Import %1$d feed
+opml_import__import_feeds__other                       | Import %1$d feeds
+opml_import__no_feeds_found                            | No feeds found to import
+opml_import__unsupported_file_type                     | Unsupported file type
+settings                                               | Settings
+settings__default_entries_limit                        | Default entries limit
+settings__default_entries_limit__summary               | Keep up to %1$d entries per feed
+settings__entry_viewer                                 | Embedded entry viewer
+settings__entry_viewer__javascript                     | JavaScript
+settings__entry_viewer__javascript__summary            | Allow execution of JavaScript in the embedded entry view
+settings__entry_viewer__volume_navigation              | Volume buttons
+settings__entry_viewer__volume_navigation__summary_off | Disabled
+settings__entry_viewer__volume_navigation__summary_on  | Navigate between entries
+settings__feeds                                        | Feeds
+settings__feeds__export                                | Export feeds
+settings__feeds__export__summary                       | Export feeds to an OPML file
+settings__feeds__import                                | Import
+settings__feeds__import__summary                       | Import feeds from an OPML file
+settings__notifications                                | Notifications
+settings__notifications__new_entries_only              | New unread entries only
+settings__notifications__new_entries_only__summary_off | Notify me about old unread entries too
+settings__notifications__new_entries_only__summary_on  | Notify me only about new unread entries
+settings__notifications__ringtone                      | Ringtone
+settings__notifications__ringtone__default             | Default
+settings__notifications__ringtone__none                | None
+settings__notifications__unread_entries                | Unread entries
+settings__notifications__unread_entries__summary_off   | Disabled
+settings__notifications__unread_entries__summary_on    | Notify me about unread entries
+settings__notifications__vibrate                       | Vibrate
+settings__notifications__vibrate__summary_off          | Don\'t vibrate on new notifications
+settings__notifications__vibrate__summary_on           | Vibrate on new notifications
+settings__preferred_browser                            | Open entry links with…
+settings__preferred_browser__default                   | Default browser
+settings__support                                      | Support
+settings__support__contact                             | Contact
+settings__support__contact__summary                    | E-mail the developer
+settings__support__donate                              | Donate
+settings__support__donate__summary                     | Show how much you like this app
+settings__theme                                        | Theme
+settings__theme__dark                                  | Dark
+settings__theme__light                                 | Light
+sharing__share_via                                     | Share via
+url_handler__cannot_open_connection                    | Cannot open connection
+url_handler__invalid_url                               | Invalid URL
+url_handler__timeout                                   | Time out
+url_handler__unknown_host                              | Unknown host
+url_handler__unsupported_encoding                      | Unsupported encoding: %1$s
+url_handler__unsupported_url                           | No application found for: %1$s
+url_handler__untrusted                                 | There is a security problem with this server: %1$s

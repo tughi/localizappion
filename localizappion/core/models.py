@@ -92,7 +92,7 @@ class String(models.Model):
 
     class Meta:
         db_table = 'localizappion_string'
-        ordering = ('position',)
+        ordering = ('position', 'name')
         unique_together = (
             ('project', 'name'),
         )

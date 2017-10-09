@@ -1,0 +1,564 @@
+ action__cancel                                         | de | translator_01 | Abbrechen
+ action__cancel                                         | de | translator_05 | Abbrechen
+ action__cancel                                         | de | translator_01 | Stornieren
+ action__cancel                                         | es | translator_01 | Cancelar
+ action__cancel                                         | pt | translator_08 | Cancelar
+ action__cancel                                         | uk | translator_01 | скасувати
+ action__create                                         | de | translator_01 | Erstellen
+ action__create                                         | es | translator_01 | Crear
+ action__create                                         | pt | translator_08 | Criar
+ action__create                                         | uk | translator_01 | створити
+ action__delete                                         | de | translator_01 | Löschen
+ action__delete                                         | es | translator_03 | Borrar
+ action__delete                                         | es | translator_10 | Eliminar
+ action__delete                                         | pt | translator_08 | Deletar
+ action__delete                                         | uk | translator_02 | видалити
+ action__done                                           | de | translator_01 | Erledigt
+ action__done                                           | de | translator_01 | Fertig
+ action__done                                           | es | translator_01 | Hecho
+ action__done                                           | pt | translator_08 | Feito
+ action__done                                           | uk | translator_02 | Виконано
+ action__help                                           | de | translator_01 | Hilfe
+ action__help                                           | es | translator_01 | Ayuda
+ action__help                                           | pt | translator_08 | Ajuda
+ action__help                                           | uk | translator_02 | Допомога
+ action__invert_selection                               | de | translator_01 | Auswahl umkehren
+ action__invert_selection                               | es | translator_01 | Invertir la selección
+ action__invert_selection                               | pt | translator_08 | Inverter seleção
+ action__invert_selection                               | uk | translator_02 | інвертувати виділення
+ action__no                                             | de | translator_01 | Nein
+ action__no                                             | es | translator_01 | No
+ action__no                                             | pt | translator_08 | Não
+ action__no                                             | uk | translator_02 | ні
+ action__save                                           | de | translator_01 | Speichern
+ action__save                                           | es | translator_03 | Guardar
+ action__save                                           | pt | translator_08 | Salvar
+ action__save                                           | uk | translator_02 | зберегти
+ action__share                                          | de | translator_01 | Teilen
+ action__share                                          | es | translator_03 | Compartir
+ action__share                                          | pt | translator_08 | Compartilhar
+ action__share                                          | uk | translator_02 | Поширити
+ action__yes                                            | de | translator_01 | Ja
+ action__yes                                            | de | translator_06 | Ja
+ action__yes                                            | es | translator_01 | Sí
+ action__yes                                            | pt | translator_08 | Sim
+ action__yes                                            | uk | translator_02 | Так
+ entries__by_author                                     | de | translator_01 | von %1$s
+ entries__by_author                                     | es | translator_03 | por %1$s
+ entries__by_author                                     | pt | translator_08 | por %1$s
+ entries__by_author                                     | uk | translator_02 | за %1$s
+ entries__empty                                         | de | translator_01 | Keine Einträge vorhanden
+ entries__empty                                         | es | translator_03 | Nada que leer aquí
+ entries__empty                                         | pt | translator_08 | Nada para ler agora
+ entries__empty                                         | uk | translator_02 | Тут немає чого читати
+ entries_menu__create_exclusion_rule                    | de | translator_09 | Ausnahmeregel erstellen
+ entries_menu__create_exclusion_rule                    | de | translator_01 | Ausschlussregel erstellen
+ entries_menu__create_exclusion_rule                    | de | translator_07 | Filterregel erstellen
+ entries_menu__create_exclusion_rule                    | es | translator_01 | Crear regla de exclusión
+ entries_menu__create_exclusion_rule                    | pt | translator_08 | Criar regra de exclusão
+ entries_menu__create_exclusion_rule                    | uk | translator_02 | Створити правило винятку
+ entries_menu__mark_all_as_read                         | de | translator_01 | Alles als gelesen markieren
+ entries_menu__mark_all_as_read                         | es | translator_01 | Marcar todas como leídas
+ entries_menu__mark_all_as_read                         | pt | translator_08 | Marcar todas como lidas
+ entries_menu__mark_all_as_read                         | uk | translator_02 | Помітити все як прочитане
+ entries_menu__mark_as_pinned                           | de | translator_01 | Als gepinnt markieren
+ entries_menu__mark_as_pinned                           | de | translator_05 | Anheften
+ entries_menu__mark_as_pinned                           | es | translator_01 | Marcar como fijada
+ entries_menu__mark_as_pinned                           | pt | translator_08 | Marcar como fixada
+ entries_menu__mark_as_pinned                           | uk | translator_02 | Помітити як пришпилене
+ entries_menu__mark_as_read                             | de | translator_01 | Als gelesen markieren
+ entries_menu__mark_as_read                             | es | translator_01 | Marcar como leída
+ entries_menu__mark_as_read                             | pt | translator_08 | Marcar como lida
+ entries_menu__mark_as_read                             | uk | translator_02 | Помітити як прочитане
+ entries_menu__show_read_entries                        | de | translator_09 | Gelesene anzeigen
+ entries_menu__show_read_entries                        | de | translator_01 | Gelesene Einträge anzeigen
+ entries_menu__show_read_entries                        | es | translator_01 | Mostrar todas las entradas
+ entries_menu__show_read_entries                        | pt | translator_08 | Mostrar entradas lidas
+ entries_menu__show_read_entries                        | uk | translator_02 | Показати прочитані записи
+ entries_menu__sort_by_date_asc                         | de | translator_01 | nach Datum, aufsteigend
+ entries_menu__sort_by_date_asc                         | es | translator_01 | por fecha, ascendente
+ entries_menu__sort_by_date_asc                         | pt | translator_08 | por data, ascendente
+ entries_menu__sort_by_date_asc                         | uk | translator_02 | за датою, по висхідній
+ entries_menu__sort_by_date_desc                        | de | translator_01 | nach Datum, absteigend
+ entries_menu__sort_by_date_desc                        | es | translator_01 | por fecha, descendente
+ entries_menu__sort_by_date_desc                        | pt | translator_08 | por data, descendente
+ entries_menu__sort_by_date_desc                        | uk | translator_02 | за датою, по низхідній
+ entries_menu__sort_by_title                            | de | translator_01 | nach Titel
+ entries_menu__sort_by_title                            | es | translator_01 | por título
+ entries_menu__sort_by_title                            | pt | translator_08 | por título
+ entries_menu__sort_by_title                            | uk | translator_02 | за заголовком
+ entries_menu__sort                                     | de | translator_01 | Sortieren…
+ entries_menu__sort                                     | de | translator_05 | Sortieren...
+ entries_menu__sort                                     | es | translator_01 | Ordenar…
+ entries_menu__sort                                     | pt | translator_08 | Ordenar…
+ entries_menu__sort                                     | uk | translator_02 | Сортувати…
+ entries_menu__update_now                               | de | translator_01 | Jetzt aktualisieren
+ entries_menu__update_now                               | es | translator_01 | Actualizar ahora
+ entries_menu__update_now                               | pt | translator_08 | Atualizar agora
+ entries_menu__update_now                               | uk | translator_02 | Оновити зараз
+ entry_rule                                             | de | translator_01 | Eintragregel
+ entry_rule                                             | de | translator_07 | Filterregel
+ entry_rule                                             | es | translator_01 | Regla de entrada
+ entry_rule__exclude_entries_with_matching_content      | de | translator_07 | Einträge mit Inhalt ausschließen
+ entry_rule__exclude_entries_with_matching_content      | de | translator_01 | Einträge mit passendem Inhalt ausschließen
+ entry_rule__exclude_entries_with_matching_content      | de | translator_05 | Einträge mit übereinstimmendem Inhalt ausschließen
+ entry_rule__exclude_entries_with_matching_content      | es | translator_01 | Excluir entradas con el mismo contenido
+ entry_rule__exclude_entries_with_matching_content      | pt | translator_08 | Excluir entradas com conteúdo correspondente
+ entry_rule__exclude_entries_with_matching_content      | uk | translator_02 | Виключити записи з відповідним змістом
+ entry_rule__exclude_entries_with_matching_title        | de | translator_01 | Einträge mit passendem Titel ausschließen
+ entry_rule__exclude_entries_with_matching_title        | de | translator_07 | Einträge mit Titel ausschließen
+ entry_rule__exclude_entries_with_matching_title        | de | translator_01 | Einträge mit übereinstimmender Titel ausschließen
+ entry_rule__exclude_entries_with_matching_title        | de | translator_05 | Einträge mit übereinstimmender Überschrift ausschließen
+ entry_rule__exclude_entries_with_matching_title        | es | translator_01 | Excluir entradas con el mismo título
+ entry_rule__exclude_entries_with_matching_title        | pt | translator_08 | Excluir entradas com título correspondente
+ entry_rule__exclude_entries_with_matching_title        | uk | translator_02 | Виключити записи з відповідним заголовком
+ entry_rule__global_rule                                | de | translator_01 | Globale Regel
+ entry_rule__global_rule                                | es | translator_01 | Regla general
+ entry_rule__global_rule                                | pt | translator_08 | Regra global
+ entry_rule__global_rule                                | uk | translator_02 | Глобальне правило
+ entry_rule__include_entries_with_matching_content      | de | translator_01 | Einträge mit passende Inhalt einbeziehen
+ entry_rule__include_entries_with_matching_content      | de | translator_01 | Einträge mit passendem Inhalt einbeziehen
+ entry_rule__include_entries_with_matching_content      | de | translator_05 | Einträge mit übereinstimmendem Inhalt einbeziehen
+ entry_rule__include_entries_with_matching_content      | es | translator_01 | Incluir entradas con el mismo contenido
+ entry_rule__include_entries_with_matching_content      | pt | translator_08 | Incluir entradas com conteúdo correspondente
+ entry_rule__include_entries_with_matching_content      | uk | translator_02 | Включити записи з відповідним змістом
+ entry_rule__include_entries_with_matching_title        | de | translator_01 | Einträge mit passendem Titel einbeziehen
+ entry_rule__include_entries_with_matching_title        | de | translator_01 | Einträge mit passenden Titeln einbeziehen
+ entry_rule__include_entries_with_matching_title        | de | translator_01 | Einträge mit übereinstimmender Titel einbeziehe
+ entry_rule__include_entries_with_matching_title        | de | translator_05 | Einträge mit übereinstimmender Überschrift einbeziehen
+ entry_rule__include_entries_with_matching_title        | es | translator_01 | Incluir entradas con el mismo título
+ entry_rule__include_entries_with_matching_title        | pt | translator_08 | Incluir entradas com título correspondente
+ entry_rule__include_entries_with_matching_title        | uk | translator_02 | Включити записи з відповідним заголовком
+ entry_rule__mask                                       | de | translator_01 | Maske
+ entry_rule__mask                                       | es | translator_01 | Máscara
+ entry_rule__mask                                       | uk | translator_02 | Маска
+ entry_rule__no_matching_entries_found                  | de | translator_01 | Keine passenden Einträge gefunden
+ entry_rule__no_matching_entries_found                  | de | translator_05 | Keine übereinstimmenden Einträge gefunden
+ entry_rule__no_matching_entries_found                  | es | translator_01 | No se han encontrado entradas coincidentes
+ entry_rule__no_matching_entries_found                  | uk | translator_02 | Не знайдено відповідних записів
+ entry_rule                                             | pt | translator_08 | Regras de entrada
+ entry_rules                                            | de | translator_01 | Eintragregeln
+ entry_rules                                            | de | translator_05 | Filterregeln
+ entry_rules__empty                                     | de | translator_01 | Dieser Feed hat keine Eintragregeln
+ entry_rules__empty                                     | de | translator_05 | Dieser Feed hat keine Filterregeln
+ entry_rules__empty                                     | es | translator_03 | Esta fuente no tiene reglas para las entradas
+ entry_rules__empty                                     | uk | translator_02 | Цей канал не має правил записів
+ entry_rules                                            | es | translator_01 | Reglas de entrada
+ entry_rules__feed_rules                                | de | translator_01 | Feedregeln
+ entry_rules__feed_rules                                | es | translator_03 | Reglas para la fuente
+ entry_rules__feed_rules                                | uk | translator_02 | Правила каналу
+ entry_rules__global_rules                              | de | translator_04 | Allgemeine Regeln
+ entry_rules__global_rules                              | de | translator_06 | Globale Filter
+ entry_rules__global_rules                              | de | translator_05 | Globale Regeln
+ entry_rules__global_rules                              | es | translator_01 | Reglas generales
+ entry_rules__global_rules                              | uk | translator_02 | Глобальні правила
+ entry_rules                                            | uk | translator_02 | Правила записів
+ entry_rule                                             | uk | translator_02 | Правило запису
+ entry_rule__wildcard                                   | de | translator_01 | Platzhalter
+ entry_rule__wildcard                                   | es | translator_01 | Comodín
+ entry_rule__wildcard                                   | uk | translator_02 | Байдужий символ
+ entry_viewer__share_link                               | de | translator_01 | Link teilen
+ entry_viewer__share_link                               | es | translator_01 | Compartir enlace
+ entry_viewer__share_link                               | uk | translator_02 | Поширити посилання
+ entry_viewer__show_original                            | de | translator_05 | Original anzeigen
+ entry_viewer__show_original                            | es | translator_01 | Mostrar el original
+ entry_viewer__show_original                            | uk | translator_02 | Показати оригінал
+ entry_viewer__view_image                               | de | translator_07 | Bild ansehen
+ entry_viewer__view_image                               | de | translator_01 | Bild anzeigen
+ entry_viewer__view_image                               | es | translator_01 | Ver imagen
+ entry_viewer__view_image                               | uk | translator_02 | Показати зображення
+ feed__all_entries                                      | de | translator_01 | Alle Einträge
+ feed__all_entries                                      | es | translator_01 | Todas las entradas
+ feed__all_entries                                      | uk | translator_02 | Усі записи
+ feed_preferences__category                             | de | translator_01 | Kategorie
+ feed_preferences__category                             | es | translator_01 | Categoría
+ feed_preferences__category                             | uk | translator_02 | Категорія
+ feed_preferences__color__amber                         | de | translator_01 | Bernstein
+ feed_preferences__color__amber                         | es | translator_01 | Ámbar
+ feed_preferences__color__amber                         | uk | translator_02 | бурштиновий
+ feed_preferences__color__blue                          | de | translator_01 | Blau
+ feed_preferences__color__blue                          | de | translator_05 | Blau
+ feed_preferences__color__blue                          | es | translator_01 | Azul
+ feed_preferences__color__blue_grey                     | de | translator_01 | Blaugrau
+ feed_preferences__color__blue_grey                     | es | translator_01 | Azul acerado
+ feed_preferences__color__blue_grey                     | uk | translator_02 | сіро-блакитний
+ feed_preferences__color__blue                          | uk | translator_02 | синій
+ feed_preferences__color__brown                         | de | translator_01 | Braun
+ feed_preferences__color__brown                         | de | translator_05 | Braun
+ feed_preferences__color__brown                         | es | translator_01 | Marrón
+ feed_preferences__color__brown                         | uk | translator_02 | брунатний
+ feed_preferences__color__cyan                          | de | translator_01 | Cyan
+ feed_preferences__color__cyan                          | es | translator_03 | Cian (azul)
+ feed_preferences__color__cyan                          | uk | translator_02 | ціановий
+ feed_preferences__color__deep_orange                   | de | translator_01 | Dunkelorange
+ feed_preferences__color__deep_orange                   | es | translator_01 | Naranja intenso
+ feed_preferences__color__deep_orange                   | uk | translator_02 | темно-помаранчевий
+ feed_preferences__color__deep_purple                   | de | translator_05 | Dunkles Lila
+ feed_preferences__color__deep_purple                   | de | translator_01 | Dunkles Violet
+ feed_preferences__color__deep_purple                   | es | translator_01 | Púrpura intenso
+ feed_preferences__color__deep_purple                   | uk | translator_02 | темно-фіолетовий
+ feed_preferences__color                                | de | translator_01 | Farbe
+ feed_preferences__color                                | es | translator_01 | Color
+ feed_preferences__color__green                         | de | translator_01 | Grün
+ feed_preferences__color__green                         | de | translator_05 | Grün
+ feed_preferences__color__green                         | es | translator_01 | Verde
+ feed_preferences__color__green                         | uk | translator_02 | зелений
+ feed_preferences__color__indigo                        | de | translator_01 | Indigo
+ feed_preferences__color__indigo                        | de | translator_05 | Indigo
+ feed_preferences__color__indigo                        | es | translator_01 | Añil
+ feed_preferences__color__indigo                        | uk | translator_02 | індиго
+ feed_preferences__color__light_blue                    | de | translator_01 | Hellblau
+ feed_preferences__color__light_blue                    | de | translator_05 | Hellblau
+ feed_preferences__color__light_blue                    | es | translator_01 | Azul claro
+ feed_preferences__color__light_blue                    | uk | translator_02 | блакитний
+ feed_preferences__color__light_green                   | de | translator_01 | Hellgrün
+ feed_preferences__color__light_green                   | de | translator_05 | Hellgrün
+ feed_preferences__color__light_green                   | es | translator_01 | Verde claro
+ feed_preferences__color__light_green                   | uk | translator_02 | світло-зелений
+ feed_preferences__color__lime                          | de | translator_01 | Limette
+ feed_preferences__color__lime                          | es | translator_01 | Lima
+ feed_preferences__color__lime                          | uk | translator_02 | лаймовий
+ feed_preferences__color__none                          | de | translator_01 | Keine
+ feed_preferences__color__none                          | es | translator_01 | Ninguno
+ feed_preferences__color__none                          | uk | translator_02 | Ніщо
+ feed_preferences__color__orange                        | de | translator_01 | Orange
+ feed_preferences__color__orange                        | de | translator_05 | Orange
+ feed_preferences__color__orange                        | es | translator_01 | Naranja
+ feed_preferences__color__orange                        | uk | translator_02 | помаранчевий
+ feed_preferences__color__pink                          | de | translator_01 | Rosa
+ feed_preferences__color__pink                          | de | translator_05 | Rosa
+ feed_preferences__color__pink                          | es | translator_01 | Rosa
+ feed_preferences__color__pink                          | uk | translator_02 | рожевий
+ feed_preferences__color__purple                        | de | translator_01 | Lila
+ feed_preferences__color__purple                        | de | translator_05 | Lila
+ feed_preferences__color__purple                        | es | translator_01 | Púrpura
+ feed_preferences__color__purple                        | uk | translator_02 | фіолетовий
+ feed_preferences__color__red                           | de | translator_01 | Rot
+ feed_preferences__color__red                           | de | translator_05 | Rot
+ feed_preferences__color__red                           | es | translator_01 | Rojo
+ feed_preferences__color__red                           | uk | translator_02 | червоний
+ feed_preferences__color__teal                          | de | translator_01 | Blaugrün
+ feed_preferences__color__teal                          | es | translator_03 | Turquesa
+ feed_preferences__color__teal                          | uk | translator_02 | зеленувато-блакитний
+ feed_preferences__color                                | uk | translator_02 | Колір
+ feed_preferences__color__yellow                        | de | translator_01 | Gelb
+ feed_preferences__color__yellow                        | de | translator_05 | Gelb
+ feed_preferences__color__yellow                        | es | translator_01 | Amarillo
+ feed_preferences__color__yellow                        | uk | translator_02 | жовтий
+ feed_preferences                                       | de | translator_01 | Feed Einstellungen
+ feed_preferences__delete_feed__confirmation            | de | translator_01 | Feed gelöscht
+ feed_preferences__delete_feed__confirmation            | es | translator_01 | Fuente eliminada
+ feed_preferences__delete_feed__confirmation            | uk | translator_02 | Канал видалений
+ feed_preferences__delete_feed__dialog_message          | de | translator_05 | Sind Sie sich sicher, dass dieser Feed und dessen Einträge gelöscht werden soll?
+ feed_preferences__delete_feed__dialog_message          | es | translator_01 | ¿Realmente desea eliminar esta fuente y todas sus entradas?
+ feed_preferences__delete_feed__dialog_message          | uk | translator_02 | Ви впевнені, що хочете видалити цей канал і всі його записи?
+ feed_preferences__entries_limit                        | de | translator_05 | Max. Anzahl der Einträge
+ feed_preferences__entries_limit                        | es | translator_01 | Límite de entradas
+ feed_preferences__entries_limit                        | uk | translator_02 | Ліміт записів
+ feed_preferences__show_original                        | de | translator_05 | Immer Originalinhalt in integrierter Vorschau anzeigen
+ feed_preferences__show_original                        | es | translator_03 | Mostrar siempre el contenido original en el visor embebido
+ feed_preferences__show_original                        | uk | translator_02 | Завжди показувати оригінальний зміст у вбудованому переглядачі
+ feed_preferences__time_interval                        | de | translator_01 | Zeitintervall
+ feed_preferences__time_interval                        | es | translator_01 | Intervalo de tiempo
+ feed_preferences__time_interval                        | uk | translator_02 | Проміжок часу
+ feed_preferences__title                                | de | translator_01 | Titel
+ feed_preferences__title                                | es | translator_01 | Título
+ feed_preferences__title                                | uk | translator_02 | Заголовок
+ feed_preferences                                       | uk | translator_02 | Налаштування каналу
+ feed_preferences__update_every_12_hours                | de | translator_01 | 12 Stunden
+ feed_preferences__update_every_12_hours                | es | translator_01 | 12 horas
+ feed_preferences__update_every_12_hours                | uk | translator_02 | 12 годин
+ feed_preferences__update_every_15_minutes              | de | translator_01 | 15 Minuten
+ feed_preferences__update_every_15_minutes              | es | translator_01 | 15 minutos
+ feed_preferences__update_every_15_minutes              | uk | translator_02 | 15 хвилин
+ feed_preferences__update_every_1_hour                  | de | translator_01 | 1 Stunde
+ feed_preferences__update_every_1_hour                  | es | translator_01 | 1 hora
+ feed_preferences__update_every_1_hour                  | uk | translator_02 | 1 година
+ feed_preferences__update_every_24_hours                | de | translator_01 | 24 Stunden
+ feed_preferences__update_every_24_hours                | es | translator_01 | 24 horas
+ feed_preferences__update_every_24_hours                | uk | translator_02 | 24 години
+ feed_preferences__update_every_2_hours                 | de | translator_01 | 2 Stunden
+ feed_preferences__update_every_2_hours                 | es | translator_01 | 2 horas
+ feed_preferences__update_every_2_hours                 | uk | translator_02 | 2 години
+ feed_preferences__update_every_30_minutes              | de | translator_01 | 30 Minuten
+ feed_preferences__update_every_30_minutes              | es | translator_01 | 30 minutos
+ feed_preferences__update_every_30_minutes              | uk | translator_02 | 30 хвилин
+ feed_preferences__update_every_3_hours                 | de | translator_01 | 3 Stunden
+ feed_preferences__update_every_3_hours                 | es | translator_01 | 3 horas
+ feed_preferences__update_every_3_hours                 | uk | translator_02 | 3 години
+ feed_preferences__update_every_45_minutes              | de | translator_01 | 45 Minuten
+ feed_preferences__update_every_45_minutes              | es | translator_01 | 45 minutos
+ feed_preferences__update_every_45_minutes              | uk | translator_02 | 45 хвилин
+ feed_preferences__update_every_4_hours                 | de | translator_01 | 4 Stunden
+ feed_preferences__update_every_4_hours                 | es | translator_01 | 4 horas
+ feed_preferences__update_every_4_hours                 | uk | translator_02 | 4 години
+ feed_preferences__update_every_6_hours                 | de | translator_01 | 6 Stunden
+ feed_preferences__update_every_6_hours                 | es | translator_01 | 6 horas
+ feed_preferences__update_every_6_hours                 | uk | translator_02 | 6 годин
+ feed_preferences__update_every_8_hours                 | de | translator_01 | 8 Stunden
+ feed_preferences__update_every_8_hours                 | es | translator_01 | 8 horas
+ feed_preferences__update_every_8_hours                 | uk | translator_02 | 8 годин
+ feed_preferences__update_mode                          | de | translator_05 | Aktualisierungsmethode
+ feed_preferences__update_mode                          | de | translator_04 | Aktualisierungsmodus
+ feed_preferences__update_mode__disabled                | de | translator_01 | Aus
+ feed_preferences__update_mode__disabled                | de | translator_01 | Deaktiviert
+ feed_preferences__update_mode__disabled                | de | translator_05 | Manuell
+ feed_preferences__update_mode__disabled__description   | de | translator_01 | Die Applikation aktualisiert diesen Feed nicht im Hintergrund
+ feed_preferences__update_mode__disabled__description   | es | translator_03 | La aplicación no actualiza esta fuente en segundo plano
+ feed_preferences__update_mode__disabled__description   | uk | translator_02 | Застосунок не оновлює цей канал у фоновому режимі
+ feed_preferences__update_mode__disabled                | es | translator_01 | Desactivado
+ feed_preferences__update_mode__disabled                | uk | translator_02 | вимкнено
+ feed_preferences__update_mode                          | es | translator_01 | Modo de actualización
+ feed_preferences__update_mode__repeating               | de | translator_05 | Automatisch
+ feed_preferences__update_mode__repeating               | es | translator_01 | Repetir
+ feed_preferences__update_mode__repeating               | uk | translator_02 | Періодично
+ feed_preferences__update_mode                          | uk | translator_02 | Режим оновлення
+ feed_preferences__url                                  | de | translator_01 | URL
+ feed_preferences__url                                  | es | translator_01 | URL
+ feed_preferences__url                                  | uk | translator_02 | URL
+ feed_subscriber__add_feed__confirmation                | de | translator_06 | Feed hinzgefügt
+ feed_subscriber__add_feed__confirmation                | es | translator_03 | Fuente añadida
+ feed_subscriber__add_feed__confirmation                | uk | translator_02 | Канал доданий
+ feed_subscriber                                        | de | translator_05 | Feed hinzufügen
+ feed_subscriber                                        | es | translator_01 | Añadir una suscripción
+ feed_subscriber__no_feeds_found                        | de | translator_01 | Keine Feeds gefunden
+ feed_subscriber__no_feeds_found                        | es | translator_01 | No se han encontrado fuentes
+ feed_subscriber__no_feeds_found                        | uk | translator_02 | Жодного каналу не знайдено
+ feed_subscriber__search_hint                           | de | translator_01 | URL
+ feed_subscriber__search_hint                           | es | translator_01 | URL
+ feed_subscriber__search_hint                           | uk | translator_02 | URL
+ feed_update_details                                    | de | translator_06 | Details aktualisieren
+ feed_update_details__duration_millis                   | de | translator_01 | <b>Dauer:</b> %1$dms
+ feed_update_details__duration_millis                   | es | translator_01 | <b>Duración:</b> %1$dms
+ feed_update_details__duration_millis                   | uk | translator_02 | <b>Тривалість:</b> %1$dms
+ feed_update_details__duration_minutes                  | de | translator_01 | <b>Dauer:</b> %1$dm %2$ds %3$dms
+ feed_update_details__duration_minutes                  | es | translator_01 | <b>Duración:</b> %1$dm %2$ds %3$dms
+ feed_update_details__duration_minutes                  | uk | translator_02 | <b>Тривалість:</b> %1$dm %2$ds %3$dms
+ feed_update_details__duration_seconds                  | de | translator_01 | <b>Dauer:</b> %1$ds %2$dms
+ feed_update_details__duration_seconds                  | es | translator_01 | <b>Duración:</b> %1$ds %2$dms
+ feed_update_details__duration_seconds                  | uk | translator_02 | <b>Тривалість:</b> %1$ds %2$dms
+ feed_update_details                                    | es | translator_01 | Detalles de la actualización
+ feed_update_details__fail_message                      | de | translator_05 | <b>Fehlermeldung:</b> %1$s
+ feed_update_details__fail_message                      | es | translator_03 | <b>Mensaje de error:</b> %1$s
+ feed_update_details__finish_time                       | es | translator_01 | <b>Hora de fin:</b> %1$s
+ feed_update_details__finish_time                       | uk | translator_02 | <b>Час завершення:</b> %1$s
+ feed_update_details__http_response_code                | de | translator_01 | <b>HTTP Statuscode:</b> %1$d
+ feed_update_details__http_response_code                | es | translator_01 | <b>Código de respuesta HTTP:</b> %1$d
+ feed_update_details__http_response_code                | uk | translator_02 | <b>Код відповіді HTTP:</b> %1$d
+ feed_update_details__http_response_message             | de | translator_01 | <b>HTTP Statusnachricht:</b> %1$s
+ feed_update_details__http_response_message             | es | translator_01 | <b>Mensaje de respuesta HTTP:</b> %1$s
+ feed_update_details__http_response_message             | uk | translator_02 | <b>Відповідь-повідомлення HTTP:</b> %1$s
+ feed_update_details__new_entries                       | de | translator_01 | <b>Neue Einträge:</b> %1$d
+ feed_update_details__new_entries                       | es | translator_01 | <b>Entradas nuevas:</b> %1$d
+ feed_update_details__new_entries                       | uk | translator_02 | <b>Нові записи:</b> %1$d
+ feed_update_details__start_time                        | de | translator_01 | <b>Startzeit:</b> %1$s
+ feed_update_details__start_time                        | es | translator_01 | <b>Hora de inicio:</b> %1$s
+ feed_update_details__start_time                        | uk | translator_02 | <b>Час початку:</b> %1$s
+ feed_update_details__total_entries                     | de | translator_01 | <b>Einträge gesamt:</b> %1$d
+ feed_update_details__total_entries                     | es | translator_01 | <b>Total de entradas:</b> %1$d
+ feed_update_details__total_entries                     | uk | translator_02 | <b>Загалом записів:</b> %1$d
+ feed_update_history                                    | de | translator_05 | Feed Aktualisierungsverlauf
+ feed_update_history                                    | es | translator_03 | Historial de actualizaciones de la fuente
+ feed_update_history__new_entries__one                  | de | translator_01 | %1$d neuer Eintrag
+ feed_update_history__new_entries__one                  | es | translator_01 | %1$d nueva entrada
+ feed_update_history__new_entries__one                  | uk | translator_02 | %1$d новий запис
+ feed_update_history__new_entries__other                | de | translator_01 | %1$d neue Einträge
+ feed_update_history__new_entries__other                | es | translator_01 | %1$d entradas nuevas
+ feed_update_history__new_entries__other                | uk | translator_02 | %1$d нових записів
+ feed_update_history__no_new_entries                    | de | translator_01 | Keine neuen Einträge
+ feed_update_history__no_new_entries                    | es | translator_01 | Sin entradas nuevas
+ feed_update_history__no_new_entries                    | uk | translator_02 | Немає нових записів
+ feed_update_history                                    | uk | translator_02 | Історія оновлення каналу
+ feed_updater__parser_error                             | de | translator_01 | Fehler beim interpretieren des Feedinhalts: %1$s
+ feed_updater__parser_error                             | es | translator_01 | Errores al analizar el contenido de la fuente: %1$s
+ feed_updater__parser_error                             | uk | translator_02 | Не вдалося розібрати зміст каналу: %1$s
+ feed_updater__unexpected_http_response                 | de | translator_01 | Unerwarteter HTTP Statuscode
+ feed_updater__unexpected_http_response                 | es | translator_01 | Código de respuesta inesperada HTTP
+ feed_updater__unexpected_http_response                 | uk | translator_02 | Несподіваний код відповіді HTTP
+ new_category                                           | de | translator_01 | Neue Kategorie
+ new_category                                           | es | translator_01 | Nueva categoría
+ new_category__name                                     | de | translator_01 | Name
+ new_category__name                                     | es | translator_01 | Nombre
+ new_category__name                                     | uk | translator_02 | Назва
+ new_category                                           | uk | translator_02 | Нова категорія
+ notification__new_entries__one                         | de | translator_01 | %1$d neuer Eintrag
+ notification__new_entries__one                         | es | translator_01 | %1$d entrada nueva
+ notification__new_entries__one                         | uk | translator_02 | %1$d новий запис
+ notification__new_entries__other                       | de | translator_01 | %1$d neue Einträge
+ notification__new_entries__other                       | es | translator_01 | %1$d entradas nuevas
+ notification__new_entries__other                       | uk | translator_02 | %1$d нових записів
+ notification__updated_feeds__one                       | de | translator_05 | %1$d aktualisierter Feed
+ notification__updated_feeds__one                       | es | translator_01 | %1$d fuente actualizada
+ notification__updated_feeds__one                       | uk | translator_02 | %1$d канал оновлено
+ notification__updated_feeds__other                     | de | translator_01 | %1$d aktualisierte Feeds
+ notification__updated_feeds__other                     | es | translator_01 | %1$d fuentes actualizadas
+ notification__updated_feeds__other                     | uk | translator_02 | %1$d каналів оновлено
+ opml_export                                            | de | translator_01 | Feeds exportieren
+ opml_export                                            | es | translator_01 | Exportar fuentes
+ opml_export__export_feeds__one                         | de | translator_01 | %1$d Feed exportieren
+ opml_export__export_feeds__one                         | es | translator_01 | Exportar %1$d fuente
+ opml_export__export_feeds__one                         | uk | translator_02 | Експортувати %1$d канал
+ opml_export__export_feeds__other                       | de | translator_01 | %1$d Feeds exportieren
+ opml_export__export_feeds__other                       | es | translator_01 | Exportar %1$d fuentes
+ opml_export__export_feeds__other                       | uk | translator_02 | Експортувати %1$d каналів
+ opml_export__no_feeds_found                            | de | translator_05 | Keine exportierbaren Feeds gefunden
+ opml_export__no_feeds_found                            | de | translator_01 | Keine Feeds zum exportieren gefunden
+ opml_export__no_feeds_found                            | es | translator_01 | No se encontraron fuentes para exportar
+ opml_export__no_feeds_found                            | uk | translator_02 | Не знайдено жодного каналу для експорту
+ opml_export                                            | uk | translator_02 | Експортувати канали
+ opml_import__busy__message                             | de | translator_01 | Feeds werden importiert. Bitte warten…
+ opml_import__busy__message                             | es | translator_01 | Importando fuentes. Por favor, espere…
+ opml_import__busy__message                             | uk | translator_02 | Імпортуються канали. Будь ласка, зачекайте…
+ opml_import                                            | de | translator_01 | Feeds importieren
+ opml_import                                            | es | translator_01 | Importar fuentes
+ opml_import__import_feeds__one                         | de | translator_01 | %1$d Feed importieren
+ opml_import__import_feeds__one                         | es | translator_01 | Importar %1$d fuente
+ opml_import__import_feeds__one                         | uk | translator_02 | Імпортувати %1$d канал
+ opml_import__import_feeds__other                       | de | translator_01 | %1$d Feeds importieren
+ opml_import__import_feeds__other                       | es | translator_01 | Importar %1$d fuentes
+ opml_import__import_feeds__other                       | uk | translator_02 | Імпортувати %1$d каналів
+ opml_import__no_feeds_found                            | de | translator_05 | Keine Feeds zum importieren gefunden
+ opml_import__no_feeds_found                            | de | translator_05 | Keine importierbaren Feeds gefunden
+ opml_import__no_feeds_found                            | es | translator_01 | No se encontraron fuentes para importar
+ opml_import__no_feeds_found                            | uk | translator_02 | Не знайдено жодного каналу для імпорту
+ opml_import                                            | uk | translator_02 | Імпортувати канали
+ opml_import__unsupported_file_type                     | de | translator_01 | Nicht unterstützter Dateityp
+ opml_import__unsupported_file_type                     | es | translator_01 | Tipo de archivo no soportado
+ opml_import__unsupported_file_type                     | uk | translator_02 | Тип файлу не підтримується
+ settings                                               | de | translator_01 | Einstellungen
+ settings__default_entries_limit                        | de | translator_01 | Standardlimit für Einträge
+ settings__default_entries_limit                        | es | translator_01 | Límite de entradas por defecto
+ settings__default_entries_limit__summary               | de | translator_01 | Bis zu %1$d Einträge pro Feed behalten
+ settings__default_entries_limit__summary               | es | translator_01 | Seguir hasta %1$d entradas por fuente
+ settings__default_entries_limit__summary               | uk | translator_02 | Зберігати до %1$d записів на канал
+ settings__default_entries_limit                        | uk | translator_02 | Межа записів за замовчуванням
+ settings__entry_viewer                                 | de | translator_05 | Integrierte Vorschau
+ settings__entry_viewer                                 | es | translator_03 | Visor de entradas embebido
+ settings__entry_viewer__javascript                     | de | translator_01 | JavaScript
+ settings__entry_viewer__javascript                     | es | translator_01 | JavaScript
+ settings__entry_viewer__javascript__summary            | de | translator_05 | Ausführung von JavaScript in integrierter Vorschau erlauben
+ settings__entry_viewer__javascript__summary            | es | translator_03 | Permitir la ejecución de JavaScript en el visor de entradas embebido
+ settings__entry_viewer__javascript__summary            | uk | translator_02 | Дозволити запуск JavaScript у вбудованому перегляді запису
+ settings__entry_viewer__javascript                     | uk | translator_02 | JavaScript
+ settings__entry_viewer                                 | uk | translator_02 | Вбудований переглядач записів
+ settings__entry_viewer__volume_navigation              | de | translator_05 | Lautstärkebuttons
+ settings__entry_viewer__volume_navigation              | de | translator_05 | Lautstärkeknöpfe
+ settings__entry_viewer__volume_navigation              | es | translator_03 | Botones de volumen
+ settings__entry_viewer__volume_navigation__summary_off | de | translator_01 | Deaktiviert
+ settings__entry_viewer__volume_navigation__summary_off | es | translator_03 | Desactivado
+ settings__entry_viewer__volume_navigation__summary_off | uk | translator_02 | Вимкнено
+ settings__entry_viewer__volume_navigation__summary_on  | de | translator_05 | Zwischen Einträgen navigieren
+ settings__entry_viewer__volume_navigation__summary_on  | es | translator_03 | Navegar entre las entradas
+ settings__entry_viewer__volume_navigation__summary_on  | uk | translator_02 | Навігація між записами
+ settings__entry_viewer__volume_navigation              | uk | translator_02 | Кнопки гучності
+ settings                                               | es | translator_01 | Configuración
+ settings__feeds                                        | de | translator_01 | Feeds
+ settings__feeds                                        | es | translator_03 | Fuentes
+ settings__feeds__export                                | de | translator_01 | Feeds exportieren
+ settings__feeds__export                                | es | translator_03 | Exportar fuentes
+ settings__feeds__export__summary                       | de | translator_05 | Feeds in OPML Datei exportieren
+ settings__feeds__export__summary                       | es | translator_03 | Exportar fuentes a un archivo OPML
+ settings__feeds__export__summary                       | uk | translator_02 | Експортувати канали до OPML-файлу
+ settings__feeds__export                                | uk | translator_02 | Експортувати канали
+ settings__feeds__import                                | de | translator_01 | Importieren
+ settings__feeds__import                                | de | translator_05 | Import
+ settings__feeds__import                                | es | translator_03 | Importar
+ settings__feeds__import__summary                       | de | translator_05 | Feeds aus OPML Datei importieren
+ settings__feeds__import__summary                       | uk | translator_02 | Імпортувати канали з OPML-файлу
+ settings__feeds__import                                | uk | translator_02 | Імпортування
+ settings__feeds                                        | uk | translator_02 | Канали
+ settings__notifications                                | de | translator_05 | Benachrichtigungen
+ settings__notifications                                | es | translator_03 | Notificaciones
+ settings__notifications__new_entries_only              | de | translator_01 | Nur neue, ungelesene Einträge
+ settings__notifications__new_entries_only              | es | translator_03 | Sólo entradas nuevas sin leer
+ settings__notifications__new_entries_only__summary_off | de | translator_05 | Über alte, ungelesene Einträge ebenfalls benachrichtigen
+ settings__notifications__new_entries_only__summary_off | es | translator_03 | Notifícame también sobre entradas antiguas no leídas
+ settings__notifications__new_entries_only__summary_off | uk | translator_02 | Нагадувати також про старі непрочитані записи
+ settings__notifications__new_entries_only__summary_on  | de | translator_01 | Nur über neue, ungelesene Einträge benachrichtigen
+ settings__notifications__new_entries_only__summary_on  | es | translator_03 | Notifícame sólo sobre nuevas entradas sin leer
+ settings__notifications__new_entries_only__summary_on  | uk | translator_02 | Нагадувати лише про нові непрочитані записи
+ settings__notifications__new_entries_only              | uk | translator_02 | Лише нові непрочитані записи
+ settings__notifications__ringtone__default             | de | translator_01 | Standard
+ settings__notifications__ringtone__default             | es | translator_01 | Predeterminado
+ settings__notifications__ringtone__default             | uk | translator_02 | усталений
+ settings__notifications__ringtone                      | de | translator_01 | Klingelton
+ settings__notifications__ringtone                      | es | translator_03 | Sonido de notificación
+ settings__notifications__ringtone__none                | de | translator_01 | Keinen
+ settings__notifications__ringtone__none                | es | translator_01 | Ninguno
+ settings__notifications__ringtone__none                | uk | translator_02 | Немає
+ settings__notifications__ringtone                      | uk | translator_02 | Мелодія
+ settings__notifications                                | uk | translator_02 | Нагадування
+ settings__notifications__unread_entries                | de | translator_01 | Ungelesene Einträge
+ settings__notifications__unread_entries                | es | translator_03 | Entradas no leídas
+ settings__notifications__unread_entries__summary_off   | de | translator_01 | Deaktiviert
+ settings__notifications__unread_entries__summary_off   | es | translator_01 | Desactivado
+ settings__notifications__unread_entries__summary_off   | uk | translator_02 | Вимкнено
+ settings__notifications__unread_entries__summary_on    | de | translator_05 | Über ungelesene Einträge benachrichtigen
+ settings__notifications__unread_entries__summary_on    | es | translator_03 | Notifícame sobre entradas sin leer
+ settings__notifications__unread_entries__summary_on    | uk | translator_02 | Нагадувати мені про непрочитані записи
+ settings__notifications__unread_entries                | uk | translator_02 | Непрочитані записи
+ settings__notifications__vibrate                       | de | translator_01 | Vibrieren
+ settings__notifications__vibrate                       | es | translator_03 | Vibrar
+ settings__notifications__vibrate__summary_off          | de | translator_04 | Bei neuen Benachrichtigungen nicht vibrieren
+ settings__notifications__vibrate__summary_off          | de | translator_05 | Nicht bei neuen Benachrichtigungen vibrieren
+ settings__notifications__vibrate__summary_off          | es | translator_03 | No vibrar cuando haya nuevas notificaciones
+ settings__notifications__vibrate__summary_off          | uk | translator_02 | Не вібрувати через нові нагадування
+ settings__notifications__vibrate__summary_on           | de | translator_01 | Bei neuen Benachrichtigungen vibrieren
+ settings__notifications__vibrate__summary_on           | es | translator_03 | Vibrar cuando haya nuevas notificaciones
+ settings__notifications__vibrate__summary_on           | uk | translator_02 | Вібрувати через нові нагадування
+ settings__notifications__vibrate                       | uk | translator_02 | Вібрувати
+ settings__preferred_browser                            | de | translator_05 | Einträge öffnen mit...
+ settings__preferred_browser__default                   | de | translator_01 | Standardbrowser
+ settings__preferred_browser__default                   | es | translator_03 | Navegador predeterminado
+ settings__preferred_browser__default                   | uk | translator_02 | Усталений браузер
+ settings__preferred_browser                            | es | translator_03 | Abrir los enlaces de las entradas con...
+ settings__preferred_browser                            | uk | translator_02 | Відкрити посилання запису з…
+ settings__support__contact                             | de | translator_01 | Kontakt
+ settings__support__contact                             | es | translator_01 | Contacto
+ settings__support__contact__summary                    | de | translator_05 | E-Mail an den Entwickler
+ settings__support__contact__summary                    | es | translator_03 | E-mail al desarrollador
+ settings__support__contact__summary                    | uk | translator_02 | Надіслати електронного листа розробникові
+ settings__support__contact                             | uk | translator_02 | Контакт
+ settings__support                                      | de | translator_01 | Support
+ settings__support__donate                              | de | translator_01 | Spenden
+ settings__support__donate                              | es | translator_01 | Donar
+ settings__support__donate__summary                     | de | translator_01 | Zeigen Sie, wie sehr Sie die App mögen
+ settings__support__donate__summary                     | es | translator_03 | Demuestra cuánto te gusta esta aplicación
+ settings__support__donate__summary                     | uk | translator_02 | Вкажіть, наскільки Вам до вподоби цей застосунок
+ settings__support__donate                              | uk | translator_02 | Скинутися
+ settings__support                                      | es | translator_03 | Soporte
+ settings__support                                      | uk | translator_02 | Підтримка
+ settings__theme__dark                                  | de | translator_01 | Dunkel
+ settings__theme__dark                                  | es | translator_03 | Oscuro
+ settings__theme__dark                                  | uk | translator_02 | Темний
+ settings__theme                                        | de | translator_05 | Aussehen
+ settings__theme                                        | es | translator_03 | Tema
+ settings__theme__light                                 | de | translator_01 | Hell
+ settings__theme__light                                 | es | translator_03 | Claro
+ settings__theme__light                                 | uk | translator_02 | Світлий
+ settings__theme                                        | uk | translator_02 | Тема
+ settings                                               | uk | translator_02 | Налаштування
+ sharing__share_via                                     | de | translator_05 | Teilen über
+ sharing__share_via                                     | es | translator_03 | Compartir vía
+ sharing__share_via                                     | uk | translator_02 | Поширити через
+ url_handler__cannot_open_connection                    | de | translator_01 | Konnte keine Verbindung herstellen
+ url_handler__cannot_open_connection                    | es | translator_03 | No se ha podido conectar
+ url_handler__cannot_open_connection                    | uk | translator_02 | Неможливо встановити з’єднання
+ url_handler__invalid_url                               | de | translator_01 | Ungültige URL
+ url_handler__invalid_url                               | es | translator_03 | URL inválida
+ url_handler__invalid_url                               | uk | translator_02 | Недійсний URL
+ url_handler__timeout                                   | de | translator_01 | Zeitüberschreitung
+ url_handler__timeout                                   | es | translator_03 | Tiempo agotado
+ url_handler__timeout                                   | uk | translator_02 | Час вийшов
+ url_handler__unknown_host                              | de | translator_04 | Unbekannter Host
+ url_handler__unknown_host                              | es | translator_03 | Host desconocido
+ url_handler__unknown_host                              | uk | translator_02 | Невідомий хост
+ url_handler__unsupported_encoding                      | de | translator_01 | Nicht unterstützte Kodierung: %1$s
+ url_handler__unsupported_encoding                      | es | translator_03 | Codificación no soportada: %1$s
+ url_handler__unsupported_encoding                      | uk | translator_02 | Не підтримується кодування: %1$s
+ url_handler__unsupported_url                           | de | translator_01 | Keine Applikation gefunden für: %1$s
+ url_handler__unsupported_url                           | es | translator_03 | No se ha encontrado una aplicación para: %1$s
+ url_handler__unsupported_url                           | uk | translator_02 | Не знайдено застосунку для: %1$s
+ url_handler__untrusted                                 | de | translator_01 | Sicherheitsproblem mit dem Server: %1$s
+ url_handler__untrusted                                 | es | translator_03 | Hay un problema de seguridad con este servidor: %1$s
+ url_handler__untrusted                                 | uk | translator_02 | Проблеми безпеки з сервером: %1$s
