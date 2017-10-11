@@ -3,6 +3,10 @@ from datetime import datetime
 from xml.etree import ElementTree
 
 from django import views
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import permission_required
 from django.db import transaction
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -13,6 +17,35 @@ from .models import Suggestion
 from .models import Vote
 
 
+class LoginView(views.View):
+    @staticmethod
+    def get(request):
+        return render(request, 'core/login.html')
+
+    @staticmethod
+    def post(request):
+        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        if user:
+            login(request, user)
+            return redirect('project_list')
+        return render(request, 'core/login.html')
+
+
+class LogoutView(views.View):
+    @staticmethod
+    def get(request):
+        logout(request)
+        return redirect('project_list')
+
+
+class ProjectListView(views.View):
+    @staticmethod
+    def get(request):
+        return render(request, 'core/project_list.html', dict(
+            projects=Project.objects.all(),
+        ))
+
+
 class ProjectStringsView(views.View):
     @staticmethod
     def get(request, project_uuid=None):
@@ -21,6 +54,7 @@ class ProjectStringsView(views.View):
         ))
 
     @staticmethod
+    @permission_required('core.can_add_string')
     def post(request, project_uuid=None):
         project = Project.objects.get(uuid=project_uuid)
 
@@ -125,6 +159,7 @@ class ProjectStringsView(views.View):
 
 class ProjectStringsCommitView(views.View):
     @staticmethod
+    @permission_required('core.can_add_string')
     def post(request, project_uuid):
         project = Project.objects.get(uuid=project_uuid)
 

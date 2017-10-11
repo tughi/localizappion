@@ -1,4 +1,4 @@
-{% extends './__base__.html' %}
+{% extends 'core/base.html' %}
 {% load strings %}
 
 {% block navbar %}
@@ -6,9 +6,11 @@
     <li class="active">
         <a href="{% url 'project_strings' project.uuid %}">Strings</a>
     </li>
+    {% if perms.core.can_add_string %}
     <li>
         <a data-toggle="modal" data-target="#upload-dialog"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
     </li>
+    {% endif %}
 </ul>
 {% endblock %}
 
@@ -55,6 +57,7 @@
     </table>
 </div>
 
+{% if perms.core.can_add_string %}
 <div id="upload-dialog" class="modal fade" tabindex="-1" role="dialog">
     <form action="{% url 'project_strings' project.uuid %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -77,4 +80,5 @@
         </div>
     </form>
 </div>
+{% endif %}
 {% endblock %}
