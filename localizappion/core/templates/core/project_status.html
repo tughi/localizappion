@@ -11,14 +11,19 @@
 
 {% block content %}
 <div class="list-group">
-    <a href="{% url 'project_strings' project.uuid %}" class="list-group-item list-group-item-info">
+    <a href="{% url 'project_strings' project.uuid %}" class="list-group-item">
         <span class="badge">{{ project.strings.count }}</span>
         Strings
     </a>
 </div>
 <div class="list-group">
-    {% for language in project.languages.all %}
-    <a href="#" class="list-group-item">{{ language.name }}</a>
+    {% for language in languages %}
+    <a href="#" class="list-group-item">
+        <span class="suggestions-required">{{ language.progress.required_suggestions }}</span>
+        <span class="suggestions-submitted">{{ language.progress.submitted_suggestions }}</span>
+        <span class="suggestions-voted">{{ language.progress.voted_suggestions }}</span>
+        {{ language.name }}
+    </a>
     {% endfor %}
 </div>
 {% endblock %}
