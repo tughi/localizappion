@@ -4,7 +4,7 @@
 {% block content %}
 <div class="list-group">
     {% for project in projects %}
-    <a href="{% url 'project_strings' project.uuid %}" class="list-group-item">{{ project.name }}</a>
+    <a href="{% url 'project' project.uuid %}" class="list-group-item">{{ project.name }}</a>
     {% endfor %}
 </div>
 {% endblock %}

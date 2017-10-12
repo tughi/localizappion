@@ -3,7 +3,10 @@
 
 {% block navbar %}
 <ul class="nav navbar-nav">
-    <li class="active">
+    <li class="breadcrumb-step first">
+        <a href="{% url 'project' project.uuid %}">{{ project.name }}</a>
+    </li>
+    <li class="breadcrumb-step">
         <a href="{% url 'project_strings' project.uuid %}">Strings</a>
     </li>
     {% if perms.core.can_add_string %}

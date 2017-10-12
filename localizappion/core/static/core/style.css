@@ -1,0 +1,13 @@
+@media (min-width: 768px) {
+    ul.navbar-nav > li.breadcrumb-step::before {
+        content: '⟩';
+        display: block;
+        position: absolute;
+        line-height: 50px;
+        opacity: 0.25;
+    }
+
+    ul.navbar-nav > li.first.breadcrumb-step::before {
+        content: '⟫';
+    }
+}

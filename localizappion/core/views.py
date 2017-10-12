@@ -20,22 +20,23 @@ from .models import Vote
 class LoginView(views.View):
     @staticmethod
     def get(request):
-        return render(request, 'core/login.html')
+        return render(request, 'core/login.html', dict(next=request.META['HTTP_REFERER']))
 
     @staticmethod
     def post(request):
         user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
         if user:
             login(request, user)
-            return redirect('project_list')
-        return render(request, 'core/login.html')
+            return redirect(request.POST['next'] or 'project_list')
+        return render(request, 'core/login.html', dict(next=request.POST['next']))
 
 
 class LogoutView(views.View):
     @staticmethod
     def get(request):
         logout(request)
-        return redirect('project_list')
+        referrer = request.META['HTTP_REFERER']
+        return redirect(referrer)
 
 
 class ProjectListView(views.View):
@@ -43,6 +44,14 @@ class ProjectListView(views.View):
     def get(request):
         return render(request, 'core/project_list.html', dict(
             projects=Project.objects.all(),
+        ))
+
+
+class ProjectStatusView(views.View):
+    @staticmethod
+    def get(request, project_uuid=None):
+        return render(request, 'core/project_status.html', dict(
+            project=Project.objects.get(uuid=project_uuid)
         ))
 
 

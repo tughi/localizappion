@@ -60,6 +60,7 @@ class Language(models.Model):
 
     class Meta:
         db_table = 'localizappion_language'
+        ordering = ('name',)
 
 
 class Project(models.Model):
