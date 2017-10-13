@@ -72,7 +72,9 @@ def reverse_func(apps, schema_editor):
 
     project_model = apps.get_model('core', 'Project')
     translator_model = apps.get_model('core', 'Translator')
+    vote_model = apps.get_model('core', 'Vote')
 
+    vote_model.objects.filter().delete()
     project_model.objects.filter(uuid=PROJECT_UUID).delete()
     translator_model.objects.filter().delete()
 
