@@ -52,15 +52,15 @@ REQUIRED_VOTES = 3
 
 
 class Progress:
-    def __init__(self, project, language):
+    def __init__(self, translation):
         self.required_suggestions = 0
         self.submitted_suggestions = 0
         self.voted_suggestions = 0
 
-        strings = String.objects.filter(project=project)
+        strings = translation.project.strings.all()
         for string in strings:
             suggestions = {}
-            for suggestion in string.suggestions.filter(language=language).annotate(votes_value=Sum('votes__value')):
+            for suggestion in string.suggestions.filter(translation=translation).annotate(votes_value=Sum('votes__value')):
                 if suggestion.plural_form in suggestions:
                     suggestions[suggestion.plural_form] = (suggestion.votes_value or 0) >= REQUIRED_VOTES or suggestions[suggestion.plural_form]
                 else:
@@ -73,7 +73,7 @@ class Progress:
                     self.voted_suggestions += 1
 
             if string.value_one:
-                for plural_form in language.plural_forms:
+                for plural_form in translation.language.plural_forms:
                     if plural_form != 'other':
                         self.required_suggestions += 1
                         if plural_form in suggestions:
@@ -95,10 +95,10 @@ class ProjectStatusView(views.View):
     def get(request, project_uuid=None):
         # TODO: optimize progress load time
         project = Project.objects.get(uuid=project_uuid)
-        languages = [dict(code=language.code, name=language.name, progress=Progress(project, language)) for language in project.languages.all()]
+        translations = [dict(language=translation.language, progress=Progress(translation)) for translation in project.translations.all()]
         return render(request, 'core/project_status.html', dict(
             project=project,
-            languages=languages,
+            translations=translations,
         ))
 
 

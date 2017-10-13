@@ -59,7 +59,6 @@ class Language(models.Model):
         return self.code
 
     class Meta:
-        db_table = 'localizappion_language'
         ordering = ('name',)
 
 
@@ -67,15 +66,21 @@ class Project(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=64)
 
-    languages = models.ManyToManyField(Language, related_name='+')
-
     strings_upload_time = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name
 
+
+class Translation(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='translations')
+    language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name='+')
+
+    def __str__(self):
+        return '{0}::{1}'.format(self.project.name, self.language.code)
+
     class Meta:
-        db_table = 'localizappion_project'
+        ordering = ('language__name',)
 
 
 class String(models.Model):
@@ -89,10 +94,9 @@ class String(models.Model):
     last_access_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return '{0}::{1}'.format(self.project.name, self.name)
 
     class Meta:
-        db_table = 'localizappion_string'
         ordering = ('position', 'name')
         unique_together = (
             ('project', 'name'),
@@ -106,33 +110,27 @@ class Translator(models.Model):
     def __str__(self):
         return self.alias or str(self.uuid)
 
-    class Meta:
-        db_table = 'localizappion_translator'
-
 
 class Suggestion(models.Model):
-    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
-    translator = models.ForeignKey(Translator, on_delete=models.PROTECT)
+    translation = models.ForeignKey(Translation, on_delete=models.CASCADE, related_name='suggestions')
+    translator = models.ForeignKey(Translator, on_delete=models.CASCADE, related_name='suggestions')
     string = models.ForeignKey(String, on_delete=models.CASCADE, related_name='suggestions')
-    language = models.ForeignKey(Language, on_delete=models.PROTECT)
     value = models.TextField()
     plural_form = models.CharField(max_length=8, choices=PLURAL_FORMS, default='other')
-
-    google_translation = models.TextField(blank=True)
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     accepted = models.BooleanField(default=False)
 
     def __str__(self):
-        return '{0} =({1}::{2})= {3}'.format(self.string.name, self.language.code, self.plural_form, self.value)
+        return '{0} =({1}::{2})= {3}'.format(self.string.name, self.translation, self.plural_form, self.value)
 
     class Meta:
-        db_table = 'localizappion_suggestion'
         unique_together = (
-            ('string', 'language', 'value', 'plural_form'),
+            ('translation', 'string', 'value', 'plural_form'),
         )
 
 
 class Vote(models.Model):
-    translator = models.ForeignKey(Translator, on_delete=models.PROTECT)
+    translator = models.ForeignKey(Translator, on_delete=models.CASCADE)
     suggestion = models.ForeignKey(Suggestion, on_delete=models.CASCADE, related_name='votes')
     value = models.IntegerField(default=1)
 
@@ -140,7 +138,6 @@ class Vote(models.Model):
         return str(self.translator)
 
     class Meta:
-        db_table = 'localizappion_vote'
         unique_together = (
             ('translator', 'suggestion'),
         )

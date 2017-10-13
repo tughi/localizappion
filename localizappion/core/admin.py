@@ -4,6 +4,7 @@ from .models import Language
 from .models import Project
 from .models import String
 from .models import Suggestion
+from .models import Translation
 from .models import Translator
 from .models import Vote
 
@@ -26,6 +27,11 @@ class StringAdmin(admin.ModelAdmin):
 @admin.register(Suggestion)
 class SuggestionAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(Translation)
+class TranslationAdmin(admin.ModelAdmin):
+    list_display = ('project', 'language')
 
 
 @admin.register(Translator)

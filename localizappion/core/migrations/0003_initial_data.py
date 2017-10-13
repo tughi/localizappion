@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import os
 import uuid
 
-from django.db import migrations, IntegrityError
+from django.db import migrations
 
 PROJECT_UUID = '0d296504-e113-4f68-89c7-4617eea04b38'
 
@@ -18,6 +18,7 @@ def forwards_func(apps, schema_editor):
     language_model = apps.get_model('core', 'Language')
     string_model = apps.get_model('core', 'String')
     suggestion_model = apps.get_model('core', 'Suggestion')
+    translation_model = apps.get_model('core', 'Translation')
     translator_model = apps.get_model('core', 'Translator')
     vote_model = apps.get_model('core', 'Vote')
 
@@ -47,17 +48,20 @@ def forwards_func(apps, schema_editor):
     with open(os.path.join(os.path.dirname(__file__), '0003_initial_data_suggestions.txt')) as data_file:
         for line in data_file:
             string_name, language_code, translator_alias, suggestion_value = line.split('|', 3)
+            string = string_model.objects.get(project=project, name=string_name.strip())
+            language = language_model.objects.get(code=language_code.strip())
+            translation, _ = translation_model.objects.get_or_create(project=project, language=language)
             translator = translator_model.objects.get(alias=translator_alias.strip())
             suggestion = suggestion_model.objects.filter(
-                string=string_model.objects.get(project=project, name=string_name.strip()),
-                language=language_model.objects.get(code=language_code.strip()),
-                value=suggestion_value.strip(),
+                translation=translation,
+                string=string,
+                value=suggestion_value.strip()
             ).first()
             if not suggestion:
                 suggestion = suggestion_model.objects.create(
                     translator=translator,
-                    string=string_model.objects.get(project=project, name=string_name.strip()),
-                    language=language_model.objects.get(code=language_code.strip()),
+                    string=string,
+                    translation=translation,
                     value=suggestion_value.strip(),
                 )
             vote_model.objects.create(

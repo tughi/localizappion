@@ -17,12 +17,12 @@
     </a>
 </div>
 <div class="list-group">
-    {% for language in languages %}
+    {% for translation in translations %}
     <a href="#" class="list-group-item">
-        <span class="suggestions-required">{{ language.progress.required_suggestions }}</span>
-        <span class="suggestions-submitted">{{ language.progress.submitted_suggestions }}</span>
-        <span class="suggestions-voted">{{ language.progress.voted_suggestions }}</span>
-        {{ language.name }}
+        <span class="suggestions-required">{{ translation.progress.required_suggestions }}</span>
+        <span class="suggestions-submitted">{{ translation.progress.submitted_suggestions }}</span>
+        <span class="suggestions-voted">{{ translation.progress.voted_suggestions }}</span>
+        {{ translation.language.name }}
     </a>
     {% endfor %}
 </div>
