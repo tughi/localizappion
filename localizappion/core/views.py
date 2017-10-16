@@ -8,7 +8,6 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import permission_required
 from django.db import transaction
-from django.db.models import Sum
 from django.shortcuts import redirect
 from django.shortcuts import render
 
@@ -48,57 +47,12 @@ class ProjectListView(views.View):
         ))
 
 
-REQUIRED_VOTES = 3
-
-
-class Progress:
-    def __init__(self, translation):
-        self.required_suggestions = 0
-        self.submitted_suggestions = 0
-        self.voted_suggestions = 0
-
-        strings = translation.project.strings.all()
-        for string in strings:
-            suggestions = {}
-            for suggestion in string.suggestions.filter(translation=translation).annotate(votes_value=Sum('votes__value')):
-                if suggestion.plural_form in suggestions:
-                    suggestions[suggestion.plural_form] = (suggestion.votes_value or 0) >= REQUIRED_VOTES or suggestions[suggestion.plural_form]
-                else:
-                    suggestions[suggestion.plural_form] = (suggestion.votes_value or 0) >= REQUIRED_VOTES
-
-            self.required_suggestions += 1
-            if 'other' in suggestions:
-                self.submitted_suggestions += 1
-                if suggestions['other']:
-                    self.voted_suggestions += 1
-
-            if string.value_one:
-                for plural_form in translation.language.plural_forms:
-                    if plural_form != 'other':
-                        self.required_suggestions += 1
-                        if plural_form in suggestions:
-                            self.submitted_suggestions += 1
-                            if suggestions[plural_form]:
-                                self.voted_suggestions += 1
-
-    @property
-    def percentage_voted(self):
-        return 100. * self.voted_suggestions / self.required_suggestions
-
-    @property
-    def percentage_submitted_only(self):
-        return 100. * (self.submitted_suggestions - self.voted_suggestions) / self.required_suggestions
-
-
 class ProjectStatusView(views.View):
     @staticmethod
     def get(request, project_uuid=None):
-        # TODO: optimize progress load time
         project = Project.objects.get(uuid=project_uuid)
-        translations = [dict(language=translation.language, progress=Progress(translation)) for translation in project.translations.all()]
         return render(request, 'core/project_status.html', dict(
             project=project,
-            translations=translations,
         ))
 
 

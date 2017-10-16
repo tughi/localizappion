@@ -12,41 +12,22 @@
     }
 }
 
-.list-group-item > .badge {
-    min-width: 36px;
-    border-radius: 5px;
-    background-color: #d9edf7;
-    color: #31708f;
-}
-
-.list-group-item > .suggestions-required,
-.list-group-item > .suggestions-submitted,
-.list-group-item > .suggestions-voted {
-    display: inline-block;
-    float: right;
-    min-width: 36px;
-    padding: 3px 7px;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-}
-
-.list-group-item > .suggestions-voted {
-    border-radius: 5px 0 0 5px;
+.badge-success {
     background-color: #dff0d8;
     color: #3c763d;
 }
 
-.list-group-item > .suggestions-submitted {
+.badge-info {
+    background-color: #d9edf7;
+    color: #31708f;
+}
+
+.badge-warning {
     background-color: #fcf8e3;
     color: #8a6d3b;
 }
 
-.list-group-item > .suggestions-required {
-    border-radius: 0 5px 5px 0;
-    background-color: #d9edf7;
-    color: #31708f;
+.badge-danger {
+    background-color: #f2dede;
+    color: #a94442;
 }

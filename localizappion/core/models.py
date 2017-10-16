@@ -68,6 +68,9 @@ class Project(models.Model):
 
     strings_upload_time = models.DateTimeField(null=True, blank=True)
 
+    def count_new_suggestions(self):
+        return Suggestion.objects.filter(translation__project=self, accepted=None).count()
+
     def __str__(self):
         return self.name
 
@@ -75,6 +78,21 @@ class Project(models.Model):
 class Translation(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='translations')
     language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name='+')
+
+    def count_accepted_suggestions(self):
+        count = 0
+        for plural_form in self.language.plural_forms:
+            count += String.objects.distinct().filter(
+                project=self.project,
+                suggestions__translation=self,
+                suggestions__plural_form=plural_form,
+                suggestions__accepted=True
+            ).count()
+        return count
+
+    def count_required_suggestions(self):
+        plurals = self.project.strings.exclude(value_one='').count()
+        return plurals * len(self.language.plural_forms) + self.project.strings.count() - plurals
 
     def __str__(self):
         return '{0}::{1}'.format(self.project.name, self.language.code)
@@ -118,7 +136,8 @@ class Suggestion(models.Model):
     value = models.TextField()
     plural_form = models.CharField(max_length=8, choices=PLURAL_FORMS, default='other')
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
-    accepted = models.BooleanField(default=False)
+    accepted = models.NullBooleanField()
+    added_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return '{0} =({1}::{2})= {3}'.format(self.string.name, self.translation, self.plural_form, self.value)

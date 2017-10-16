@@ -12,16 +12,21 @@
 {% block content %}
 <div class="list-group">
     <a href="{% url 'project_strings' project.uuid %}" class="list-group-item">
-        <span class="badge">{{ project.strings.count }}</span>
+        <span class="badge badge-info">{{ project.strings.count }}</span>
         Strings
     </a>
 </div>
 <div class="list-group">
-    {% for translation in translations %}
     <a href="#" class="list-group-item">
-        <span class="suggestions-required">{{ translation.progress.required_suggestions }}</span>
-        <span class="suggestions-submitted">{{ translation.progress.submitted_suggestions }}</span>
-        <span class="suggestions-voted">{{ translation.progress.voted_suggestions }}</span>
+        <span class="badge badge-warning">{{ project.count_new_suggestions }}</span>
+        New suggestions
+    </a>
+</div>
+<div class="list-group">
+    {% for translation in project.translations.all %}
+    <a href="#" class="list-group-item">
+        <span class="badge badge-info">{{ translation.count_required_suggestions }}</span>
+        <span class="badge badge-success">{{ translation.count_accepted_suggestions }}</span>
         {{ translation.language.name }}
     </a>
     {% endfor %}
