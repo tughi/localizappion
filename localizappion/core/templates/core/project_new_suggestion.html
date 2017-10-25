@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+{% load strings %}
+
+{% block navbar %}
+<ul class="nav navbar-nav">
+    <li class="breadcrumb-step first">
+        <a href="{% url 'project' project.uuid %}">{{ project.name }}</a>
+    </li>
+    <li class="breadcrumb-step">
+        <a href="{% url 'project_new_suggestions' project.uuid %}">New suggestions</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading"><code class="text-danger bg-danger">{{ suggestion.string.name }}</code></div>
+    <div class="panel-body">
+        <div class="form-group">
+            <label for="original">String value</label>
+            <span id="original" class="form-control">{{ suggestion.string.value_other }}</span>
+        </div>
+        <div class="form-group">
+            <label for="translation">Suggestion for {{ suggestion.translation.language.name }} translation</label>
+            <span id="translation" class="form-control">{{ suggestion.value }}</span>
+        </div>
+        <div class="form-group">
+            <label for="reverse">Suggestion translation by Google</label>
+            <span id="reverse" class="form-control">{{ suggestion.value }}</span>
+        </div>
+        {% if perms.core.can_change_suggestion %}
+        {% if suggestion.accepted is True %}
+        <span class="btn btn-success disabled">Accept</span>
+        <a href="{% url 'project_new_suggestion_reject' project.uuid suggestion.uuid %}" class="btn btn-danger">Reject</a>
+        {% elif suggestion.accepted is False %}
+        <a href="{% url 'project_new_suggestion_accept' project.uuid suggestion.uuid %}" class="btn btn-success">Accept</a>
+        <span class="btn btn-danger disabled">Reject</span>
+        {% else %}
+        <a href="{% url 'project_new_suggestion_accept' project.uuid suggestion.uuid %}" class="btn btn-success">Accept</a>
+        <a href="{% url 'project_new_suggestion_reject' project.uuid suggestion.uuid %}" class="btn btn-danger">Reject</a>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -17,7 +17,7 @@
     </a>
 </div>
 <div class="list-group">
-    <a href="#" class="list-group-item">
+    <a href="{% url 'project_new_suggestions' project.uuid %}" class="list-group-item">
         <span class="badge badge-warning">{{ project.count_new_suggestions }}</span>
         New suggestions
     </a>

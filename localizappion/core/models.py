@@ -71,6 +71,9 @@ class Project(models.Model):
     def count_new_suggestions(self):
         return Suggestion.objects.filter(translation__project=self, accepted=None).count()
 
+    def first_new_suggestion(self):
+        return Suggestion.objects.filter(translation__project=self, accepted=None).order_by('added_time').first()
+
     def __str__(self):
         return self.name
 

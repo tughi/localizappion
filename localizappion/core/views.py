@@ -232,3 +232,43 @@ class ProjectStringsCommitView(views.View):
 class UploadError(Exception):
     def __init__(self, message):
         self.message = message
+
+
+class ProjectNewSuggestions(views.View):
+    @staticmethod
+    def get(request, project_uuid):
+        project = Project.objects.get(uuid=project_uuid)
+        suggestion = project.first_new_suggestion()
+        if suggestion:
+            return redirect('project_new_suggestion', project_uuid, suggestion.uuid)
+        else:
+            # TODO: render something
+            pass
+
+
+class ProjectNewSuggestion(views.View):
+    @staticmethod
+    def get(request, project_uuid, suggestion_uuid):
+        project = Project.objects.get(uuid=project_uuid)
+        suggestion = Suggestion.objects.get(uuid=suggestion_uuid, translation__project=project)
+        return render(request, 'core/project_new_suggestion.html', dict(project=project, suggestion=suggestion))
+
+
+class ProjectNewSuggestionAccept(views.View):
+    @staticmethod
+    def get(request, project_uuid, suggestion_uuid):
+        project = Project.objects.get(uuid=project_uuid)
+        suggestion = Suggestion.objects.get(uuid=suggestion_uuid, translation__project=project)
+        suggestion.accepted = True
+        suggestion.save()
+        return redirect('project_new_suggestions', project_uuid)
+
+
+class ProjectNewSuggestionReject(views.View):
+    @staticmethod
+    def get(request, project_uuid, suggestion_uuid):
+        project = Project.objects.get(uuid=project_uuid)
+        suggestion = Suggestion.objects.get(uuid=suggestion_uuid, translation__project=project)
+        suggestion.accepted = False
+        suggestion.save()
+        return redirect('project_new_suggestions', project_uuid)
