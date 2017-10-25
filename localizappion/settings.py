@@ -106,6 +106,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 15 * 60  # 15 minutes
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
