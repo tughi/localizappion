@@ -139,6 +139,7 @@ class Suggestion(models.Model):
     value = models.TextField()
     plural_form = models.CharField(max_length=8, choices=PLURAL_FORMS, default='other')
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    google_translation = models.TextField(null=True, blank=True)
     accepted = models.NullBooleanField()
     added_time = models.DateTimeField(auto_now_add=True)
 

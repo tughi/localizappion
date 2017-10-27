@@ -251,7 +251,19 @@ class ProjectNewSuggestion(views.View):
     def get(request, project_uuid, suggestion_uuid):
         project = Project.objects.get(uuid=project_uuid)
         suggestion = Suggestion.objects.get(uuid=suggestion_uuid, translation__project=project)
-        return render(request, 'core/project_new_suggestion.html', dict(project=project, suggestion=suggestion))
+
+        other_suggestions = suggestion.string.suggestions.exclude(id=suggestion.id).filter(
+            accepted=True,
+            translation=suggestion.translation,
+            plural_form=suggestion.plural_form
+        )
+
+        return render(request, 'core/project_new_suggestion.html', dict(
+            project=project,
+            suggestion=suggestion,
+            suggestion_votes=suggestion.votes.count(),
+            other_suggestions=other_suggestions,
+        ))
 
 
 class ProjectNewSuggestionAccept(views.View):
