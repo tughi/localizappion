@@ -35,16 +35,18 @@
                 {% for other_suggestion in other_suggestions %}
                 <li class="list-group-item">
                     <span class="badge">{{ other_suggestion.votes.count }}</span>
-                    {{ other_suggestion.value }}
+                    <span class="{{ other_suggestion.accepted|yesno:'text-success,text-danger,text-muted' }}">{{ other_suggestion.value }}</span>
                 </li>
                 {% endfor %}
             </ul>
         </div>
         {% endif %}
+        {% if suggestion.google_translation %}
         <div class="form-group">
-            <label for="reverse">Suggestion translation by Google</label>
-            <span id="reverse" class="form-control">{{ suggestion.google_translation|default:"" }}</span>
+            <label for="reverse">Google translation</label>
+            <span id="reverse" class="form-control">{{ suggestion.google_translation }}</span>
         </div>
+        {% endif %}
         {% if perms.core.can_change_suggestion %}
         {% if suggestion.accepted is True %}
         <span class="btn btn-success disabled">Accept</span>

@@ -253,7 +253,6 @@ class ProjectNewSuggestion(views.View):
         suggestion = Suggestion.objects.get(uuid=suggestion_uuid, translation__project=project)
 
         other_suggestions = suggestion.string.suggestions.exclude(id=suggestion.id).filter(
-            accepted=True,
             translation=suggestion.translation,
             plural_form=suggestion.plural_form
         )
