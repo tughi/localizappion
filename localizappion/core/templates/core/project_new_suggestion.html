@@ -14,7 +14,11 @@
 
 {% block content %}
 <div class="panel panel-default">
-    <div class="panel-heading"><code class="text-danger bg-danger">{{ suggestion.string.name }}</code></div>
+    <div class="panel-heading">
+        <code class="text-danger bg-danger">{{ suggestion.string.name }}</code>
+        <nobr> ::</nobr>
+        <code class="text-warning bg-warning">{{ suggestion.plural_form }}</code>
+    </div>
     <div class="panel-body">
         <div class="form-group">
             <label for="original">String value</label>
