@@ -8,8 +8,10 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import permission_required
 from django.db import transaction
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
+from google.cloud import translate as google_translate
 
 from .models import Project
 from .models import String
@@ -283,3 +285,22 @@ class ProjectNewSuggestionReject(views.View):
         suggestion.accepted = False
         suggestion.save()
         return redirect('project_new_suggestions', project_uuid)
+
+
+class TranslateSuggestions(views.View):
+    @staticmethod
+    def get(request):
+        suggestion = Suggestion.objects.filter(accepted=None, google_translation=None).first()
+
+        if suggestion:
+            google_translate_client = google_translate.Client()
+            suggestion_translation = google_translate_client.translate(
+                values=suggestion.value,
+                source_language=suggestion.translation.language.code,
+                target_language='en',
+            )
+
+            suggestion.google_translation = suggestion_translation.get('translatedText')
+            suggestion.save()
+
+        return JsonResponse(dict(response='success'))
