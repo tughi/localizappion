@@ -290,7 +290,7 @@ class ProjectNewSuggestionReject(views.View):
 class TranslateSuggestions(views.View):
     @staticmethod
     def get(request):
-        suggestion = Suggestion.objects.filter(accepted=None, google_translation=None).first()
+        suggestion = Suggestion.objects.filter(accepted=None, google_translation=None).select_related('translation__language').first()
 
         if suggestion:
             google_translate_client = google_translate.Client()
@@ -303,4 +303,6 @@ class TranslateSuggestions(views.View):
             suggestion.google_translation = suggestion_translation.get('translatedText')
             suggestion.save()
 
-        return JsonResponse(dict(response='success'))
+            return JsonResponse(dict(success=True))
+
+        return JsonResponse(dict(success=False))
