@@ -16,8 +16,10 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <code class="text-danger bg-danger">{{ suggestion.string.name }}</code>
+        {% if suggestion.string.value_one %}
         <nobr> ::</nobr>
         <code class="text-warning bg-warning">{{ suggestion.plural_form }}</code>
+        {% endif %}
     </div>
     <div class="panel-body">
         <div class="form-group">
