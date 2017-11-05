@@ -24,7 +24,7 @@
 </div>
 <div class="list-group">
     {% for translation in project.translations.all %}
-    <a href="#" class="list-group-item">
+    <a href="{% url 'project_translation' project.uuid translation.language.code %}" class="list-group-item">
         <span class="badge badge-info">{{ translation.count_required_suggestions }}</span>
         <span class="badge badge-success">{{ translation.count_accepted_suggestions }}</span>
         {{ translation.language.name }}

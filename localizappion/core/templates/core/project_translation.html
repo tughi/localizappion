@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+
+{% block navbar %}
+<ul class="nav navbar-nav">
+    <li class="breadcrumb-step first">
+        <a href="{% url 'project' project.uuid %}">{{ project.name }}</a>
+    </li>
+    <li class="breadcrumb-step">
+        <a>Translations</a>
+    </li>
+    <li class="breadcrumb-step">
+        <a href="{% url 'project_translation' project.uuid translation.language.code %}">{{ translation.language.name }}</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>NAME</th>
+            <th>VALUE</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for string in strings %}
+        {% for plural_form, suggestions in string.suggestions %}
+        <tr>
+            <td>
+                <code class="text-info bg-info" title="{{ string.value_other }}">{{ string.name }}</code>
+                {% if string.value_one %}
+                <nobr> ::</nobr>
+                <code class="text-warning bg-warning">{{ plural_form }}</code>
+                {% endif %}
+            </td>
+            <td>
+                {% if suggestions %}
+                <span title="{{ suggestions.0.google_translation|default:'' }}">{{ suggestions.0.value }}</span>
+                {% else %}
+                <code class="text-danger bg-danger">Not translated</code>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

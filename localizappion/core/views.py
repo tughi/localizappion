@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import permission_required
+from django.db import models
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -16,6 +17,7 @@ from google.cloud import translate as google_translate
 from .models import Project
 from .models import String
 from .models import Suggestion
+from .models import Translation
 from .models import Vote
 
 
@@ -285,6 +287,44 @@ class ProjectNewSuggestionReject(views.View):
         suggestion.accepted = False
         suggestion.save()
         return redirect('project_new_suggestions', project_uuid)
+
+
+class ProjectTranslation(views.View):
+    @staticmethod
+    def get(request, project_uuid, language_code):
+        translation = Translation.objects.filter(language__code=language_code, project__uuid=project_uuid).select_related('project').get()
+        project = translation.project
+
+        suggestions = Suggestion.objects.filter(translation=translation, accepted=True)
+        suggestions = suggestions.values('string_id', 'value', 'plural_form', 'added_time', 'google_translation')
+        suggestions = suggestions.annotate(votes_value=models.Sum('votes__value'))
+        suggestions = list(suggestions)
+
+        strings = []
+        for string in String.objects.filter(project=project):
+            string_values = dict(
+                name=string.name,
+                value_one=string.value_one,
+                value_other=string.value_other,
+                suggestions=[],
+            )
+            for plural_form in translation.language.plural_forms if string.value_one else ('other',):
+                string_values['suggestions'].append((
+                    plural_form,
+                    sorted(
+                        filter(lambda suggestion: suggestion['string_id'] == string.id and suggestion['plural_form'] == plural_form, suggestions),
+                        key=lambda suggestion: (suggestion['votes_value'], -suggestion['added_time'].timestamp()),
+                        reverse=True,
+                    )
+                ))
+
+            strings.append(string_values)
+
+        return render(request, 'core/project_translation.html', dict(
+            project=project,
+            translation=translation,
+            strings=strings,
+        ))
 
 
 class TranslateSuggestions(views.View):

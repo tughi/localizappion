@@ -13,5 +13,6 @@ urlpatterns = (
     url(r'^projects/(?P<project_uuid>[0-9a-f-]+)/new-suggestions/(?P<suggestion_uuid>[0-9a-f-]+)$', views.ProjectNewSuggestion.as_view(), name='project_new_suggestion'),
     url(r'^projects/(?P<project_uuid>[0-9a-f-]+)/new-suggestions/(?P<suggestion_uuid>[0-9a-f-]+)/accept$', views.ProjectNewSuggestionAccept.as_view(), name='project_new_suggestion_accept'),
     url(r'^projects/(?P<project_uuid>[0-9a-f-]+)/new-suggestions/(?P<suggestion_uuid>[0-9a-f-]+)/reject$', views.ProjectNewSuggestionReject.as_view(), name='project_new_suggestion_reject'),
+    url(r'^projects/(?P<project_uuid>[0-9a-f-]+)/translations/(?P<language_code>[a-z]{2}(_[A-Z]{2})?)$', views.ProjectTranslation.as_view(), name='project_translation'),
     url(r'^translate-suggestions$', views.TranslateSuggestions.as_view(), name='translate_suggestions'),
 )
