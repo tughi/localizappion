@@ -245,9 +245,7 @@ class ProjectNewSuggestions(views.View):
         suggestion = project.first_new_suggestion()
         if suggestion:
             return redirect('project_new_suggestion', project_uuid, suggestion.uuid)
-        else:
-            # TODO: render something
-            pass
+        return redirect('project', project_uuid)
 
 
 class ProjectNewSuggestion(views.View):

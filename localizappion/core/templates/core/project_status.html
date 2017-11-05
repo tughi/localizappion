@@ -16,12 +16,14 @@
         Strings
     </a>
 </div>
+{% if project.count_new_suggestions %}
 <div class="list-group">
     <a href="{% url 'project_new_suggestions' project.uuid %}" class="list-group-item">
         <span class="badge badge-warning">{{ project.count_new_suggestions }}</span>
         New suggestions
     </a>
 </div>
+{% endif %}
 <div class="list-group">
     {% for translation in project.translations.all %}
     <a href="{% url 'project_translation' project.uuid translation.language.code %}" class="list-group-item">
