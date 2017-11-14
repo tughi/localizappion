@@ -58,13 +58,16 @@ class VoteType(graphene_sqlalchemy.SQLAlchemyObjectType):
 
 
 class Query(graphene.ObjectType):
-    languages = graphene.List(LanguageType)
+    languages = graphene.List(LanguageType, language_code=graphene.String())
     projects = graphene.List(ProjectType)
     strings = graphene.List(StringType, project_uuid=graphene.String())
     translators = graphene.List(TranslatorType)
 
-    def resolve_languages(self, info):
-        return db_session.query(Language).all()
+    def resolve_languages(self, info, language_code=None):
+        languages = db_session.query(Language)
+        if language_code is not None:
+            languages = languages.filter(Language.code == language_code)
+        return languages
 
     def resolve_projects(self, info):
         return db_session.query(Project)
