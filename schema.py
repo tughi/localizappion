@@ -12,6 +12,8 @@ from models import db_session
 
 
 class LanguageType(graphene_sqlalchemy.SQLAlchemyObjectType):
+    plural_forms = graphene.List(graphene.String)
+
     class Meta:
         model = Language
 
