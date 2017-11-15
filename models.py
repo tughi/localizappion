@@ -2,7 +2,6 @@ import uuid
 
 from sqlalchemy import BOOLEAN
 from sqlalchemy import Column
-from sqlalchemy import DATETIME
 from sqlalchemy import ForeignKey
 from sqlalchemy import INTEGER
 from sqlalchemy import PrimaryKeyConstraint
@@ -20,7 +19,7 @@ from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 
-engine = create_engine('sqlite:///database.sqlite3', convert_unicode=True)
+engine = create_engine('postgresql:///localizappion')
 db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))  # type: Session
 
 Base = declarative_base()
@@ -168,7 +167,7 @@ class Suggestion(Base):
     uuid = Column(VARCHAR(40), nullable=False, unique=True, default=generate_uuid)
     google_translation = Column(TEXT, nullable=True)
     accepted = Column(BOOLEAN, nullable=True)
-    added_time = Column(DATETIME(timezone=True), default=func.now())
+    added_time = Column(TIMESTAMP, default=func.now())
 
     translation = relationship(Translation, back_populates='suggestions')
     translator = relationship(Translator, back_populates='suggestions')
