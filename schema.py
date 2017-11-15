@@ -22,15 +22,16 @@ class ProjectType(graphene_sqlalchemy.SQLAlchemyObjectType):
 
 
 class StringType(graphene_sqlalchemy.SQLAlchemyObjectType):
-    id = graphene.Int()
-    suggestions = graphene.List(lambda: SuggestionType, accepted=graphene.Boolean(), language_code=graphene.String())
+    suggestions = graphene.List(lambda: SuggestionType, accepted=graphene.Boolean(), language_code=graphene.String(), plural_form=graphene.String())
 
-    def resolve_suggestions(self, info, accepted=None, language_code=None):
+    def resolve_suggestions(self, info, accepted=None, language_code=None, plural_form=None):
         suggestions = self.suggestions.join(Suggestion.translation, Translation.language)
         if accepted is not None:
             suggestions = suggestions.filter(Suggestion.accepted == accepted)
         if language_code is not None:
             suggestions = suggestions.filter(Language.code == language_code)
+        if plural_form is not None:
+            suggestions = suggestions.filter(Suggestion.plural_form == plural_form)
         return suggestions
 
     class Meta:
@@ -61,7 +62,7 @@ class Query(graphene.ObjectType):
     languages = graphene.List(LanguageType, language_code=graphene.String())
     projects = graphene.List(ProjectType)
     strings = graphene.List(StringType, project_uuid=graphene.String())
-    translators = graphene.List(TranslatorType)
+    translations = graphene.List(TranslationType, language_code=graphene.String())
 
     def resolve_languages(self, info, language_code=None):
         languages = db_session.query(Language)
@@ -78,8 +79,11 @@ class Query(graphene.ObjectType):
             strings = strings.join(Project).filter(Project.uuid == project_uuid)
         return strings
 
-    def resolve_translators(self, info):
-        return db_session.query(Translator).all()
+    def resolve_translations(self, info, language_code=None):
+        translations = db_session.query(Translation)
+        if language_code is not None:
+            translations = translations.join(Language).filter(Language.code == language_code)
+        return translations
 
 
 schema = graphene.Schema(query=Query)
