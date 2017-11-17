@@ -1,14 +1,14 @@
 import graphene
 import graphene_sqlalchemy
 
-from models import Language
-from models import Project
-from models import String
-from models import Suggestion
-from models import Translation
-from models import Translator
-from models import Vote
-from models import db_session
+from .models import Language
+from .models import Project
+from .models import String
+from .models import Suggestion
+from .models import Translation
+from .models import Translator
+from .models import Vote
+from .models import db_session
 
 
 class LanguageType(graphene_sqlalchemy.SQLAlchemyObjectType):

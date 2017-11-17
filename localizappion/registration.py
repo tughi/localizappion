@@ -5,10 +5,10 @@ from hashlib import sha512
 import flask
 from flask_mail import Message
 
-from models import Project
-from models import Translator
-from models import TranslatorClient
-from models import db_session
+from .models import Project
+from .models import Translator
+from .models import TranslatorClient
+from .models import db_session
 
 registration = flask.Blueprint(__name__.split('.')[-1], __name__)
 
@@ -59,7 +59,7 @@ def register_translator():
                 Cheers,<br>
                 Tughi
             </p>
-        """.format(project.name, flask.url_for(registration.name + '.activate_translator', translator_client=translator_client.uuid, _external=True)),
+        """.format(project.name, flask.url_for('.activate_translator', translator_client=translator_client.uuid, _external=True)),
     )
 
     flask.current_app.extensions.get('mail').send(message)

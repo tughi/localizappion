@@ -5,17 +5,16 @@ import flask
 from flask_graphql import GraphQLView
 from flask_mail import Mail
 
-import commands
-from localizappion.registration import registration
-from models import db_session
-from schema import schema
+from . import commands
+from .models import db_session
+from .registration import registration
+from .schema import schema
 
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 app = flask.Flask(__name__)
 app.config.from_object('settings.Config')
-app.debug = True
 
 mail = Mail()
 mail.init_app(app)
@@ -42,6 +41,3 @@ app.add_url_rule(
 )
 
 app.register_blueprint(registration)
-
-if __name__ == '__main__':
-    app.run()

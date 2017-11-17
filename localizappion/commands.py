@@ -1,15 +1,15 @@
 import os
 
-from localizappion.registration import create_email_hash
-from models import Base
-from models import Language
-from models import Project
-from models import String
-from models import Suggestion
-from models import Translation
-from models import Translator
-from models import Vote
-from models import db_session
+from .models import Base
+from .models import Language
+from .models import Project
+from .models import String
+from .models import Suggestion
+from .models import Translation
+from .models import Translator
+from .models import Vote
+from .models import db_session
+from .registration import create_email_hash
 
 
 def init_db():
