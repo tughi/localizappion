@@ -63,8 +63,9 @@ def init_db():
     translators = {}
     with open(os.path.join(os.path.dirname(__file__), 'db_data', 'translators.txt')) as data_file:
         for line in data_file:
-            alias = line.strip()
+            alias, email_hash = map(str.strip, line.split('|')[0:2])
             translator = Translator(
+                email_hash=email_hash,
                 alias=alias,
             )
             db_session.add(translator)

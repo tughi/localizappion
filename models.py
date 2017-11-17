@@ -148,8 +148,20 @@ class Translator(Base):
     __tablename__ = 'translator'
 
     id = Column(INTEGER, primary_key=True, nullable=False)
-    uuid = Column(VARCHAR(40), nullable=False, unique=True, default=generate_uuid)
+    email_hash = Column(TEXT, nullable=False, unique=True)
     alias = Column(VARCHAR(32), nullable=True)
+
+
+class TranslatorClient(Base):
+    __tablename__ = 'translator_client'
+
+    id = Column(INTEGER, primary_key=True, nullable=False)
+    translator_id = Column(INTEGER, ForeignKey(Translator.id), nullable=False)
+    uuid = Column(VARCHAR(40), nullable=False, unique=True, default=generate_uuid)
+    added_time = Column(TIMESTAMP, nullable=False, default=func.now())
+    activated_time = Column(TIMESTAMP, nullable=True)
+
+    translator = relationship(Translator, cascade='delete')
 
 
 class Suggestion(Base):
@@ -167,7 +179,7 @@ class Suggestion(Base):
     uuid = Column(VARCHAR(40), nullable=False, unique=True, default=generate_uuid)
     google_translation = Column(TEXT, nullable=True)
     accepted = Column(BOOLEAN, nullable=True)
-    added_time = Column(TIMESTAMP, default=func.now())
+    added_time = Column(TIMESTAMP, nullable=False, default=func.now())
 
     translation = relationship(Translation, back_populates='suggestions')
     translator = relationship(Translator, back_populates='suggestions')

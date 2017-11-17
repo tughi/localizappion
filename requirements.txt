@@ -3,3 +3,4 @@ SQLAlchemy==1.1.15
 graphene_sqlalchemy==2.0.0
 Flask-GraphQL==1.4.1
 psycopg2==2.7.3.2
+Flask-Mail==0.9.1
