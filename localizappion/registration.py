@@ -13,6 +13,11 @@ from models import db_session
 registration = flask.Blueprint(__name__.split('.')[-1], __name__)
 
 
+def create_email_hash(email):
+    hash_data = '{0}+{1}'.format(email, flask.current_app.config['REGISTRATION_MAIL_SENDER'])
+    return base64.standard_b64encode(sha512(hash_data.encode()).digest()).decode()
+
+
 @registration.route('/translators/register', methods=['POST'])
 def register_translator():
     request_data = flask.request.json  # type: dict
@@ -26,7 +31,7 @@ def register_translator():
     if len(email) < 3 or email.find('@', 1) < 0:
         return flask.jsonify(message='Invalid email address')
 
-    email_hash = base64.standard_b64encode(sha512(email.encode()).digest()).decode()
+    email_hash = create_email_hash(email)
 
     translator = db_session.query(Translator).filter(Translator.email_hash == email_hash).first()
     if not translator:
