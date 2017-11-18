@@ -1,5 +1,6 @@
 import uuid
 
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import BOOLEAN
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -9,20 +10,14 @@ from sqlalchemy import TEXT
 from sqlalchemy import TIMESTAMP
 from sqlalchemy import UniqueConstraint
 from sqlalchemy import VARCHAR
-from sqlalchemy import create_engine
 from sqlalchemy import func
 from sqlalchemy import select
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import column_property
 from sqlalchemy.orm import relationship
-from sqlalchemy.orm import scoped_session
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm.session import Session
 
-engine = create_engine('postgresql:///localizappion')
-db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))  # type: Session
+from localizappion import app
 
-Base = declarative_base()
+db = SQLAlchemy(app)
 
 PLURAL_FORMS = (
     ('zero', "Zero"),
@@ -38,7 +33,7 @@ def generate_uuid():
     return str(uuid.uuid4())
 
 
-class Language(Base):
+class Language(db.Model):
     __tablename__ = 'language'
 
     id = Column(INTEGER, primary_key=True, nullable=False)
@@ -85,7 +80,7 @@ class Language(Base):
         return None
 
 
-class Project(Base):
+class Project(db.Model):
     __tablename__ = 'project'
 
     id = Column(INTEGER, primary_key=True, nullable=False)
@@ -95,7 +90,7 @@ class Project(Base):
     strings_upload_time = Column(TIMESTAMP, nullable=True)
 
 
-class String(Base):
+class String(db.Model):
     __tablename__ = 'string'
     __table_args__ = (
         UniqueConstraint('project_id', 'name'),
@@ -115,7 +110,7 @@ class String(Base):
 Project.strings = relationship(String, order_by=String.position, cascade='delete')
 
 
-class Translation(Base):
+class Translation(db.Model):
     __tablename__ = 'translation'
 
     id = Column(INTEGER, primary_key=True, nullable=False)
@@ -144,7 +139,7 @@ class Translation(Base):
 Project.translations = relationship(Translation, cascade='delete')
 
 
-class Translator(Base):
+class Translator(db.Model):
     __tablename__ = 'translator'
 
     id = Column(INTEGER, primary_key=True, nullable=False)
@@ -152,7 +147,7 @@ class Translator(Base):
     alias = Column(VARCHAR(32), nullable=True)
 
 
-class TranslatorClient(Base):
+class TranslatorClient(db.Model):
     __tablename__ = 'translator_client'
 
     id = Column(INTEGER, primary_key=True, nullable=False)
@@ -164,7 +159,7 @@ class TranslatorClient(Base):
     translator = relationship(Translator, cascade='delete')
 
 
-class Suggestion(Base):
+class Suggestion(db.Model):
     __tablename__ = 'suggestion'
     __table_args__ = (
         UniqueConstraint('translation_id', 'string_id', 'value', 'plural_form'),
@@ -191,7 +186,7 @@ Translator.suggestions = relationship(Suggestion, cascade='delete')
 String.suggestions = relationship(Suggestion, cascade='delete', lazy='dynamic')
 
 
-class Vote(Base):
+class Vote(db.Model):
     __tablename__ = 'suggestion_vote'
     __table_args__ = (
         PrimaryKeyConstraint('suggestion_id', 'translator_id'),

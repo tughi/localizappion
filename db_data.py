@@ -1,22 +1,17 @@
 import os
 
-from .models import Base
-from .models import Language
-from .models import Project
-from .models import String
-from .models import Suggestion
-from .models import Translation
-from .models import Translator
-from .models import Vote
-from .models import db_session
-from .registration import create_email_hash
+from localizappion.models import Language
+from localizappion.models import Project
+from localizappion.models import String
+from localizappion.models import Suggestion
+from localizappion.models import Translation
+from localizappion.models import Translator
+from localizappion.models import Vote
+from localizappion.models import db
+from localizappion.registration import create_email_hash
 
 
-def init_db():
-    Base.metadata.create_all(db_session.bind)
-
-    # import data
-
+def import_db_data():
     languages = {}
     with open(os.path.join(os.path.dirname(__file__), 'db_data', 'languages.txt')) as data_file:
         for line in data_file:
@@ -31,8 +26,8 @@ def init_db():
                 plurals_many=plurals_many or None,
                 plurals_other=plurals_other or None,
             )
-            db_session.add(language)
-            db_session.flush()
+            db.session.add(language)
+            db.session.flush()
             languages[language.code] = language.id
 
     projects = {}
@@ -43,8 +38,8 @@ def init_db():
                 uuid=project_uuid,
                 name=project_name,
             )
-            db_session.add(project)
-            db_session.flush()
+            db.session.add(project)
+            db.session.flush()
             projects[project.uuid] = project.id
 
     strings = {}
@@ -57,8 +52,8 @@ def init_db():
                 name=string_name,
                 value_other=string_value_other,
             )
-            db_session.add(string)
-            db_session.flush()
+            db.session.add(string)
+            db.session.flush()
             strings[(project_id, string_name)] = string.id
 
     translators = {}
@@ -69,8 +64,8 @@ def init_db():
                 email_hash=create_email_hash(email),
                 alias=alias,
             )
-            db_session.add(translator)
-            db_session.flush()
+            db.session.add(translator)
+            db.session.flush()
             translators[translator.alias] = translator.id
 
     translations = {}
@@ -86,8 +81,8 @@ def init_db():
                     project_id=project_id,
                     language_id=language_id,
                 )
-                db_session.add(translation)
-                db_session.flush()
+                db.session.add(translation)
+                db.session.flush()
                 translations[(project_id, language_id)] = translation_id = translation.id
             translator_id = translators[translator_alias]
             string_id = strings[(project_id, string_name)]
@@ -100,13 +95,13 @@ def init_db():
                     value=value,
                     plural_form='other',
                 )
-                db_session.add(suggestion)
-                db_session.flush()
+                db.session.add(suggestion)
+                db.session.flush()
                 suggestions[(translation_id, string_id, value, plural_form)] = suggestion_id = suggestion.id
-            db_session.add(Vote(
+            db.session.add(Vote(
                 suggestion_id=suggestion_id,
                 translator_id=translator_id,
                 value=1,
             ))
 
-    db_session.commit()
+    db.session.commit()

@@ -8,7 +8,7 @@ from flask_mail import Message
 from .models import Project
 from .models import Translator
 from .models import TranslatorClient
-from .models import db_session
+from .models import db
 
 registration = flask.Blueprint(__name__.split('.')[-1], __name__)
 
@@ -24,7 +24,7 @@ def register_translator():
     project_uuid = request_data['project'] if 'project' in request_data else ''
     email = request_data['email'] if 'email' in request_data else ''
 
-    project = db_session.query(Project).filter(Project.uuid == project_uuid).first()
+    project = db.session.query(Project).filter(Project.uuid == project_uuid).first()
     if not project:
         return flask.abort(404)
 
@@ -33,14 +33,14 @@ def register_translator():
 
     email_hash = create_email_hash(email)
 
-    translator = db_session.query(Translator).filter(Translator.email_hash == email_hash).first()
+    translator = db.session.query(Translator).filter(Translator.email_hash == email_hash).first()
     if not translator:
         translator = Translator(email_hash=email_hash)
-        db_session.add(translator)
+        db.session.add(translator)
 
     translator_client = TranslatorClient(translator=translator)
-    db_session.add(translator_client)
-    db_session.commit()
+    db.session.add(translator_client)
+    db.session.commit()
 
     message = Message(
         subject="New {0} translator".format(project.name),
@@ -69,14 +69,14 @@ def register_translator():
 
 @registration.route('/translators/<uuid:translator_client>/activate')
 def activate_translator(translator_client=None):
-    translator_client = db_session.query(TranslatorClient).filter(TranslatorClient.uuid == str(translator_client)).first()
+    translator_client = db.session.query(TranslatorClient).filter(TranslatorClient.uuid == str(translator_client)).first()
     if not translator_client:
         # TODO: render template
         return flask.abort(404)
 
     if not translator_client.activated_time:
         translator_client.activated_time = datetime.now()
-        db_session.commit()
+        db.session.commit()
 
     # TODO: render template
     return flask.jsonify(message="Thanks for becoming a translator.")

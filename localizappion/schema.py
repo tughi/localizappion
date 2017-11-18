@@ -8,7 +8,7 @@ from .models import Suggestion
 from .models import Translation
 from .models import Translator
 from .models import Vote
-from .models import db_session
+from .models import db
 
 
 class LanguageType(graphene_sqlalchemy.SQLAlchemyObjectType):
@@ -67,22 +67,22 @@ class Query(graphene.ObjectType):
     translations = graphene.List(TranslationType, language_code=graphene.String())
 
     def resolve_languages(self, info, language_code=None):
-        languages = db_session.query(Language)
+        languages = db.session.query(Language)
         if language_code is not None:
             languages = languages.filter(Language.code == language_code)
         return languages
 
     def resolve_projects(self, info):
-        return db_session.query(Project)
+        return db.session.query(Project)
 
     def resolve_strings(self, info, project_uuid=None):
-        strings = db_session.query(String)
+        strings = db.session.query(String)
         if project_uuid is not None:
             strings = strings.join(Project).filter(Project.uuid == project_uuid)
         return strings
 
     def resolve_translations(self, info, language_code=None):
-        translations = db_session.query(Translation)
+        translations = db.session.query(Translation)
         if language_code is not None:
             translations = translations.join(Language).filter(Language.code == language_code)
         return translations
