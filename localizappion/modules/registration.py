@@ -10,7 +10,7 @@ from ..models import Translator
 from ..models import TranslatorClient
 from ..models import db
 
-blueprint = flask.Blueprint('registration', __name__)
+blueprint = flask.Blueprint(__name__.split('.')[-1], __name__)
 
 
 def create_email_hash(email):
