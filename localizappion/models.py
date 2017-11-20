@@ -107,7 +107,7 @@ class String(db.Model):
     project = relationship(Project)
 
 
-Project.strings = relationship(String, order_by=String.position, cascade='delete')
+Project.strings = relationship(String, lazy='dynamic')
 
 
 class Translation(db.Model):
@@ -136,7 +136,7 @@ class Translation(db.Model):
     #     return plurals * len(self.language.plural_forms) + self.project.strings.count() - plurals
 
 
-Project.translations = relationship(Translation, cascade='delete')
+Project.translations = relationship(Translation, lazy='dynamic')
 
 
 class Translator(db.Model):
@@ -156,7 +156,7 @@ class TranslatorClient(db.Model):
     added_time = Column(TIMESTAMP, nullable=False, default=func.now())
     activated_time = Column(TIMESTAMP, nullable=True)
 
-    translator = relationship(Translator, cascade='delete')
+    translator = relationship(Translator)
 
 
 class Suggestion(db.Model):
@@ -176,14 +176,14 @@ class Suggestion(db.Model):
     accepted = Column(BOOLEAN, nullable=True)
     added_time = Column(TIMESTAMP, nullable=False, default=func.now())
 
+    string = relationship(String, back_populates='suggestions')
     translation = relationship(Translation, back_populates='suggestions')
     translator = relationship(Translator, back_populates='suggestions')
-    string = relationship(String, back_populates='suggestions')
 
 
-Translation.suggestions = relationship(Suggestion, cascade='delete')
-Translator.suggestions = relationship(Suggestion, cascade='delete')
-String.suggestions = relationship(Suggestion, cascade='delete', lazy='dynamic')
+String.suggestions = relationship(Suggestion, lazy='dynamic')
+Translation.suggestions = relationship(Suggestion, lazy='dynamic')
+Translator.suggestions = relationship(Suggestion, lazy='dynamic')
 
 
 class Vote(db.Model):
@@ -196,12 +196,12 @@ class Vote(db.Model):
     translator_id = Column(INTEGER, ForeignKey(Translator.id), nullable=False)
     value = Column(INTEGER, nullable=False, default=1)
 
-    suggestion = relationship(Suggestion, cascade='delete', back_populates='votes')
-    translator = relationship(Translator, cascade='delete')
+    suggestion = relationship(Suggestion, back_populates='votes')
+    translator = relationship(Translator)
 
     def __str__(self):
         return str(self.translator)
 
 
-Suggestion.votes = relationship(Vote)
+Suggestion.votes = relationship(Vote, lazy='dynamic')
 Suggestion.votes_value = column_property(select([func.sum(Vote.value)]).where(Vote.suggestion_id == Suggestion.id))
