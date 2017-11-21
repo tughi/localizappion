@@ -7,7 +7,7 @@ from .models import String
 from .models import Suggestion
 from .models import Translation
 from .models import Translator
-from .models import Vote
+from .models import SuggestionVote
 from .models import db
 
 
@@ -55,9 +55,9 @@ class SuggestionType(graphene_sqlalchemy.SQLAlchemyObjectType):
         model = Suggestion
 
 
-class VoteType(graphene_sqlalchemy.SQLAlchemyObjectType):
+class SuggestionVoteType(graphene_sqlalchemy.SQLAlchemyObjectType):
     class Meta:
-        model = Vote
+        model = SuggestionVote
 
 
 class Query(graphene.ObjectType):

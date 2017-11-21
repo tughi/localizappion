@@ -34,8 +34,6 @@ def generate_uuid():
 
 
 class Language(db.Model):
-    __tablename__ = 'language'
-
     id = Column(INTEGER, primary_key=True, nullable=False)
     code = Column(VARCHAR(8), nullable=False, unique=True)
     name = Column(VARCHAR(64))
@@ -81,8 +79,6 @@ class Language(db.Model):
 
 
 class Project(db.Model):
-    __tablename__ = 'project'
-
     id = Column(INTEGER, primary_key=True, nullable=False)
     uuid = Column(VARCHAR(40), nullable=False, unique=True, default=generate_uuid)
     name = Column(VARCHAR(128), nullable=False, unique=True)
@@ -91,7 +87,6 @@ class Project(db.Model):
 
 
 class String(db.Model):
-    __tablename__ = 'string'
     __table_args__ = (
         UniqueConstraint('project_id', 'name'),
     )
@@ -111,8 +106,6 @@ Project.strings = relationship(String, lazy='dynamic')
 
 
 class Translation(db.Model):
-    __tablename__ = 'translation'
-
     id = Column(INTEGER, primary_key=True, nullable=False)
     project_id = Column(INTEGER, ForeignKey(Project.id), nullable=False)
     language_id = Column(INTEGER, ForeignKey(Language.id), nullable=False)
@@ -120,36 +113,17 @@ class Translation(db.Model):
     project = relationship(Project, back_populates='translations')
     language = relationship(Language)
 
-    # def count_accepted_suggestions(self):
-    #     count = 0
-    #     for plural_form in self.language.plural_forms:
-    #         count += String.objects.distinct().filter(
-    #             project=self.project,
-    #             suggestions__translation=self,
-    #             suggestions__plural_form=plural_form,
-    #             suggestions__accepted=True
-    #         ).count()
-    #     return count
-    #
-    # def count_required_suggestions(self):
-    #     plurals = self.project.strings.exclude(value_one='').count()
-    #     return plurals * len(self.language.plural_forms) + self.project.strings.count() - plurals
-
 
 Project.translations = relationship(Translation, lazy='dynamic')
 
 
 class Translator(db.Model):
-    __tablename__ = 'translator'
-
     id = Column(INTEGER, primary_key=True, nullable=False)
     email_hash = Column(TEXT, nullable=False, unique=True)
     alias = Column(VARCHAR(32), nullable=True)
 
 
 class TranslatorClient(db.Model):
-    __tablename__ = 'translator_client'
-
     id = Column(INTEGER, primary_key=True, nullable=False)
     translator_id = Column(INTEGER, ForeignKey(Translator.id), nullable=False)
     uuid = Column(VARCHAR(40), nullable=False, unique=True, default=generate_uuid)
@@ -160,7 +134,6 @@ class TranslatorClient(db.Model):
 
 
 class Suggestion(db.Model):
-    __tablename__ = 'suggestion'
     __table_args__ = (
         UniqueConstraint('translation_id', 'string_id', 'value', 'plural_form'),
     )
@@ -186,8 +159,7 @@ Translation.suggestions = relationship(Suggestion, lazy='dynamic')
 Translator.suggestions = relationship(Suggestion, lazy='dynamic')
 
 
-class Vote(db.Model):
-    __tablename__ = 'suggestion_vote'
+class SuggestionVote(db.Model):
     __table_args__ = (
         PrimaryKeyConstraint('suggestion_id', 'translator_id'),
     )
@@ -203,5 +175,5 @@ class Vote(db.Model):
         return str(self.translator)
 
 
-Suggestion.votes = relationship(Vote, lazy='dynamic')
-Suggestion.votes_value = column_property(select([func.sum(Vote.value)]).where(Vote.suggestion_id == Suggestion.id))
+Suggestion.votes = relationship(SuggestionVote, lazy='dynamic')
+Suggestion.votes_value = column_property(select([func.sum(SuggestionVote.value)]).where(SuggestionVote.suggestion_id == Suggestion.id))

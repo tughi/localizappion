@@ -26,7 +26,7 @@ def createdb():
     from localizappion.models import Translator
     from localizappion.models import Translation
     from localizappion.models import Suggestion
-    from localizappion.models import Vote
+    from localizappion.models import SuggestionVote
     from localizappion.modules.registration import create_email_hash
 
     languages = {}
@@ -115,7 +115,7 @@ def createdb():
                 db.session.add(suggestion)
                 db.session.flush()
                 suggestions[(translation_id, string_id, value, plural_form)] = suggestion_id = suggestion.id
-            db.session.add(Vote(
+            db.session.add(SuggestionVote(
                 suggestion_id=suggestion_id,
                 translator_id=translator_id,
                 value=1,
