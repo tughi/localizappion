@@ -61,13 +61,14 @@ def createdb():
 
     strings = {}
     with open(os.path.join(os.path.dirname(__file__), 'db_data', 'strings.txt')) as data_file:
-        for line in data_file:
+        for position, line in enumerate(data_file):
             project_uuid, string_name, string_value_other = map(str.strip, line.split('|', 2))
             project_id = projects[project_uuid]
             string = String(
                 project_id=project_id,
                 name=string_name,
                 value_other=string_value_other,
+                position=position,
             )
             db.session.add(string)
             db.session.flush()
