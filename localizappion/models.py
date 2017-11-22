@@ -178,5 +178,6 @@ class SuggestionVote(db.Model):
         return str(self.translator)
 
 
-Suggestion.votes = relationship(SuggestionVote, lazy='dynamic')
+Suggestion.votes = relationship(SuggestionVote)
+Suggestion.votes_query = relationship(SuggestionVote, lazy='dynamic')
 Suggestion.votes_value = column_property(select([func.sum(SuggestionVote.value)]).where(SuggestionVote.suggestion_id == Suggestion.id))
