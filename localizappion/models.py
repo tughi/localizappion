@@ -102,11 +102,13 @@ class String(db.Model):
     project = relationship(Project)
 
 
-Project.strings = relationship(String, lazy='dynamic')
+Project.strings = relationship(String)
+Project.strings_query = relationship(String, lazy='dynamic')
 
 
 class Translation(db.Model):
     id = Column(INTEGER, primary_key=True, nullable=False)
+    uuid = Column(VARCHAR(40), nullable=False, unique=True, default=generate_uuid)
     project_id = Column(INTEGER, ForeignKey(Project.id), nullable=False)
     language_id = Column(INTEGER, ForeignKey(Language.id), nullable=False)
 
@@ -154,7 +156,8 @@ class Suggestion(db.Model):
     translator = relationship(Translator, back_populates='suggestions')
 
 
-String.suggestions = relationship(Suggestion, lazy='dynamic')
+String.suggestions = relationship(Suggestion)
+String.suggestions_query = relationship(Suggestion, lazy='dynamic')
 Translation.suggestions = relationship(Suggestion, lazy='dynamic')
 Translator.suggestions = relationship(Suggestion, lazy='dynamic')
 

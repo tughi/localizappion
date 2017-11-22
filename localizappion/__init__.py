@@ -9,6 +9,7 @@ Mail().init_app(app)
 
 from .schema import schema
 from .modules import registration
+from .modules import translate
 from .modules import translation
 
 app.add_url_rule(
@@ -21,4 +22,5 @@ app.add_url_rule(
 )
 
 app.register_blueprint(registration.blueprint)
+app.register_blueprint(translate.blueprint)
 app.register_blueprint(translation.blueprint)
