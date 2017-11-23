@@ -1,9 +1,11 @@
 import flask
-from sqlalchemy.orm import joinedload, contains_eager
+from sqlalchemy.orm import contains_eager
+from sqlalchemy.orm import joinedload
 
-from ...models import String
-from ...models import Suggestion
-from ...models import Translation
+from localizappion.models import String, SuggestionVote
+from localizappion.models import Suggestion
+from localizappion.models import Translation
+from localizappion.models import TranslatorClient
 
 blueprint = flask.Blueprint(__name__.split('.')[-1], __name__)
 
@@ -16,8 +18,18 @@ class Void:
         flask.current_app.logger.warning('{prefix}{item}'.format(prefix=self.prefix, item=item))
 
 
-@blueprint.route('/api/v1/translations/<uuid:translation_uuid>')
-def get_translation(translation_uuid):
+@blueprint.route('/api/v1/translations/<uuid:translation_uuid>:<uuid:translator_uuid>')
+def get_translation(translation_uuid, translator_uuid):
+    translator = TranslatorClient.query \
+        .join(TranslatorClient.translator) \
+        .options(contains_eager(TranslatorClient.translator)) \
+        .filter(TranslatorClient.activated_time.isnot(None)) \
+        .filter(TranslatorClient.uuid == str(translator_uuid)) \
+        .first()
+
+    if not translator:
+        return flask.abort(404)
+
     translation = Translation.query \
         .options(joinedload(Translation.project), joinedload(Translation.language)) \
         .filter(Translation.uuid == str(translation_uuid)) \
@@ -36,7 +48,16 @@ def get_translation(translation_uuid):
         .options(contains_eager(String.suggestions)) \
         .order_by(String.position, Suggestion.votes_value.desc(), Suggestion.added_time)
 
-    # TODO: query all suggestion_ids that have a vote from the authenticated translator
+    voted_suggestions = set(result[0] for result in SuggestionVote.query.filter(SuggestionVote.translator == translator).values(SuggestionVote.suggestion_id))
+
+    def _as_suggestion_data(suggestion):
+        suggestion_data = dict(
+            value=suggestion.value,
+            votes=suggestion.votes_value,
+        )
+        if suggestion.id in voted_suggestions:
+            suggestion_data['voted'] = True
+        return suggestion_data
 
     ignored_suggestions = {plural_form: Void('Discarded "{}" suggestion: '.format(plural_form)) for plural_form in language_plural_forms}
 
@@ -80,11 +101,4 @@ def get_translation(translation_uuid):
             },
         ),
         strings=strings_data,
-    )
-
-
-def _as_suggestion_data(suggestion):
-    return dict(
-        value=suggestion.value,
-        votes=suggestion.votes_value,
     )
