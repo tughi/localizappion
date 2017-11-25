@@ -2,7 +2,7 @@ import flask
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
 
-from localizappion.models import String, SuggestionVote
+from localizappion.models import String, SuggestionVote, PLURAL_FORMS
 from localizappion.models import Suggestion
 from localizappion.models import Translation
 from localizappion.models import TranslatorClient
@@ -59,7 +59,7 @@ def get_translation(translation_uuid, translator_uuid):
             suggestion_data['voted'] = True
         return suggestion_data
 
-    ignored_suggestions = {plural_form: Void('Discarded "{}" suggestion: '.format(plural_form)) for plural_form in language_plural_forms}
+    ignored_suggestions = {plural_form: Void('Discarded "{}" suggestion: '.format(plural_form)) for plural_form, plural_form_name in PLURAL_FORMS}
 
     strings_data = []
     for string in strings:
