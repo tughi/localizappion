@@ -26,8 +26,8 @@ class ProjectType(graphene_sqlalchemy.SQLAlchemyObjectType):
 class StringType(graphene_sqlalchemy.SQLAlchemyObjectType):
     suggestions = graphene.List(lambda: SuggestionType, accepted=graphene.Boolean(), language_code=graphene.String(), plural_form=graphene.String())
 
-    def resolve_suggestions(self, info, accepted=None, language_code=None, plural_form=None):
-        suggestions = self.suggestions.join(Suggestion.translation, Translation.language).order_by(Suggestion.votes_value.desc(), Suggestion.added_time)
+    def resolve_suggestions(self: String, info, accepted=None, language_code=None, plural_form=None):
+        suggestions = self.suggestions_query.join(Suggestion.translation, Translation.language).order_by(Suggestion.votes_value.desc(), Suggestion.added_time)
         if accepted is not None:
             suggestions = suggestions.filter(Suggestion.accepted == accepted)
         if language_code is not None:
