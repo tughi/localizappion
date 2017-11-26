@@ -2,7 +2,16 @@
   <div>
     <p>How do you say the following in <strong>{{ language.name }}</strong>?</p>
     <ul class="list-group">
-        <li class="string-value list-group-item">{{ string.value }}</li>
+        <li class="list-group-item"><span v-html="formattedStringValue"></span></li>
+        <li v-if="string.markers" class="list-group-item list-group-item-info">
+          <span v-if="Object.keys(string.markers).length === 1">
+            The <strong>highlighted</strong> marker is required and cannot be translated
+          </span>
+          <span v-else>
+            The <strong>highlighted</strong> markers are required and cannot be translated
+          </span>
+        </li>
+        <li v-for="marker in annotatedMarkers" :key="marker[1]" class="list-group-item list-group-item-info"><strong>{{ marker[1] }}</strong> - {{ marker[2]['id'] }}</li>
     </ul>
     
     <template v-if="string.suggestions.length">
@@ -32,6 +41,8 @@
 </template>
 
 <script>
+import html from '@/utils/html.js';
+
 export default {
   name: 'String',
 
@@ -41,7 +52,26 @@ export default {
     'string'
   ],
 
-  watch: {
+  computed: {
+    annotatedMarkers() {
+      var markers = [];
+      for (var marker in this.string.markers) {
+        var markerDetails = this.string.markers[marker];
+        if ('id' in markerDetails) {
+          markers.push([this.string.value.indexOf(marker), marker, markerDetails]);
+        }
+      }
+      return markers;
+    },
+
+    formattedStringValue() {
+      var escapedStringValue = html.escape(this.string.value);
+      for (var marker in this.string.markers) {
+        marker = html.escape(marker);
+        escapedStringValue = escapedStringValue.split(marker).join(`<span class="bg-info text-info"><strong>${marker}</strong></span>`);
+      }
+      return escapedStringValue;
+    }
   },
 
   data() {
