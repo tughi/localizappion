@@ -62,7 +62,7 @@ def createdb():
     strings = {}
     with open(os.path.join(os.path.dirname(__file__), 'db_data', 'strings.txt')) as data_file:
         for position, line in enumerate(data_file):
-            project_uuid, string_name, string_value_one, string_value_other = map(str.strip, line.split('|'))
+            project_uuid, string_name, string_value_one, string_value_other, string_markers = map(str.strip, line.split('|'))
             project_id = projects[project_uuid]
             string = String(
                 project_id=project_id,
@@ -70,6 +70,7 @@ def createdb():
                 value_one=string_value_one or None,
                 value_other=string_value_other,
                 position=position,
+                markers=string_markers or None,
             )
             db.session.add(string)
             db.session.flush()

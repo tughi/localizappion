@@ -1,3 +1,5 @@
+import json
+
 import flask
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
@@ -67,7 +69,7 @@ def get_translation(translation_uuid, translator_uuid):
             name=string.name,
         )
         if string.markers:
-            string_data['markers'] = string.markers
+            string_data['markers'] = json.loads(string.markers)
         if string.value_one:
             string_data.update(dict(
                 value=dict(
