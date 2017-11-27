@@ -116,7 +116,7 @@ class Translation(db.Model):
     language = relationship(Language)
 
 
-Project.translations = relationship(Translation, lazy='dynamic')
+Project.translations = relationship(Translation)
 
 
 class Translator(db.Model):
@@ -125,11 +125,12 @@ class Translator(db.Model):
     alias = Column(VARCHAR(32), nullable=True)
 
 
-class TranslatorClient(db.Model):
+class TranslatorSession(db.Model):
     id = Column(INTEGER, primary_key=True, nullable=False)
-    translator_id = Column(INTEGER, ForeignKey(Translator.id), nullable=False)
     uuid = Column(VARCHAR(40), nullable=False, unique=True, default=generate_uuid)
+    translator_id = Column(INTEGER, ForeignKey(Translator.id), nullable=False)
     added_time = Column(TIMESTAMP, nullable=False, default=func.now())
+    activation_code = Column(VARCHAR(40), nullable=False, unique=True, default=generate_uuid)
     activated_time = Column(TIMESTAMP, nullable=True)
 
     translator = relationship(Translator)
@@ -158,8 +159,8 @@ class Suggestion(db.Model):
 
 String.suggestions = relationship(Suggestion)
 String.suggestions_query = relationship(Suggestion, lazy='dynamic')
-Translation.suggestions = relationship(Suggestion, lazy='dynamic')
-Translator.suggestions = relationship(Suggestion, lazy='dynamic')
+Translation.suggestions = relationship(Suggestion)
+Translator.suggestions = relationship(Suggestion)
 
 
 class SuggestionVote(db.Model):

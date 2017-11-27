@@ -4,10 +4,12 @@ import flask
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
 
-from localizappion.models import String, SuggestionVote, PLURAL_FORMS
+from localizappion.models import PLURAL_FORMS
+from localizappion.models import String
 from localizappion.models import Suggestion
+from localizappion.models import SuggestionVote
 from localizappion.models import Translation
-from localizappion.models import TranslatorClient
+from localizappion.models import TranslatorSession
 
 blueprint = flask.Blueprint(__name__.split('.')[-1], __name__)
 
@@ -22,21 +24,21 @@ class Void:
 
 @blueprint.route('/api/v1/translations/<uuid:translation_uuid>:<uuid:translator_uuid>')
 def get_translation(translation_uuid, translator_uuid):
-    translator = TranslatorClient.query \
-        .join(TranslatorClient.translator) \
-        .options(contains_eager(TranslatorClient.translator)) \
-        .filter(TranslatorClient.activated_time.isnot(None)) \
-        .filter(TranslatorClient.uuid == str(translator_uuid)) \
+    translator_session = TranslatorSession.query \
+        .join(TranslatorSession.translator) \
+        .options(contains_eager(TranslatorSession.translator)) \
+        .filter(TranslatorSession.activated_time.isnot(None)) \
+        .filter(TranslatorSession.uuid == str(translator_uuid)) \
         .first()
-
-    if not translator:
+    if not translator_session:
         return flask.abort(404)
+
+    translator = translator_session.translator
 
     translation = Translation.query \
         .options(joinedload(Translation.project), joinedload(Translation.language)) \
         .filter(Translation.uuid == str(translation_uuid)) \
         .first()
-
     if not translation:
         return flask.abort(404)
 
@@ -50,6 +52,7 @@ def get_translation(translation_uuid, translator_uuid):
         .options(contains_eager(String.suggestions)) \
         .order_by(String.position, Suggestion.votes_value.desc(), Suggestion.added_time)
 
+    # TODO: select only the suggestions made in this translation
     voted_suggestions = set(result[0] for result in SuggestionVote.query.filter(SuggestionVote.translator == translator).values(SuggestionVote.suggestion_id))
 
     def _as_suggestion_data(suggestion):

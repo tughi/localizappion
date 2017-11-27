@@ -8,7 +8,7 @@ app.config.from_object('settings.Config')
 Mail().init_app(app)
 
 from .schema import schema
-from .modules import registration
+from .modules import translators
 from .modules import translate
 from .modules import translation
 
@@ -21,6 +21,6 @@ app.add_url_rule(
     )
 )
 
-app.register_blueprint(registration.blueprint)
+app.register_blueprint(translators.blueprint, url_prefix='/translators')
 app.register_blueprint(translate.blueprint)
 app.register_blueprint(translation.blueprint)

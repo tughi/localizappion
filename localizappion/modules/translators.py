@@ -7,7 +7,7 @@ from flask_mail import Message
 
 from ..models import Project
 from ..models import Translator
-from ..models import TranslatorClient
+from ..models import TranslatorSession
 from ..models import db
 
 blueprint = flask.Blueprint(__name__.split('.')[-1], __name__)
@@ -18,16 +18,16 @@ def create_email_hash(email):
     return base64.standard_b64encode(sha512(hash_data.encode()).digest()).decode()
 
 
-@blueprint.route('/translators/register', methods=['POST'])
-def register_translator():
+@blueprint.route('/register', methods=['POST'])
+def register():
     request_data = flask.request.json  # type: dict
-    project_uuid = request_data['project'] if 'project' in request_data else ''
-    email = request_data['email'] if 'email' in request_data else ''
 
+    project_uuid = request_data['project'] if 'project' in request_data else ''
     project = db.session.query(Project).filter(Project.uuid == project_uuid).first()
     if not project:
         return flask.abort(404)
 
+    email = request_data['email'] if 'email' in request_data else ''
     if len(email) < 3 or email.find('@', 1) < 0:
         return flask.jsonify(message='Invalid email address')
 
@@ -38,8 +38,8 @@ def register_translator():
         translator = Translator(email_hash=email_hash)
         db.session.add(translator)
 
-    translator_client = TranslatorClient(translator=translator)
-    db.session.add(translator_client)
+    translator_session = TranslatorSession(translator=translator)
+    db.session.add(translator_session)
     db.session.commit()
 
     message = Message(
@@ -59,23 +59,23 @@ def register_translator():
                 Cheers,<br>
                 Tughi
             </p>
-        """.format(project.name, flask.url_for('.activate_translator', translator_client=translator_client.uuid, _external=True)),
+        """.format(project.name, flask.url_for('.activate', activation_code=translator_session.activation_code, _external=True)),
     )
 
     flask.current_app.extensions.get('mail').send(message)
 
-    return flask.jsonify(message="You will receive shortly an activation email", translator_client=translator_client.uuid)
+    return flask.jsonify(message="You will receive shortly an activation email", translator_client=translator_session.uuid)
 
 
-@blueprint.route('/translators/<uuid:translator_client>/activate')
-def activate_translator(translator_client=None):
-    translator_client = db.session.query(TranslatorClient).filter(TranslatorClient.uuid == str(translator_client)).first()
-    if not translator_client:
+@blueprint.route('/activate/<uuid:activation_code>')
+def activate(activation_code=None):
+    translator_session = TranslatorSession.query.filter(TranslatorSession.activation_code == str(activation_code)).first()
+    if not translator_session:
         # TODO: render template
         return flask.abort(404)
 
-    if not translator_client.activated_time:
-        translator_client.activated_time = datetime.now()
+    if not translator_session.activated_time:
+        translator_session.activated_time = datetime.now()
         db.session.commit()
 
     # TODO: render template
