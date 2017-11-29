@@ -5,10 +5,10 @@ from hashlib import sha512
 import flask
 from flask_mail import Message
 
-from ..models import Project
-from ..models import Translator
-from ..models import TranslatorSession
-from ..models import db
+from localizappion.models import Project
+from localizappion.models import Translator
+from localizappion.models import TranslatorSession
+from localizappion.models import db
 
 blueprint = flask.Blueprint(__name__.split('.')[-1], __name__)
 
@@ -18,7 +18,7 @@ def create_email_hash(email):
     return base64.standard_b64encode(sha512(hash_data.encode()).digest()).decode()
 
 
-@blueprint.route('/register', methods=['POST'])
+@blueprint.route('/translators/register', methods=['POST'])
 def register():
     request_data = flask.request.json  # type: dict
 
@@ -67,7 +67,7 @@ def register():
     return flask.jsonify(message="You will receive shortly an activation email", translator_client=translator_session.uuid)
 
 
-@blueprint.route('/activate/<uuid:activation_code>')
+@blueprint.route('/translators/activate/<uuid:activation_code>')
 def activate(activation_code=None):
     translator_session = TranslatorSession.query.filter(TranslatorSession.activation_code == str(activation_code)).first()
     if not translator_session:

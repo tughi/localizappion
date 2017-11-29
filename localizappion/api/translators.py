@@ -22,13 +22,13 @@ class Void:
         flask.current_app.logger.warning('{prefix}{item}'.format(prefix=self.prefix, item=item))
 
 
-@blueprint.route('/api/v1/translations/<uuid:translation_uuid>:<uuid:translator_uuid>')
-def get_translation(translation_uuid, translator_uuid):
+@blueprint.route('/translators/<uuid:translator_session_uuid>/translations/<uuid:translation_uuid>')
+def translator_translation(translator_session_uuid, translation_uuid):
     translator_session = TranslatorSession.query \
         .join(TranslatorSession.translator) \
         .options(contains_eager(TranslatorSession.translator)) \
         .filter(TranslatorSession.activated_time.isnot(None)) \
-        .filter(TranslatorSession.uuid == str(translator_uuid)) \
+        .filter(TranslatorSession.uuid == str(translator_session_uuid)) \
         .first()
     if not translator_session:
         return flask.abort(404)

@@ -13,7 +13,7 @@ from localizappion.models import db
 blueprint = flask.Blueprint(__name__.split('.')[-1], __name__)
 
 
-@blueprint.route('/api/v1/projects/<uuid:project_uuid>/translations/<string:language_code>/status')
+@blueprint.route('/projects/<uuid:project_uuid>/translations/<string:language_code>/status')
 def translation_status(project_uuid, language_code):
     translation = Translation.query \
         .join(Translation.project, Translation.language) \

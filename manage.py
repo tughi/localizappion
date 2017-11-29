@@ -23,11 +23,11 @@ def createdb():
     from localizappion.models import Language
     from localizappion.models import Project
     from localizappion.models import String
-    from localizappion.models import Translator
     from localizappion.models import Translation
+    from localizappion.models import Translator
     from localizappion.models import Suggestion
     from localizappion.models import SuggestionVote
-    from localizappion.modules.translators import create_email_hash
+    from localizappion.registration import create_email_hash
 
     languages = {}
     with open(os.path.join(os.path.dirname(__file__), 'db_data', 'languages.txt')) as data_file:
