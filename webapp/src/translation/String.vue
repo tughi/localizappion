@@ -20,16 +20,16 @@
         <a v-for="(suggestion, index) in string.suggestions" :class="['suggestion', 'list-group-item', suggestionIndex === index ? 'active' : '']" :key="index" @click="suggestionIndex = index">
             <span :class="['glyphicon', suggestionIndex === index ? 'glyphicon-check' : 'glyphicon-unchecked']"></span>{{ suggestion.value }}
         </a>
-        <a :class="['suggestion', 'list-group-item', suggestionIndex === -1 ? 'active' : '']" @click="suggestionIndex = -1">
-          <span :class="['state-icon', 'glyphicon', suggestionIndex === -1 ? 'glyphicon-check' : 'glyphicon-unchecked']"></span><strong>I have a better suggestion...</strong>
+        <a :class="['suggestion', 'list-group-item', suggestionIndex === -2 ? 'active' : '']" @click="suggestionIndex = -2">
+          <span :class="['state-icon', 'glyphicon', suggestionIndex === -2 ? 'glyphicon-check' : 'glyphicon-unchecked']"></span><strong>I have a better suggestion...</strong>
         </a>
       </div>
     </template>
 
-    <div v-if="suggestionIndex === -1">
+    <div v-if="suggestionIndex === -2">
       <p>My suggestion:</p>
       <div class="form-group">
-        <input v-model.trim="suggestion" type="text" class="form-control" placeholder="Suggestion">
+        <input v-model.trim="newSuggestion" type="text" class="form-control" placeholder="Suggestion">
       </div>
     </div>
 
@@ -51,6 +51,13 @@ export default {
     'skipString',
     'string'
   ],
+
+  data() {
+    return {
+      newSuggestion: '',
+      suggestionIndex: this.string.suggestions.length === 0 ? -2 : this.string.suggestions.findIndex(suggestion => 'voted' in suggestion)
+    };
+  },
 
   computed: {
     annotatedMarkers() {
@@ -74,16 +81,9 @@ export default {
     }
   },
 
-  data() {
-    return {
-      suggestion: '',
-      suggestionIndex: null
-    };
-  },
-
   methods: {
     isSuggestionValid() {
-      return this.suggestion.length > 0;
+      return (this.suggestionIndex === -2 && this.newSuggestion.length > 0) || this.suggestionIndex >= 0;
     }
   }
 };

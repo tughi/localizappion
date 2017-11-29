@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       translation: null,
-      stringIndex: 106
+      stringIndex: 0
     };
   },
 
@@ -40,7 +40,7 @@ export default {
 
   created() {
     axios
-      .get('/api/v1/translations/ff0ad885-4626-4f5d-9aec-5418589136ae:a593b335-ebaf-484f-8ed8-102724e61236')
+      .get(`/api/translators/${this.$route.params.translator}/translations/${this.$route.params.translation}`)
       .then(response => {
         this.translation = response.data;
       });

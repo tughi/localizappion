@@ -7,7 +7,7 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: '/translation',
+      path: '/translators/:translator/translate/:translation',
       name: 'Translation',
       component: Translation
     }
