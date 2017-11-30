@@ -17,31 +17,42 @@
     <template v-if="string.suggestions.length">
       <p>Already submitted suggestion{{ string.suggestions.length > 1 ? "s" : "" }}:</p>
       <div class="list-group">
-        <a v-for="(suggestion, index) in string.suggestions" :class="['suggestion', 'list-group-item', suggestionIndex === index ? 'active' : '']" :key="index" @click="suggestionIndex = index">
+        <button v-for="(suggestion, index) in string.suggestions" :class="['suggestion', 'list-group-item', suggestionIndex === index ? 'active' : '']" :disabled="disabled" :key="index" @click="selectSuggestion(index)">
             <span :class="['glyphicon', suggestionIndex === index ? 'glyphicon-check' : 'glyphicon-unchecked']"></span>{{ suggestion.value }}
-        </a>
-        <a :class="['suggestion', 'list-group-item', suggestionIndex === -2 ? 'active' : '']" @click="suggestionIndex = -2">
+        </button>
+        <button :class="['suggestion', 'list-group-item', suggestionIndex === -2 ? 'active' : '']" :disabled="disabled" @click="selectSuggestion(-2)">
           <span :class="['state-icon', 'glyphicon', suggestionIndex === -2 ? 'glyphicon-check' : 'glyphicon-unchecked']"></span><strong>I have a better suggestion...</strong>
-        </a>
+        </button>
       </div>
     </template>
 
     <div v-if="suggestionIndex === -2">
       <p>My suggestion:</p>
       <div class="form-group">
-        <input v-model.trim="newSuggestion" type="text" class="form-control" placeholder="Suggestion">
+        <input v-model.trim="newSuggestion" type="text" class="form-control" placeholder="Suggestion" :disabled="disabled">
       </div>
     </div>
 
     <div class="form-group">
-      <button @click="skipString" class="btn btn-default" type="button">Skip</button>
-      <button class="btn btn-primary pull-right" :disabled="!isSuggestionValid()" type="button">Submit</button>
+      <button @click="skipString" class="btn btn-default" :disabled="disabled">Skip</button>
+      <span v-if="disabled" class="btn btn-primary disabled pull-right busy">
+        <span class="text">Submit</span>
+        <span class="spinner">
+          <span class="rect1"></span>
+          <span class="rect2"></span>
+          <span class="rect3"></span>
+          <span class="rect4"></span>
+          <span class="rect5"></span>
+        </span>
+      </span>
+      <button v-else class="btn btn-primary pull-right" :disabled="!isSuggestionValid()" @click="disabled = true">Submit</button>
     </div>
   </div>
 </template>
 
 <script>
 import html from '@/utils/html.js';
+import '../../node_modules/spinkit/css/spinkit.css';
 
 export default {
   name: 'String',
@@ -54,6 +65,7 @@ export default {
 
   data() {
     return {
+      disabled: false,
       newSuggestion: '',
       suggestionIndex: this.string.suggestions.length === 0 ? -2 : this.string.suggestions.findIndex(suggestion => 'voted' in suggestion)
     };
@@ -82,6 +94,10 @@ export default {
   },
 
   methods: {
+    selectSuggestion(index) {
+      this.suggestionIndex = index;
+    },
+
     isSuggestionValid() {
       return (this.suggestionIndex === -2 && this.newSuggestion.length > 0) || this.suggestionIndex >= 0;
     }
@@ -93,9 +109,80 @@ export default {
 .suggestion {
   padding-left: 3em;
 }
+.suggestion:focus {
+  outline: none;
+}
 .suggestion > .glyphicon {
   position: absolute;
   left: 1em;
   top: 12px;
+}
+
+.spinner {
+  display: block;
+  width: 50px;
+  height: 1em;
+  text-align: center;
+}
+
+.spinner > span {
+  background-color: #fff;
+  height: 100%;
+  width: 2px;
+  display: inline-block;
+  
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+
+.btn.busy {
+  position: relative;
+}
+
+.btn.busy > .text {
+  visibility: hidden;
+}
+
+.btn.busy > .spinner {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5em;
+  left: 50%;
+  margin-left: -25px;
 }
 </style>
