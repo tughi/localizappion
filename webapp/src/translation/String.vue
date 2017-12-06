@@ -17,10 +17,10 @@
     <template v-if="string.suggestions.length">
       <p>Already submitted suggestion{{ string.suggestions.length > 1 ? "s" : "" }}:</p>
       <div class="list-group">
-        <button v-for="(suggestion, index) in string.suggestions" :class="['suggestion', 'list-group-item', suggestionIndex === index ? 'active' : '']" :disabled="disabled" :key="index" @click="selectSuggestion(index)">
+        <button v-for="(suggestion, index) in string.suggestions" :class="['suggestion', 'list-group-item', suggestionIndex === index ? 'active' : '', disabled ? 'disabled' : '']" :disabled="disabled" :key="index" @click="selectSuggestion(index)">
             <span :class="['glyphicon', suggestionIndex === index ? 'glyphicon-check' : 'glyphicon-unchecked']"></span>{{ suggestion.value }}
         </button>
-        <button :class="['suggestion', 'list-group-item', suggestionIndex === -2 ? 'active' : '']" :disabled="disabled" @click="selectSuggestion(-2)">
+        <button :class="['suggestion', 'list-group-item', suggestionIndex === -2 ? 'active' : '', disabled ? 'disabled' : '']" :disabled="disabled" @click="selectSuggestion(-2)">
           <span :class="['state-icon', 'glyphicon', suggestionIndex === -2 ? 'glyphicon-check' : 'glyphicon-unchecked']"></span><strong>I have a better suggestion...</strong>
         </button>
       </div>
@@ -45,7 +45,7 @@
           <span class="rect5"></span>
         </span>
       </span>
-      <button v-else class="btn btn-primary pull-right" :disabled="!isSuggestionValid()" @click="disabled = true">Submit</button>
+      <button v-else class="btn btn-primary pull-right" :disabled="!isSuggestionValid()" @click="submit()">Submit</button>
     </div>
   </div>
 </template>
@@ -100,6 +100,16 @@ export default {
 
     isSuggestionValid() {
       return (this.suggestionIndex === -2 && this.newSuggestion.length > 0) || this.suggestionIndex >= 0;
+    },
+
+    submit() {
+      // this.disabled = true;
+
+      this.$emit('submit-suggestion', {
+        string: this.string.name,
+        plural_form: 'other',
+        value: this.suggestionIndex === -2 ? this.newSuggestion : this.string.suggestions[this.suggestionIndex].value
+      });
     }
   }
 };

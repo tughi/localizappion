@@ -4,7 +4,7 @@
       <h1>{{ translation.project.name }}</h1>
     </div>
 
-    <String v-if="typeof string.value === 'string'" :key="stringIndex" :language="language" :skipString="skipString" :string="string" />
+    <String v-if="typeof string.value === 'string'" :key="stringIndex" :language="language" :skipString="skipString" :string="string" v-on:submit-suggestion="submit" />
     <Plurals v-else :key="stringIndex" :language="language" :skipString="skipString" :string="string" />
   </div>
 </template>
@@ -52,6 +52,14 @@ export default {
       if (this.stringIndex === this.translation.strings.length) {
         this.stringIndex = 0;
       }
+    },
+
+    submit(suggestion) {
+      axios
+        .post(`/api/translators/${this.$route.params.translator}/translations/${this.$route.params.translation}`, suggestion)
+        .then(response => {
+          // TODO: this.translation = response.data;
+        });
     }
   }
 };
