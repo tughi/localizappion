@@ -5,7 +5,6 @@ from sqlalchemy import BOOLEAN
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import INTEGER
-from sqlalchemy import PrimaryKeyConstraint
 from sqlalchemy import TEXT
 from sqlalchemy import TIMESTAMP
 from sqlalchemy import UniqueConstraint
@@ -165,9 +164,10 @@ Translator.suggestions = relationship(Suggestion)
 
 class SuggestionVote(db.Model):
     __table_args__ = (
-        PrimaryKeyConstraint('suggestion_id', 'translator_id'),
+        UniqueConstraint('suggestion_id', 'translator_id'),
     )
 
+    id = Column(INTEGER, primary_key=True, nullable=False)
     suggestion_id = Column(INTEGER, ForeignKey(Suggestion.id), nullable=False)
     translator_id = Column(INTEGER, ForeignKey(Translator.id), nullable=False)
     value = Column(INTEGER, nullable=False, default=1)
@@ -181,4 +181,4 @@ class SuggestionVote(db.Model):
 
 Suggestion.votes = relationship(SuggestionVote)
 Suggestion.votes_query = relationship(SuggestionVote, lazy='dynamic')
-Suggestion.votes_value = column_property(select([func.sum(SuggestionVote.value)]).where(SuggestionVote.suggestion_id == Suggestion.id))
+Suggestion.votes_value = column_property(select([func.coalesce(func.sum(SuggestionVote.value), 0)]).where(SuggestionVote.suggestion_id == Suggestion.id))

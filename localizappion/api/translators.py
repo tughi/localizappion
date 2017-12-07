@@ -25,21 +25,25 @@ class Void:
 
 @blueprint.route('/translators/<uuid:translator_session_uuid>/translations/<uuid:translation_uuid>')
 def get_translation(translator_session_uuid, translation_uuid):
-    translator_session = TranslatorSession.query \
-        .join(TranslatorSession.translator) \
-        .options(contains_eager(TranslatorSession.translator)) \
-        .filter(TranslatorSession.activated_time.isnot(None)) \
-        .filter(TranslatorSession.uuid == str(translator_session_uuid)) \
-        .first()
+    translator_session = TranslatorSession.query.join(
+        TranslatorSession.translator
+    ).options(
+        contains_eager(TranslatorSession.translator)
+    ).filter(
+        TranslatorSession.activated_time.isnot(None),
+        TranslatorSession.uuid == str(translator_session_uuid)
+    ).first()
     if not translator_session:
         return flask.abort(404)
 
     translator = translator_session.translator
 
-    translation = Translation.query \
-        .options(joinedload(Translation.project), joinedload(Translation.language)) \
-        .filter(Translation.uuid == str(translation_uuid)) \
-        .first()
+    translation = Translation.query.options(
+        joinedload(Translation.project),
+        joinedload(Translation.language),
+    ).filter(
+        Translation.uuid == str(translation_uuid)
+    ).first()
     if not translation:
         return flask.abort(404)
 
@@ -52,10 +56,15 @@ def __get_translator_translation__(translator, translation):
     language = translation.language
     language_plural_forms = language.plural_forms
 
-    strings = project.strings_query \
-        .outerjoin(Suggestion, (String.id == Suggestion.string_id) & (Suggestion.translation == translation)) \
-        .options(contains_eager(String.suggestions)) \
-        .order_by(String.position, Suggestion.votes_value.desc(), Suggestion.added_time)
+    strings = project.strings_query.outerjoin(
+        Suggestion, (String.id == Suggestion.string_id) & (Suggestion.translation == translation)
+    ).options(
+        contains_eager(String.suggestions)
+    ).order_by(
+        String.position,
+        Suggestion.votes_value.desc(),
+        Suggestion.added_time,
+    )
 
     # TODO: select only the suggestions made in this translation
     voted_suggestions = set(result[0] for result in SuggestionVote.query.filter(SuggestionVote.translator == translator).values(SuggestionVote.suggestion_id))
@@ -116,21 +125,25 @@ def __get_translator_translation__(translator, translation):
 
 @blueprint.route('/translators/<uuid:translator_session_uuid>/translations/<uuid:translation_uuid>', methods=['POST'])
 def add_suggestion(translator_session_uuid, translation_uuid):
-    translator_session = TranslatorSession.query \
-        .join(TranslatorSession.translator) \
-        .options(contains_eager(TranslatorSession.translator)) \
-        .filter(TranslatorSession.activated_time.isnot(None)) \
-        .filter(TranslatorSession.uuid == str(translator_session_uuid)) \
-        .first()
+    translator_session = TranslatorSession.query.join(
+        TranslatorSession.translator
+    ).options(
+        contains_eager(TranslatorSession.translator)
+    ).filter(
+        TranslatorSession.activated_time.isnot(None),
+        TranslatorSession.uuid == str(translator_session_uuid),
+    ).first()
     if not translator_session:
         return flask.abort(404)
 
     translator = translator_session.translator
 
-    translation = Translation.query \
-        .options(joinedload(Translation.project), joinedload(Translation.language)) \
-        .filter(Translation.uuid == str(translation_uuid)) \
-        .first()
+    translation = Translation.query.options(
+        joinedload(Translation.project),
+        joinedload(Translation.language),
+    ).filter(
+        Translation.uuid == str(translation_uuid),
+    ).first()
     if not translation:
         return flask.abort(404)
 
@@ -152,12 +165,12 @@ def add_suggestion(translator_session_uuid, translation_uuid):
     elif suggestion_plural_form != 'other':
         return flask.abort(400)
 
-    suggestion = Suggestion.query \
-        .filter(Suggestion.translation == translation) \
-        .filter(Suggestion.string == string) \
-        .filter(Suggestion.plural_form == suggestion_plural_form) \
-        .filter(Suggestion.value == suggestion_value) \
-        .first()
+    suggestion = Suggestion.query.filter(
+        Suggestion.translation == translation,
+        Suggestion.string == string,
+        Suggestion.plural_form == suggestion_plural_form,
+        Suggestion.value == suggestion_value,
+    ).first()
     if not suggestion:
         suggestion = Suggestion(
             translation=translation,
@@ -169,17 +182,28 @@ def add_suggestion(translator_session_uuid, translation_uuid):
         db.session.add(suggestion)
         db.session.flush()
 
-    other_voted_suggestions_query = SuggestionVote.query \
-        .join(SuggestionVote.suggestion) \
-        .join(Suggestion.string) \
-        .filter(SuggestionVote.translator == translator, String.id == string.id, Suggestion.translation == translation)
-    for other_voted_suggestion in other_voted_suggestions_query:
-        db.session.delete(other_voted_suggestion)
+    SuggestionVote.query.filter(
+        SuggestionVote.id.in_(
+            db.session.query(
+                SuggestionVote.id
+            ).join(
+                SuggestionVote.suggestion
+            ).join(
+                Suggestion.string
+            ).filter(
+                String.id == string.id,
+                Suggestion.translation == translation,
+                Suggestion.plural_form == suggestion_plural_form,
+                SuggestionVote.translator == translator,
+            ).subquery()
+        )
+    ).delete(synchronize_session=False)
 
     db.session.add(SuggestionVote(
         suggestion=suggestion,
         translator=translator,
     ))
+
     db.session.commit()
 
     return __get_translator_translation__(translator, translation)
