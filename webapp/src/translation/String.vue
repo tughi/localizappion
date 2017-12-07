@@ -17,19 +17,19 @@
     <template v-if="string.suggestions.length">
       <p>Already submitted suggestion{{ string.suggestions.length > 1 ? "s" : "" }}:</p>
       <div class="list-group">
-        <button v-for="(suggestion, index) in string.suggestions" :class="['suggestion', 'list-group-item', suggestionIndex === index ? 'active' : '', disabled ? 'disabled' : '']" :disabled="disabled" :key="index" @click="selectSuggestion(index)">
-            <span :class="['glyphicon', suggestionIndex === index ? 'glyphicon-check' : 'glyphicon-unchecked']"></span>{{ suggestion.value }}
+        <button v-for="(suggestion, index) in string.suggestions" :key="index" :class="['suggestion', 'list-group-item', suggestionValue === suggestion.value ? 'active' : '', disabled ? 'disabled' : '']" :disabled="disabled" @click="selectSuggestion(index)">
+            <span :class="['glyphicon', suggestionValue === suggestion.value ? 'glyphicon-check' : 'glyphicon-unchecked']"></span>{{ suggestion.value }}
         </button>
-        <button :class="['suggestion', 'list-group-item', suggestionIndex === -2 ? 'active' : '', disabled ? 'disabled' : '']" :disabled="disabled" @click="selectSuggestion(-2)">
-          <span :class="['state-icon', 'glyphicon', suggestionIndex === -2 ? 'glyphicon-check' : 'glyphicon-unchecked']"></span><strong>I have a better suggestion...</strong>
+        <button :class="['suggestion', 'list-group-item', newSuggestion ? 'active' : '', disabled ? 'disabled' : '']" :disabled="disabled" @click="selectSuggestion(-1)">
+          <span :class="['state-icon', 'glyphicon', newSuggestion ? 'glyphicon-check' : 'glyphicon-unchecked']"></span><strong>I have a better suggestion...</strong>
         </button>
       </div>
     </template>
 
-    <div v-if="suggestionIndex === -2">
+    <div v-if="newSuggestion">
       <p>My suggestion:</p>
       <div class="form-group">
-        <input v-model.trim="newSuggestion" type="text" class="form-control" placeholder="Suggestion" :disabled="disabled">
+        <input v-model.trim="suggestionValue" type="text" class="form-control" placeholder="Suggestion" :disabled="disabled">
       </div>
     </div>
 
@@ -64,10 +64,21 @@ export default {
   ],
 
   data() {
+    var newSuggestion = false;
+    var suggestionValue = '';
+    if (this.string.suggestions.length === 0) {
+      newSuggestion = true;
+    } else {
+      var votedSuggestion = this.string.suggestions.find(suggestion => 'voted' in suggestion);
+      if (votedSuggestion) {
+        suggestionValue = votedSuggestion.value;
+      }
+    }
+
     return {
       disabled: false,
-      newSuggestion: '',
-      suggestionIndex: this.string.suggestions.length === 0 ? -2 : this.string.suggestions.findIndex(suggestion => 'voted' in suggestion)
+      newSuggestion: newSuggestion,
+      suggestionValue: suggestionValue
     };
   },
 
@@ -95,20 +106,21 @@ export default {
 
   methods: {
     selectSuggestion(index) {
-      this.suggestionIndex = index;
+      this.newSuggestion = index < 0;
+      this.suggestionValue = index < 0 ? '' : this.string.suggestions[index].value;
     },
 
     isSuggestionValid() {
-      return (this.suggestionIndex === -2 && this.newSuggestion.length > 0) || this.suggestionIndex >= 0;
+      return this.suggestionValue.length > 0;
     },
 
     submit() {
-      // this.disabled = true;
+      this.disabled = true;
 
       this.$emit('submit-suggestion', {
         string: this.string.name,
         plural_form: 'other',
-        value: this.suggestionIndex === -2 ? this.newSuggestion : this.string.suggestions[this.suggestionIndex].value
+        value: this.suggestionValue
       });
     }
   }

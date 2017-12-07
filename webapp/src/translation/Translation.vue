@@ -50,6 +50,7 @@ export default {
     skipString() {
       this.stringIndex++;
       if (this.stringIndex === this.translation.strings.length) {
+        // TODO: find the first string without a voted suggestion
         this.stringIndex = 0;
       }
     },
@@ -58,7 +59,9 @@ export default {
       axios
         .post(`/api/translators/${this.$route.params.translator}/translations/${this.$route.params.translation}`, suggestion)
         .then(response => {
-          // TODO: this.translation = response.data;
+          this.translation = response.data;
+          // TODO: find the next string without a voted suggestion
+          this.stringIndex++;
         });
     }
   }
