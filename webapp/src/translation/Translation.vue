@@ -4,6 +4,8 @@
       <h1>{{ translation.project.name }}</h1>
     </div>
 
+    <TranslatableString :language="language" :string="string" />
+
     <String v-if="typeof string.value === 'string'" :key="stringIndex" :language="language" :skipString="skipString" :string="string" v-on:submit-suggestion="submit" />
     <Plurals v-else :key="stringIndex" :language="language" :skipString="skipString" :string="string" />
   </div>
@@ -13,13 +15,15 @@
 import axios from 'axios';
 import Plurals from '@/translation/Plurals';
 import String from '@/translation/String';
+import TranslatableString from '@/translation/TranslatableString';
 
 export default {
   name: 'Translation',
 
   components: {
     Plurals,
-    String
+    String,
+    TranslatableString
   },
 
   data() {
