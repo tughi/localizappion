@@ -43,15 +43,31 @@ export default {
       .get(`/api/translators/${this.$route.params.translator}/translations/${this.$route.params.translation}`)
       .then(response => {
         this.translation = response.data;
+        this.stringIndex = -1;
+        this.skipString();
       });
   },
 
   methods: {
     skipString() {
-      this.stringIndex++;
-      if (this.stringIndex === this.translation.strings.length) {
-        // TODO: find the first string without a voted suggestion
-        this.stringIndex = 0;
+      for (this.stringIndex++; this.stringIndex < this.translation.strings.length; this.stringIndex++) {
+        var translatable = false;
+        if (typeof this.string.value === 'string') {
+          if (!this.string.suggestions.find(suggestion => 'voted' in suggestion)) {
+            translatable = true;
+          }
+        } else {
+          for (var pluralForm in this.string.suggestions) {
+            if (!this.string.suggestions[pluralForm].find(suggestion => 'voted' in suggestion)) {
+              translatable = true;
+              break;
+            }
+          }
+        }
+        if (translatable) {
+          break;
+        }
+        console.log('Skip: ' + this.string.name);
       }
     },
 
@@ -60,8 +76,8 @@ export default {
         .post(`/api/translators/${this.$route.params.translator}/translations/${this.$route.params.translation}`, suggestion)
         .then(response => {
           this.translation = response.data;
-          // TODO: find the next string without a voted suggestion
-          this.stringIndex++;
+          this.stringIndex--;
+          this.skipString();
         });
     }
   }
