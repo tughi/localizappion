@@ -1,7 +1,7 @@
 $(function () {
-  var router = new Localizappion.Router()
+    var router = new Localizappion.Router()
 
-  if (!Backbone.history.start()) {
-    router.navigate('projects', { trigger: true })
-  }
+    if (!Backbone.history.start()) {
+        router.navigate('projects', { trigger: true })
+    }
 })
