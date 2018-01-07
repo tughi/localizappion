@@ -85,6 +85,21 @@ class Project(db.Model):
     strings_upload_time = Column(TIMESTAMP, nullable=True)
 
 
+class Screenshot(db.Model):
+    __table_args__ = (
+        UniqueConstraint('project_id', 'name'),
+    )
+
+    id = Column(INTEGER, primary_key=True, nullable=False)
+    project_id = Column(INTEGER, ForeignKey(Project.id), nullable=False)
+    name = Column(VARCHAR(128), nullable=False)
+
+    project = relationship(Project)
+
+
+Project.screenshots = relationship(Screenshot)
+
+
 class String(db.Model):
     __table_args__ = (
         UniqueConstraint('project_id', 'name'),
@@ -97,12 +112,17 @@ class String(db.Model):
     value_other = Column(TEXT, nullable=False)
     markers = Column(TEXT, nullable=True)
     position = Column(INTEGER, default=0)
+    screenshot_id = Column(INTEGER, ForeignKey(Screenshot.id), nullable=True)
+    screenshot_area = Column(VARCHAR(27), nullable=True)
 
     project = relationship(Project)
+    screenshot = relationship(Screenshot)
 
 
 Project.strings = relationship(String)
 Project.strings_query = relationship(String, lazy='dynamic')
+
+Screenshot.strings = relationship(String)
 
 
 class Translation(db.Model):

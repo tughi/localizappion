@@ -3,11 +3,12 @@ import graphene_sqlalchemy
 
 from .models import Language
 from .models import Project
+from .models import Screenshot
 from .models import String
 from .models import Suggestion
+from .models import SuggestionVote
 from .models import Translation
 from .models import Translator
-from .models import SuggestionVote
 from .models import db
 
 
@@ -19,8 +20,22 @@ class LanguageType(graphene_sqlalchemy.SQLAlchemyObjectType):
 
 
 class ProjectType(graphene_sqlalchemy.SQLAlchemyObjectType):
+    screenshots_count = graphene.Field(graphene.Int)
+    strings_count = graphene.Field(graphene.Int)
+
+    def resolve_screenshots_count(self: Project, info):
+        return Screenshot.query.filter(Screenshot.project_id == self.id).count()
+
+    def resolve_strings_count(self: Project, info):
+        return String.query.filter(String.project_id == self.id).count()
+
     class Meta:
         model = Project
+
+
+class ScreenshotType(graphene_sqlalchemy.SQLAlchemyObjectType):
+    class Meta:
+        model = Screenshot
 
 
 class StringType(graphene_sqlalchemy.SQLAlchemyObjectType):
@@ -62,6 +77,7 @@ class SuggestionVoteType(graphene_sqlalchemy.SQLAlchemyObjectType):
 
 class Query(graphene.ObjectType):
     languages = graphene.List(LanguageType, language_code=graphene.String())
+    project = graphene.Field(ProjectType, uuid=graphene.String())
     projects = graphene.List(ProjectType)
     strings = graphene.List(StringType, project_uuid=graphene.String())
     translations = graphene.List(TranslationType, language_code=graphene.String())
@@ -71,6 +87,12 @@ class Query(graphene.ObjectType):
         if language_code is not None:
             languages = languages.filter(Language.code == language_code)
         return languages
+
+    def resolve_project(self, info, uuid=None):
+        projects = db.session.query(Project)
+        if uuid is not None:
+            projects = projects.filter(Project.uuid == uuid)
+        return projects.first()
 
     def resolve_projects(self, info):
         return db.session.query(Project)
