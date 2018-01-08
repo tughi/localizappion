@@ -1,3 +1,5 @@
+import base64
+
 import graphene
 import graphene_sqlalchemy
 
@@ -77,7 +79,7 @@ class SuggestionVoteType(graphene_sqlalchemy.SQLAlchemyObjectType):
 
 class Query(graphene.ObjectType):
     languages = graphene.List(LanguageType, language_code=graphene.String())
-    project = graphene.Field(ProjectType, uuid=graphene.String())
+    project = graphene.Field(ProjectType, uuid=graphene.String(required=True))
     projects = graphene.List(ProjectType)
     strings = graphene.List(StringType, project_uuid=graphene.String())
     translations = graphene.List(TranslationType, language_code=graphene.String())
@@ -89,9 +91,7 @@ class Query(graphene.ObjectType):
         return languages
 
     def resolve_project(self, info, uuid=None):
-        projects = db.session.query(Project)
-        if uuid is not None:
-            projects = projects.filter(Project.uuid == uuid)
+        projects = db.session.query(Project).filter(Project.uuid == uuid)
         return projects.first()
 
     def resolve_projects(self, info):
@@ -110,4 +110,40 @@ class Query(graphene.ObjectType):
         return translations
 
 
-schema = graphene.Schema(query=Query)
+class CreateScreenshot(graphene.Mutation):
+    class Arguments:
+        project_id = graphene.ID(required=True)
+        name = graphene.String(required=True)
+        content = graphene.String(required=True)
+
+    project = graphene.Field(ProjectType)
+
+    def mutate(self, info, project_id, name, content: str):
+        data, content = content.split(':', 1)
+        assert data == 'data'
+
+        content_type, content = content.split(';', 1)
+
+        encoding, content = content.split(',', 1)
+        assert encoding == 'base64'
+
+        content = base64.b64decode(content)
+
+        db.session.add(Screenshot(
+            project_id=project_id,
+            name=name,
+            content_length=len(content),
+            content_type=content_type,
+        ))
+        db.session.commit()
+
+        # TODO: create dir 'static/screenshots/project_uuid' and add screenshot as file in it
+
+        return CreateScreenshot(project=Project.query.get(project_id))
+
+
+class Mutation(graphene.ObjectType):
+    create_screenshot = CreateScreenshot.Field()
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)

@@ -93,6 +93,8 @@ class Screenshot(db.Model):
     id = Column(INTEGER, primary_key=True, nullable=False)
     project_id = Column(INTEGER, ForeignKey(Project.id), nullable=False)
     name = Column(VARCHAR(128), nullable=False)
+    content_length = Column(INTEGER, nullable=False)
+    content_type = Column(VARCHAR(64), nullable=False)
 
     project = relationship(Project)
 
