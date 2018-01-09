@@ -86,7 +86,7 @@ class SuggestionVoteType(graphene_sqlalchemy.SQLAlchemyObjectType):
 
 class Query(graphene.ObjectType):
     languages = graphene.List(LanguageType, language_code=graphene.String())
-    project = graphene.Field(ProjectType, uuid=graphene.String(required=True))
+    project = graphene.Field(ProjectType, id=graphene.ID(required=True))
     projects = graphene.List(ProjectType)
     strings = graphene.List(StringType, project_uuid=graphene.String())
     translations = graphene.List(TranslationType, language_code=graphene.String())
@@ -97,9 +97,8 @@ class Query(graphene.ObjectType):
             languages = languages.filter(Language.code == language_code)
         return languages
 
-    def resolve_project(self, info, uuid=None):
-        projects = db.session.query(Project).filter(Project.uuid == uuid)
-        return projects.first()
+    def resolve_project(self, info, id):
+        return db.session.query(Project).get(id)
 
     def resolve_projects(self, info):
         return db.session.query(Project)

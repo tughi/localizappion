@@ -1,24 +1,26 @@
 var Localizappion = {}
 
 Localizappion.ProjectBaseView = Backbone.View.extend({
-    initialize(uuid) {
-        var project = this.project = new Backbone.Model()
+    initializeProject(options) {
+        this.model = new Backbone.Model();
 
-        $.post('graphql', { query: this.query.replace('PROJECT_UUID', uuid) })
+        $.post('graphql', { query: options.query, variables: JSON.stringify(options.variables) })
             .then(response => {
-                project.set(response.data.project)
-            })
+                this.model.set({
+                    project: response.data.project
+                });
+            });
 
-        this.listenTo(project, 'change', this.render)
+        this.listenTo(this.model, 'change', this.render);
     },
 
     render() {
-        this.$el.empty()
+        this.$el.empty();
 
-        if (this.project.get('name')) {
-            this.$el.html(this.template({ project: this.project }))
+        if (this.model.has('project')) {
+            this.$el.html(this.template(this.model.attributes));
         }
 
-        return this
+        return this;
     }
 })

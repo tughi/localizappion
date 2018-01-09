@@ -5,8 +5,8 @@ if (!Localizappion) {
 Localizappion.Router = Backbone.Router.extend({
     routes: {
         'projects': 'showProjectList',
-        'projects/:uuid': 'showProjectDetail',
-        'projects/:uuid/screenshots': 'showProjectScreenshotList',
+        'projects/:projectId': 'showProjectDetail',
+        'projects/:projectId/screenshots': 'showProjectScreenshotList',
     },
 
     initialize() {
@@ -31,11 +31,11 @@ Localizappion.Router = Backbone.Router.extend({
         return new Localizappion.ProjectListView()
     },
 
-    showProjectDetail(uuid) {
-        return new Localizappion.ProjectDetailView(uuid)
+    showProjectDetail(projectId) {
+        return new Localizappion.ProjectDetailView(projectId)
     },
 
-    showProjectScreenshotList(uuid) {
-        return new Localizappion.ProjectScreenshotListView(uuid)
+    showProjectScreenshotList(projectId) {
+        return new Localizappion.ProjectScreenshotListView(projectId)
     }
 })

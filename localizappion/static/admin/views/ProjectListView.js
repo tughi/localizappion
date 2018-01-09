@@ -3,39 +3,41 @@ Localizappion.ProjectListView = Backbone.View.extend({
 
     template: _.template(`
         <div class="list-group">
-            <% projects.each(project => { %>
-                <a class="list-group-item list-group-item-action" href="#projects/<%= project.get('uuid') %>"><%= project.get('name') %></a>
+            <% _.each(projects, project => { %>
+                <a class="list-group-item list-group-item-action" href="#projects/<%= project.id %>"><%= project.name %></a>
             <% }) %>
         </div>
     `),
 
     initialize() {
-        var projects = this.projects = new Backbone.Collection()
+        this.model = new Backbone.Model();
 
         $.post(
             'graphql',
             {
-                query: `{
-                    projects {
-                        uuid
-                        name
+                query: `
+                    {
+                        projects {
+                            id
+                            name
+                        }
                     }
-                }`
+                `
             }
         ).then(response => {
-            projects.reset(response.data.projects)
+            this.model.set({ projects: response.data.projects });
         })
 
-        this.listenTo(projects, 'reset', this.render)
+        this.listenTo(this.model, 'change', this.render);
     },
 
     render() {
-        this.$el.empty()
+        this.$el.empty();
 
-        if (this.projects) {
-            this.$el.html(this.template({ projects: this.projects }))
+        if (this.model.has('projects')) {
+            this.$el.html(this.template(this.model.attributes));
         }
 
-        return this
+        return this;
     }
 })
