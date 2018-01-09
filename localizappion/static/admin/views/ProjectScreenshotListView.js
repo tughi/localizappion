@@ -29,6 +29,9 @@ Localizappion.ProjectScreenshotListView = (function() {
             <div id="uploader" class="card">
                 <div class="card-body">
                     Drop screenshots here to upload.
+                    <% if (uploads.length) { %>
+                        <div class="busy"></div>
+                    <% } %>
                 </div>
             </div>
         `),
@@ -124,12 +127,15 @@ Localizappion.ProjectScreenshotListView = (function() {
             }
 
             var model = this.model;
+            model.set('uploads', model.get('uploads').concat(_.map(images, image => image.name)));
+
             for (var i = 0; i < images.length; i++) {
                 var image = images[i];
 
                 var reader = new FileReader();
                 reader.image = image;
                 reader.onload = function(event) {
+                    var image = this.image;
                     $.post(
                         'graphql',
                         {
@@ -152,14 +158,24 @@ Localizappion.ProjectScreenshotListView = (function() {
                             `,
                             variables: JSON.stringify({
                                 projectId: model.get('project').id,
-                                name: this.image.name,
+                                name: image.name,
                                 content: event.target.result
                             })
                         }
                     ).then(response => {
-                        model.set({
-                            project: response.data.createScreenshot.project
-                        });
+                        if (response.data.createScreenshot) {
+                            model.set({
+                                project: response.data.createScreenshot.project
+                            });
+                        }
+                    }).always(function() {
+                        var uploads = [].concat(model.get('uploads'));
+                        var uploadIndex = uploads.indexOf(image.name);
+                        if (uploadIndex >= 0) {
+                            uploads.splice(uploadIndex, 1);
+                            model.set('uploads', uploads);
+                        }
+                        console.log(image.name);
                     });
                 };
                 reader.readAsDataURL(image);

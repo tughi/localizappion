@@ -1,0 +1,18 @@
+#uploader .busy {
+    position: absolute;
+    right: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    top: 50%;
+    margin-top: -0.75rem;
+    border: 4px solid lightgray;
+    border-right-color: gray;
+    border-radius: 50%;
+    animation: spin .75s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
