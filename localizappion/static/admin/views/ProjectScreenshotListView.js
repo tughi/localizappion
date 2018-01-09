@@ -16,7 +16,7 @@ Localizappion.ProjectScreenshotListView = (function() {
                     <% _.each(project.screenshots, function (screenshot) { %>
                         <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 pb-3">
                             <div class="card ">
-                                <img class="card-img" src="static/screenshots/device-2018-01-06-213936.png" />
+                                <img class="card-img" src="<%= screenshot.url %>" />
                                 <div class="card-footer text-muted">
                                     <%= screenshot.name %>
                                 </div>
@@ -56,6 +56,7 @@ Localizappion.ProjectScreenshotListView = (function() {
                                 name
                                 screenshots {
                                     name
+                                    url
                                     contentLength
                                     contentType
                                 }
@@ -141,6 +142,7 @@ Localizappion.ProjectScreenshotListView = (function() {
                                             name
                                             screenshots {
                                                 name
+                                                url
                                                 contentLength
                                                 contentType
                                             }

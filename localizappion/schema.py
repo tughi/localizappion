@@ -1,8 +1,9 @@
 import base64
+import os
 
 import graphene
 import graphene_sqlalchemy
-import os
+from flask import url_for
 
 from .models import Language
 from .models import Project
@@ -37,6 +38,11 @@ class ProjectType(graphene_sqlalchemy.SQLAlchemyObjectType):
 
 
 class ScreenshotType(graphene_sqlalchemy.SQLAlchemyObjectType):
+    url = graphene.Field(graphene.String)
+
+    def resolve_url(self: Screenshot, info):
+        return url_for('static', filename='screenshots/{uuid}/{name}'.format(uuid=self.project.uuid, name=self.name))
+
     class Meta:
         model = Screenshot
 
