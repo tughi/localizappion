@@ -2,6 +2,7 @@ import base64
 
 import graphene
 import graphene_sqlalchemy
+import os
 
 from .models import Language
 from .models import Project
@@ -119,6 +120,8 @@ class CreateScreenshot(graphene.Mutation):
     project = graphene.Field(ProjectType)
 
     def mutate(self, info, project_id, name, content: str):
+        project = Project.query.get(project_id)
+
         data, content = content.split(':', 1)
         assert data == 'data'
 
@@ -129,6 +132,11 @@ class CreateScreenshot(graphene.Mutation):
 
         content = base64.b64decode(content)
 
+        screenshots_dir = os.path.join(os.path.dirname(__file__), 'static', 'screenshots', project.uuid)
+        os.makedirs(screenshots_dir, exist_ok=True)
+        with open(os.path.join(screenshots_dir, name), mode='wb') as file:
+            file.write(content)
+
         db.session.add(Screenshot(
             project_id=project_id,
             name=name,
@@ -137,9 +145,7 @@ class CreateScreenshot(graphene.Mutation):
         ))
         db.session.commit()
 
-        # TODO: create dir 'static/screenshots/project_uuid' and add screenshot as file in it
-
-        return CreateScreenshot(project=Project.query.get(project_id))
+        return CreateScreenshot(project=project)
 
 
 class Mutation(graphene.ObjectType):
