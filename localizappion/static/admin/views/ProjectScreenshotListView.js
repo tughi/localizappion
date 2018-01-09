@@ -12,11 +12,11 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
 
         <% if (project.screenshots.length) { %>
             <div class="row pt-3">
-                <% _.each(project.screenshots, function (screenshot) { %>
+                <% _.each(project.screenshots, screenshot => { %>
                     <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 pb-3">
-                        <div class="card ">
+                        <div class="card<% if (screenshot.strings.length == 0) { %> text-white bg-warning<% } %>">
                             <img class="card-img" src="<%= screenshot.url %>" />
-                            <div class="card-footer text-muted">
+                            <div class="card-footer">
                                 <%= screenshot.name %>
                             </div>
                         </div>
@@ -54,6 +54,9 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
                             url
                             contentLength
                             contentType
+                            strings {
+                                screenshotArea
+                            }
                         }
                     }
                 }
@@ -149,7 +152,6 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
                         uploads.splice(uploadIndex, 1);
                         model.set('uploads', uploads);
                     }
-                    console.log(image.name);
                 });
             };
             reader.readAsDataURL(image);
