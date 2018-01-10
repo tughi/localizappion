@@ -7,6 +7,7 @@ Localizappion.Router = Backbone.Router.extend({
         'projects': 'showProjectList',
         'projects/:projectId': 'showProjectDetail',
         'projects/:projectId/screenshots': 'showProjectScreenshotList',
+        'projects/:projectId/screenshots/:screenshotId': 'showProjectScreenshotDetail',
     },
 
     initialize() {
@@ -37,5 +38,9 @@ Localizappion.Router = Backbone.Router.extend({
 
     showProjectScreenshotList(projectId) {
         return new Localizappion.ProjectScreenshotListView(projectId)
+    },
+
+    showProjectScreenshotDetail(projectId, screenshotId) {
+        return new Localizappion.ProjectScreenshotDetailView(projectId, screenshotId)
     }
 })

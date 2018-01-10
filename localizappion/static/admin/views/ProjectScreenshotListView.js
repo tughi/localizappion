@@ -23,14 +23,14 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
             <p>
             <div class="d-flex justify-content-center flex-wrap">
                 <% _.each(project.screenshots, screenshot => { %>
-                    <div class="m-2 screenshot <% if (screenshot.strings.length == 0) { %>without-strings<% } %>">
+                    <a href="#projects/<%= project.id %>/screenshots/<%= screenshot.id %>" class="m-2 screenshot <% if (screenshot.strings.length == 0) { %>without-strings<% } %>">
                         <img src="<%= screenshot.url %>" />
                         <% _.each(screenshot.strings, string => {
                             area = string.area.match('\\\\(([0-9.]+),([0-9.]+)\\\\)x\\\\(([0-9.]+),([0-9.]+)\\\\)');
                             %>
                             <div class="area hidden-on-hover" style="left: <%= area[1] %>%; top: <%= area[2] %>%; right: <%= 100 - area[3] %>%; bottom: <%= 100 - area[4] %>%;"></div>
                         <% }) %>
-                    </div>
+                    </a>
                 <% }) %>
             </div>
             </p>
@@ -52,6 +52,7 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
                         id
                         name
                         screenshots {
+                            id
                             url
                             strings {
                                 area
@@ -123,6 +124,7 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
                                         id
                                         name
                                         screenshots {
+                                            id
                                             url
                                             strings {
                                                 area

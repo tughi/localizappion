@@ -25,8 +25,12 @@ class LanguageType(graphene_sqlalchemy.SQLAlchemyObjectType):
 
 
 class ProjectType(graphene_sqlalchemy.SQLAlchemyObjectType):
+    screenshot = graphene.Field(lambda: ScreenshotType, id=graphene.ID(required=True))
     screenshots_count = graphene.Field(graphene.Int)
     strings_count = graphene.Field(graphene.Int)
+
+    def resolve_screenshot(self: Project, info, id):
+        return Screenshot.query.filter(Screenshot.id == id, Screenshot.project_id == self.id).one()
 
     def resolve_screenshots_count(self: Project, info):
         return Screenshot.query.filter(Screenshot.project_id == self.id).count()
