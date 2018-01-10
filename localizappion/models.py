@@ -115,7 +115,7 @@ class String(db.Model):
     markers = Column(TEXT, nullable=True)
     position = Column(INTEGER, default=0)
     screenshot_id = Column(INTEGER, ForeignKey(Screenshot.id), nullable=True)
-    screenshot_area = Column(VARCHAR(27), nullable=True)
+    screenshot_area = Column(VARCHAR(27), nullable=True)  # (l,t)x(r,b) in percentages with max two decimals
 
     project = relationship(Project)
     screenshot = relationship(Screenshot)

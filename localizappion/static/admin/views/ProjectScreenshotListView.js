@@ -10,21 +10,6 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
             </ol>
         </nav>
 
-        <% if (project.screenshots.length) { %>
-            <div class="row pt-3">
-                <% _.each(project.screenshots, screenshot => { %>
-                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 pb-3">
-                        <div class="card<% if (screenshot.strings.length == 0) { %> text-white bg-warning<% } %>">
-                            <img class="card-img" src="<%= screenshot.url %>" />
-                            <div class="card-footer">
-                                <%= screenshot.name %>
-                            </div>
-                        </div>
-                    </div>
-                <% }) %>
-            </div>
-        <% } %>
-
         <div id="uploader" class="card">
             <div class="card-body">
                 Drop screenshots here to upload.
@@ -33,6 +18,23 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
                 <% } %>
             </div>
         </div>
+
+        <% if (project.screenshots.length) { %>
+            <p>
+            <div class="d-flex justify-content-center flex-wrap">
+                <% _.each(project.screenshots, screenshot => { %>
+                    <div class="m-2 screenshot <% if (screenshot.strings.length == 0) { %>without-strings<% } %>">
+                        <img src="<%= screenshot.url %>" />
+                        <% _.each(screenshot.strings, string => {
+                            area = string.screenshotArea.match('\\\\(([0-9.]+),([0-9.]+)\\\\)x\\\\(([0-9.]+),([0-9.]+)\\\\)');
+                            %>
+                            <div class="area hidden-on-hover" style="left: <%= area[1] %>%; top: <%= area[2] %>%; right: <%= 100 - area[3] %>%; bottom: <%= 100 - area[4] %>%;"></div>
+                        <% }) %>
+                    </div>
+                <% }) %>
+            </div>
+            </p>
+        <% } %>
     `),
 
     events: {
@@ -128,6 +130,9 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
                                             url
                                             contentLength
                                             contentType
+                                            strings {
+                                                screenshotArea
+                                            }
                                         }
                                     }
                                 }

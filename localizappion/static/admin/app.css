@@ -1,3 +1,26 @@
+.screenshot {
+    position: relative;
+}
+
+.screenshot > img {
+    width: auto;
+    height: 256px;
+}
+
+.screenshot > .area {
+    position: absolute;
+    background: rgba(255, 193, 7, .5);
+    border: 1px solid rgba(255, 193, 7, 1);
+}
+
+.screenshot:hover > .area.hidden-on-hover {
+    display: none;
+}
+
+.screenshot.without-strings {
+    opacity: .5;
+}
+
 #uploader .busy {
     position: absolute;
     right: 1.25rem;
