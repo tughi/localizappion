@@ -139,7 +139,10 @@ class CreateScreenshot(graphene.Mutation):
 
         screenshots_dir = os.path.join(os.path.dirname(__file__), 'static', 'screenshots', project.uuid)
         os.makedirs(screenshots_dir, exist_ok=True)
-        with open(os.path.join(screenshots_dir, name), mode='wb') as file:
+        screenshot_file = os.path.join(screenshots_dir, name)
+        if os.path.exists(screenshot_file):
+            raise FileExistsError('Screenshot file already exists')
+        with open(screenshot_file, mode='wb') as file:
             file.write(content)
 
         db.session.add(Screenshot(
