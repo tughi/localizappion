@@ -14,7 +14,7 @@ blueprint = flask.Blueprint(__name__.split('.')[-1], __name__)
 
 
 def create_email_hash(email):
-    hash_data = '{0}+{1}'.format(email, flask.current_app.config['REGISTRATION_MAIL_SENDER'])
+    hash_data = '{0}+{1}'.format(email, flask.current_app.config['REGISTRATION_MAIL_SALT'])
     return base64.standard_b64encode(sha512(hash_data.encode()).digest()).decode()
 
 
