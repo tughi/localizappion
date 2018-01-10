@@ -26,7 +26,7 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
                     <div class="m-2 screenshot <% if (screenshot.strings.length == 0) { %>without-strings<% } %>">
                         <img src="<%= screenshot.url %>" />
                         <% _.each(screenshot.strings, string => {
-                            area = string.screenshotArea.match('\\\\(([0-9.]+),([0-9.]+)\\\\)x\\\\(([0-9.]+),([0-9.]+)\\\\)');
+                            area = string.area.match('\\\\(([0-9.]+),([0-9.]+)\\\\)x\\\\(([0-9.]+),([0-9.]+)\\\\)');
                             %>
                             <div class="area hidden-on-hover" style="left: <%= area[1] %>%; top: <%= area[2] %>%; right: <%= 100 - area[3] %>%; bottom: <%= 100 - area[4] %>%;"></div>
                         <% }) %>
@@ -52,12 +52,9 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
                         id
                         name
                         screenshots {
-                            name
                             url
-                            contentLength
-                            contentType
                             strings {
-                                screenshotArea
+                                area
                             }
                         }
                     }
@@ -126,12 +123,9 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
                                         id
                                         name
                                         screenshots {
-                                            name
                                             url
-                                            contentLength
-                                            contentType
                                             strings {
-                                                screenshotArea
+                                                area
                                             }
                                         }
                                     }

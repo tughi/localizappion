@@ -8,6 +8,7 @@ from flask import url_for
 from .models import Language
 from .models import Project
 from .models import Screenshot
+from .models import ScreenshotString
 from .models import String
 from .models import Suggestion
 from .models import SuggestionVote
@@ -45,6 +46,11 @@ class ScreenshotType(graphene_sqlalchemy.SQLAlchemyObjectType):
 
     class Meta:
         model = Screenshot
+
+
+class ScreenshotStringType(graphene_sqlalchemy.SQLAlchemyObjectType):
+    class Meta:
+        model = ScreenshotString
 
 
 class StringType(graphene_sqlalchemy.SQLAlchemyObjectType):

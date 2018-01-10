@@ -85,6 +85,26 @@ class Project(db.Model):
     strings_upload_time = Column(TIMESTAMP, nullable=True)
 
 
+class String(db.Model):
+    __table_args__ = (
+        UniqueConstraint('project_id', 'name'),
+    )
+
+    id = Column(INTEGER, primary_key=True, nullable=False)
+    project_id = Column(INTEGER, ForeignKey(Project.id), nullable=False)
+    name = Column(VARCHAR(64), nullable=False)
+    value_one = Column(TEXT, nullable=True)
+    value_other = Column(TEXT, nullable=False)
+    markers = Column(TEXT, nullable=True)
+    position = Column(INTEGER, default=0)
+
+    project = relationship(Project)
+
+
+Project.strings = relationship(String)
+Project.strings_query = relationship(String, lazy='dynamic')
+
+
 class Screenshot(db.Model):
     __table_args__ = (
         UniqueConstraint('project_id', 'name'),
@@ -102,29 +122,16 @@ class Screenshot(db.Model):
 Project.screenshots = relationship(Screenshot)
 
 
-class String(db.Model):
-    __table_args__ = (
-        UniqueConstraint('project_id', 'name'),
-    )
+class ScreenshotString(db.Model):
+    screenshot_id = Column(INTEGER, ForeignKey(Screenshot.id), primary_key=True)
+    string_id = Column(INTEGER, ForeignKey(String.id), primary_key=True)
+    area = Column(VARCHAR(27), nullable=True)  # (l,t)x(r,b) in percentages with max two decimals
 
-    id = Column(INTEGER, primary_key=True, nullable=False)
-    project_id = Column(INTEGER, ForeignKey(Project.id), nullable=False)
-    name = Column(VARCHAR(64), nullable=False)
-    value_one = Column(TEXT, nullable=True)
-    value_other = Column(TEXT, nullable=False)
-    markers = Column(TEXT, nullable=True)
-    position = Column(INTEGER, default=0)
-    screenshot_id = Column(INTEGER, ForeignKey(Screenshot.id), nullable=True)
-    screenshot_area = Column(VARCHAR(27), nullable=True)  # (l,t)x(r,b) in percentages with max two decimals
-
-    project = relationship(Project)
     screenshot = relationship(Screenshot)
+    string = relationship(String)
 
 
-Project.strings = relationship(String)
-Project.strings_query = relationship(String, lazy='dynamic')
-
-Screenshot.strings = relationship(String)
+Screenshot.strings = relationship(ScreenshotString)
 
 
 class Translation(db.Model):
