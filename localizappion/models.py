@@ -145,6 +145,7 @@ class Translation(db.Model):
 
 
 Project.translations = relationship(Translation)
+Project.translations_query = relationship(Translation, lazy='dynamic')
 
 
 class Translator(db.Model):

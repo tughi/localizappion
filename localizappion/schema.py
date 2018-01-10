@@ -34,6 +34,9 @@ class ProjectType(graphene_sqlalchemy.SQLAlchemyObjectType):
     def resolve_strings_count(self: Project, info):
         return String.query.filter(String.project_id == self.id).count()
 
+    def resolve_translations(self: Project, info):
+        return self.translations_query.join(Translation.language).order_by(Language.name)
+
     class Meta:
         model = Project
 
