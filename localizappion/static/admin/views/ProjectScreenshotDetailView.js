@@ -13,11 +13,11 @@ Localizappion.ProjectScreenshotDetailView = (function () {
             </nav>
 
             <div class="row mb-3">
-                <div class="col-sm-12 col-md-6 col-lg-5 col-xl-4 screenshot">
-                    <img src="<%= project.screenshot.url %>" class="img-fluid" />
-                    <button class="btn btn-danger btn-block mt-3">Delete screenshot</button>
+                <div id="screenshot" class="col-sm-12 col-md-5 col-xl-4">
+                    <img src="<%= project.screenshot.url %>" class="mb-3"/>
+                    <button id="delete-screenshot" class="btn btn-danger btn-block mb-3">Delete screenshot</button>
                 </div>
-                <div class="col-sm-12 col-md-6 col-lg-7 col-xl-8">
+                <div class="col-sm-12 col-md-7 col-xl-8">
                     <% if (project.screenshot.strings.length) { %>
                         <div class="list-group mb-3">
                             <% _.each(project.screenshot.strings, string => { %>
@@ -28,10 +28,15 @@ Localizappion.ProjectScreenshotDetailView = (function () {
                             <% }) %>
                         </div>
                     <% } %>
-                    <button class="btn btn-secondary btn-block">Add string</button>
+                    <button id="add-string" class="btn btn-secondary btn-block">Add string</button>
                 </div>
             </div>
         `),
+
+        events: {
+            'click #add-string': 'onAddString',
+            'click #delete-screenshot': 'onDeleteScreenshot',
+        },
 
         initialize(projectId, screenshotId) {
             this.initializeProject({
@@ -41,6 +46,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
                             id
                             name
                             screenshot(id: $screenshotId) {
+                                id
                                 name
                                 url
                                 strings {
@@ -61,6 +67,34 @@ Localizappion.ProjectScreenshotDetailView = (function () {
             this.model.set({
                 stringQuery: null
             });
+        },
+
+        onAddString() {
+            // TODO: add string
+        },
+
+        onDeleteScreenshot() {
+            var project = this.model.get('project');
+            // TODO: use bootstrap modal
+            if (prompt('Delete screenshot? (yes/no)') === 'yes') {
+                graphql({
+                    query: `
+                        mutation($projectId: ID!, $screenshotId: ID!) {
+                            deleteProjectScreenshot(projectId: $projectId, screenshotId: $screenshotId) {
+                                ok
+                            }
+                        }
+                    `,
+                    variables: {
+                        projectId: project.id,
+                        screenshotId: project.screenshot.id
+                    }
+                }).then(response => {
+                    if (response.data.deleteProjectScreenshot.ok) {
+                        Localizappion.router.navigate(`projects/${project.id}/screenshots`, { trigger: true })
+                    }
+                });
+            }
         }
     });
 })();

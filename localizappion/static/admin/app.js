@@ -3,9 +3,9 @@ $(function () {
         event.preventDefault()
     })
 
-    var router = new Localizappion.Router()
+    Localizappion.router = new Localizappion.Router()
 
     if (!Backbone.history.start()) {
-        router.navigate('projects', { trigger: true })
+        Localizappion.router.navigate('projects', { trigger: true })
     }
 })
