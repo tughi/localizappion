@@ -1,4 +1,83 @@
 Localizappion.ProjectScreenshotDetailView = (function () {
+    var AddStringDialog = Backbone.View.extend({
+        el: '#add-string-dialog',
+
+        template: _.template(`
+            <div class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add string</h5>
+                        </div>
+                        <div class="modal-body">
+                            <input id="filter" type="text" placeholder="Filter" class="form-control">
+
+                            <div id="list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `),
+
+        listTemplate: _.template(`
+            <% if (filter.length > 2) { %>
+                <div class="list-group mt-3">
+                    <% _.each(strings, string => { %>
+                        <% if (string.valueOther.indexOf(filter) >= 0 || string.name.indexOf(filter) >= 0 || (string.valueOne && string.valueOne.indexOf(filter) >= 0)) { %>
+                            <div class="list-group-item list-group-item-action">
+                                <% if (string.valueOne) { %>
+                                    <h5 class="mb-1"><%= string.valueOne %> <span class="text-muted">(One)</span></h5>
+                                <% } %>
+                                <h5 class="mb-1"><%= string.valueOther %><% if (string.valueOne) { %> <span class="text-muted">(Other)</span><% } %></h5>
+                                <small class="text-muted"><%= string.name %></small>
+                            </div>
+                        <% } %>
+                    <% }) %>
+                </div>
+            <% } %>
+        `),
+
+        events: {
+            'keyup #filter': 'onFilter'
+        },
+
+        initialize() {
+            this.model = new Backbone.Model({
+                filter: '',
+                strings: []
+            });
+
+            this.listenTo(this.model, 'change:strings', this.render);
+            this.listenTo(this.model, 'change:filter', this.renderList);
+        },
+
+        render() {
+            this.$el
+                .empty()
+                .html(this.template(this.model.attributes));
+
+            return this;
+        },
+
+        renderList() {
+            this.$('#list')
+                .empty()
+                .html(this.listTemplate(this.model.attributes));
+
+            return this;
+        },
+
+        show() {
+            this.$('#filter').val('');
+            this.model.set({ filter: '' });
+            this.$('.modal').modal();
+        },
+
+        onFilter(event) {
+            this.model.set({ filter: this.$('#filter').val() });
+        }
+    });
+
     return Localizappion.ProjectBaseView.extend({
         id: 'project-screenshot-detail',
 
@@ -31,6 +110,8 @@ Localizappion.ProjectScreenshotDetailView = (function () {
                     <button id="add-string" class="btn btn-secondary btn-block">Add string</button>
                 </div>
             </div>
+
+            <div id="add-string-dialog"></div>
         `),
 
         events: {
@@ -58,19 +139,26 @@ Localizappion.ProjectScreenshotDetailView = (function () {
                                     }
                                 }
                             }
+                            strings {
+                                id
+                                name
+                                valueOne
+                                valueOther
+                            }
                         }
                     }
                 `,
                 variables: { projectId, screenshotId }
             });
 
-            this.model.set({
-                stringQuery: null
+            this.model.once('change:project', model => {
+                this.addStringDialog = new AddStringDialog();
+                this.addStringDialog.model.set({ strings: model.get('project').strings });
             });
         },
 
         onAddString() {
-            // TODO: add string
+            this.addStringDialog.show();
         },
 
         onDeleteScreenshot() {
