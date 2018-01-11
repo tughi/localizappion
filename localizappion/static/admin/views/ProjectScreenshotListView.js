@@ -115,33 +115,30 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
             reader.image = image;
             reader.onload = function(event) {
                 var image = this.image;
-                $.post(
-                    'graphql',
-                    {
-                        query: `
-                            mutation ($projectId: ID!, $name: String!, $content: String!) {
-                                createScreenshot(projectId: $projectId, name: $name, content: $content) {
-                                    project {
+                graphql({
+                    query: `
+                        mutation ($projectId: ID!, $name: String!, $content: String!) {
+                            createScreenshot(projectId: $projectId, name: $name, content: $content) {
+                                project {
+                                    id
+                                    name
+                                    screenshots {
                                         id
-                                        name
-                                        screenshots {
-                                            id
-                                            url
-                                            strings {
-                                                area
-                                            }
+                                        url
+                                        strings {
+                                            area
                                         }
                                     }
                                 }
                             }
-                        `,
-                        variables: JSON.stringify({
-                            projectId: model.get('project').id,
-                            name: image.name,
-                            content: event.target.result
-                        })
+                        }
+                    `,
+                    variables: {
+                        projectId: model.get('project').id,
+                        name: image.name,
+                        content: event.target.result
                     }
-                ).then(response => {
+                }).then(response => {
                     if (response.data.createScreenshot) {
                         model.set({
                             project: response.data.createScreenshot.project

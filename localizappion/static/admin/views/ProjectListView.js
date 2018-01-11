@@ -12,23 +12,20 @@ Localizappion.ProjectListView = Backbone.View.extend({
     initialize() {
         this.model = new Backbone.Model();
 
-        $.post(
-            'graphql',
-            {
-                query: `
-                    {
-                        projects {
-                            id
-                            name
-                        }
+        graphql({
+            query: `
+                query {
+                    projects {
+                        id
+                        name
                     }
-                `
-            }
-        ).then(response => {
+                }
+            `
+        }).then(response => {
             this.model.set({ projects: response.data.projects });
-        })
+        });
 
-        this.listenTo(this.model, 'change', this.render);
+        this.listenTo(this.model, 'change:projects', this.render);
     },
 
     render() {

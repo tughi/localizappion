@@ -1,10 +1,8 @@
-var Localizappion = {}
-
 Localizappion.ProjectBaseView = Backbone.View.extend({
     initializeProject(options) {
         this.model = new Backbone.Model();
 
-        $.post('graphql', { query: options.query, variables: JSON.stringify(options.variables) })
+        graphql(options)
             .then(response => {
                 this.model.set({
                     project: response.data.project
