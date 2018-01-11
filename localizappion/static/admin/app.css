@@ -17,6 +17,10 @@
     }
 }
 
+#project-screenshot-detail .screenshot img {
+    width: 100%;
+}
+
 #project-screenshot-list .screenshot {
     position: relative;
     display: inline-block;
