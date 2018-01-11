@@ -65,6 +65,7 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
         });
 
         this.model.set({ uploads: [] });
+        this.listenTo(this.model, 'change:uploads', this.render);
     },
 
     onDragLeave(event) {
