@@ -11,7 +11,7 @@ Localizappion.ProjectBaseView = Backbone.View.extend({
                 });
             });
 
-        this.listenTo(this.model, 'change', this.render);
+        this.listenTo(this.model, 'change:project', this.render);
     },
 
     render() {
