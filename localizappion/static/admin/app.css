@@ -1,27 +1,3 @@
-.screenshot {
-    position: relative;
-    display: inline-block;
-}
-
-.screenshot > img {
-    width: auto;
-    height: 256px;
-}
-
-.screenshot > .area {
-    position: absolute;
-    background: rgba(255, 193, 7, .5);
-    border: 1px solid rgba(255, 193, 7, 1);
-}
-
-.screenshot:hover > .area.hidden-on-hover {
-    display: none;
-}
-
-.screenshot.without-strings {
-    opacity: .5;
-}
-
 #uploader .busy {
     position: absolute;
     right: 1.25rem;
@@ -40,3 +16,28 @@
         transform: rotate(360deg);
     }
 }
+
+#project-screenshot-list .screenshot {
+    position: relative;
+    display: inline-block;
+}
+
+#project-screenshot-list .screenshot > img {
+    width: auto;
+    height: 256px;
+}
+
+#project-screenshot-list .screenshot > .area {
+    position: absolute;
+    background: rgba(255, 193, 7, .5);
+    border: 1px solid rgba(255, 193, 7, 1);
+}
+
+#project-screenshot-list .screenshot:hover > .area.hidden-on-hover {
+    display: none;
+}
+
+#project-screenshot-list .screenshot.without-strings {
+    opacity: .5;
+}
+
