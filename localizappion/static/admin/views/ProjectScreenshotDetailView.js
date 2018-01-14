@@ -1,6 +1,86 @@
 Localizappion.ProjectScreenshotDetailView = (function () {
+    var AvailableStringsView = Backbone.View.extend({
+        id: '#available-strings',
+
+        template: _.template(`
+            <% if (addStringFilter.length > 2) { %>
+                <div class="list-group mt-3">
+                    <% _.each(strings, string => { %>
+                        <% if (string.valueOther.indexOf(addStringFilter) >= 0 || (string.valueOne && string.valueOne.indexOf(addStringFilter) >= 0)) { %>
+                            <div class="list-group-item list-group-item-action string">
+                                <% if (string.valueOne) { %>
+                                    <h5 class="mb-1"><%= string.valueOne %> <span class="text-muted">(One)</span></h5>
+                                <% } %>
+                                <h5 class="mb-1"><%= string.valueOther %><% if (string.valueOne) { %> <span class="text-muted">(Other)</span><% } %></h5>
+                                <small class="string-name text-muted"><%= string.name %></small>
+                            </div>
+                        <% } %>
+                    <% }) %>
+                </div>
+            <% } %>
+        `),
+
+        events: {
+            'click .string': 'onStringClicked'
+        },
+
+        initialize(options) {
+            this.listenTo(this.model, 'change:addStringFilter', this.render);
+        },
+
+        render() {
+            this.$el.html(this.template(this.model.attributes));
+
+            return this;
+        },
+
+        onStringClicked(event) {
+            var stringName = $(event.target).closest('.string').find('.string-name').text();
+            var project = this.model.get('project');
+            var string = _.find(this.model.get('strings'), string => string.name === stringName);
+
+            this.model.set({ showAddStringDialog: false });
+
+            graphql({
+                query: `
+                    mutation ($projectId: ID!, $screenshotId: ID!, $stringId: ID!) {
+                        addProjectScreenshotString(projectId: $projectId, screenshotId: $screenshotId, stringId: $stringId) {
+                            project {
+                                id
+                                name
+                                screenshot(id: $screenshotId) {
+                                    id
+                                    name
+                                    url
+                                    strings {
+                                        area
+                                        string {
+                                            name
+                                            valueOne
+                                            valueOther
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `,
+                variables: {
+                    projectId: project.id,
+                    screenshotId: project.screenshot.id,
+                    stringId: string.id
+                }
+            }).then(response => {
+                var project = response.data.addProjectScreenshotString.project;
+                if (project) {
+                    this.model.set({ project });
+                }
+            });
+        }
+    });
+
     var AddStringDialog = Backbone.View.extend({
-        el: '#add-string-dialog',
+        id: 'add-string-dialog',
 
         template: _.template(`
             <div class="modal fade" role="dialog">
@@ -12,73 +92,57 @@ Localizappion.ProjectScreenshotDetailView = (function () {
                         <div class="modal-body">
                             <input id="filter" type="text" placeholder="Filter" class="form-control">
 
-                            <div id="list"></div>
+                            <div id="available-strings"></div>
                         </div>
                     </div>
                 </div>
             </div>
         `),
 
-        listTemplate: _.template(`
-            <% if (filter.length > 2) { %>
-                <div class="list-group mt-3">
-                    <% _.each(strings, string => { %>
-                        <% if (string.valueOther.indexOf(filter) >= 0 || string.name.indexOf(filter) >= 0 || (string.valueOne && string.valueOne.indexOf(filter) >= 0)) { %>
-                            <div class="list-group-item list-group-item-action">
-                                <% if (string.valueOne) { %>
-                                    <h5 class="mb-1"><%= string.valueOne %> <span class="text-muted">(One)</span></h5>
-                                <% } %>
-                                <h5 class="mb-1"><%= string.valueOther %><% if (string.valueOne) { %> <span class="text-muted">(Other)</span><% } %></h5>
-                                <small class="text-muted"><%= string.name %></small>
-                            </div>
-                        <% } %>
-                    <% }) %>
-                </div>
-            <% } %>
-        `),
-
         events: {
-            'keyup #filter': 'onFilter'
+            'keyup #filter': 'onFilter',
+            'hidden.bs.modal .modal': 'onDialogHidden',
+            'shown.bs.modal .modal': 'onDialogShown'
         },
 
-        initialize() {
-            this.model = new Backbone.Model({
-                filter: '',
+        initialize(options) {
+            this.model.set({
+                addStringFilter: '',
                 strings: []
             });
 
-            this.listenTo(this.model, 'change:strings', this.render);
-            this.listenTo(this.model, 'change:filter', this.renderList);
+            this.listenTo(this.model, 'change:showAddStringDialog', this.showAddStringDialog);
+        },
+
+        onDialogHidden() {
+            this.model.set({ showAddStringDialog: false });
+        },
+
+        onDialogShown() {
+            this.$('#filter').trigger('focus');
+        },
+
+        showAddStringDialog() {
+            this.$('.modal').modal(this.model.get('showAddStringDialog') ? 'show' : 'hide');
         },
 
         render() {
-            this.$el
-                .empty()
-                .html(this.template(this.model.attributes));
+            this.$el.html(this.template(this.model.attributes));
+
+            new AvailableStringsView({
+                model: this.model,
+                el: this.$('#available-strings')
+            });
 
             return this;
-        },
-
-        renderList() {
-            this.$('#list')
-                .empty()
-                .html(this.listTemplate(this.model.attributes));
-
-            return this;
-        },
-
-        show() {
-            this.$('#filter').val('');
-            this.model.set({ filter: '' });
-            this.$('.modal').modal();
         },
 
         onFilter(event) {
-            this.model.set({ filter: this.$('#filter').val() });
+            this.model.set({ addStringFilter: this.$('#filter').val() });
         }
     });
 
-    return Localizappion.ProjectBaseView.extend({
+    var ScreenshotView = Localizappion.ProjectBaseView.extend({
         id: 'project-screenshot-detail',
 
         template: _.template(`
@@ -110,16 +174,14 @@ Localizappion.ProjectScreenshotDetailView = (function () {
                     <button id="add-string" class="btn btn-secondary btn-block">Add string</button>
                 </div>
             </div>
-
-            <div id="add-string-dialog"></div>
         `),
 
         events: {
-            'click #add-string': 'onAddString',
+            'click #add-string': 'onAddStringButtonClicked',
             'click #delete-screenshot': 'onDeleteScreenshot',
         },
 
-        initialize(projectId, screenshotId) {
+        initialize(options) {
             this.initializeProject({
                 query: `
                     query ($projectId: ID!, $screenshotId: ID!) {
@@ -148,17 +210,19 @@ Localizappion.ProjectScreenshotDetailView = (function () {
                         }
                     }
                 `,
-                variables: { projectId, screenshotId }
+                variables: {
+                    projectId: options.projectId,
+                    screenshotId: options.screenshotId
+                }
             });
 
             this.model.once('change:project', model => {
-                this.addStringDialog = new AddStringDialog();
-                this.addStringDialog.model.set({ strings: model.get('project').strings });
+                this.model.set({ strings: model.get('project').strings });
             });
         },
 
-        onAddString() {
-            this.addStringDialog.show();
+        onAddStringButtonClicked() {
+            this.model.set({ showAddStringDialog: true });
         },
 
         onDeleteScreenshot() {
@@ -183,6 +247,22 @@ Localizappion.ProjectScreenshotDetailView = (function () {
                     }
                 });
             }
+        }
+    });
+
+    return Backbone.View.extend({
+        id: 'project-screenshot-detail',
+
+        initialize(projectId, screenshotId) {
+            this.screenshotView = new ScreenshotView({ projectId, screenshotId });
+            this.addStringDialog = new AddStringDialog({ model: this.screenshotView.model });
+        },
+
+        render() {
+            this.$el.append(this.screenshotView.render().el);
+            this.$el.append(this.addStringDialog.render().el);
+
+            return this;
         }
     });
 })();

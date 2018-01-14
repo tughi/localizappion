@@ -21,6 +21,10 @@
     width: 100%;
 }
 
+#project-screenshot-detail .modal .string {
+    cursor: pointer;
+}
+
 #project-screenshot-list .screenshot {
     position: relative;
     display: inline-block;

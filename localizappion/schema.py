@@ -169,6 +169,27 @@ class CreateScreenshot(graphene.Mutation):
         return CreateScreenshot(project=project)
 
 
+class AddProjectScreenshotString(graphene.Mutation):
+    class Arguments:
+        project_id = graphene.ID(required=True)
+        screenshot_id = graphene.ID(required=True)
+        string_id = graphene.ID(required=True)
+
+    project = graphene.Field(ProjectType)
+
+    def mutate(self, info, project_id, screenshot_id, string_id):
+        screenshot = Screenshot.query.filter(Screenshot.id == screenshot_id, Screenshot.project_id == project_id).first()
+        string = String.query.filter(String.id == string_id, String.project_id == project_id).first()
+
+        if screenshot and string:
+            db.session.add(ScreenshotString(screenshot=screenshot, string=string))
+            db.session.commit()
+
+            return AddProjectScreenshotString(project=screenshot.project)
+
+        return AddProjectScreenshotString(project=None)
+
+
 class DeleteProjectScreenshot(graphene.Mutation):
     class Arguments:
         project_id = graphene.ID(required=True)
@@ -194,6 +215,7 @@ class DeleteProjectScreenshot(graphene.Mutation):
 
 class Mutation(graphene.ObjectType):
     create_screenshot = CreateScreenshot.Field()
+    add_project_screenshot_string = AddProjectScreenshotString.Field()
     delete_project_screenshot = DeleteProjectScreenshot.Field()
 
 
