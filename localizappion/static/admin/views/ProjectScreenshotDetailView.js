@@ -22,7 +22,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
 
     var ScreenshotAreas = Backbone.View.extend({
         initialize(options) {
-            this.listenTo(this.model, 'change:activeScreenshotString', this.render);
+            this.listenTo(this.model, 'change:activeScreenshotStringName', this.render);
             this.listenTo(this.model, 'change:pointedScreenshotString', this.render);
             this.listenTo(this.model, 'change:screenshotStrings', this.render);
         },
@@ -36,14 +36,14 @@ Localizappion.ProjectScreenshotDetailView = (function () {
         render() {
             this.$el.empty();
 
-            var activeScreenshotString = this.model.get('activeScreenshotString');
+            var activeScreenshotStringName = this.model.get('activeScreenshotStringName');
             var screenshotStrings = this.model.get('screenshotStrings');
 
             _.each(screenshotStrings, screenshotString => {
                 var area = screenshotString.area.match(/\(([0-9.]+),([0-9.]+)\)x\(([0-9.]+),([0-9.]+)\)/);
 
                 $('<div class="area" />')
-                    .addClass(screenshotString.string.name === activeScreenshotString ? 'active' : null)
+                    .addClass(screenshotString.string.name === activeScreenshotStringName ? 'active' : null)
                     .css({
                         left: area[1] + '%',
                         top: area[2] + '%',
@@ -55,7 +55,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
         },
 
         startArea(event) {
-            if (this.model.get('activeScreenshotString')) {
+            if (this.model.get('activeScreenshotStringName')) {
                 event.preventDefault();
 
                 this.drawingStart = {
@@ -110,7 +110,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
                     var x2 = Math.round((areaPosition.left + areaWidth) / parentWidth * 10000) / 100;
                     var y2 = Math.round((areaPosition.top + areaHeight) / parentHeight * 10000) / 100;
 
-                    var activeScreenshotStringName = this.model.get('activeScreenshotString');
+                    var activeScreenshotStringName = this.model.get('activeScreenshotStringName');
                     var activeScreenshotString = _.find(this.model.get('screenshotStrings'), screenshotString => screenshotString.string.name === activeScreenshotStringName);
                     if (activeScreenshotString) {
                         activeScreenshotString.area = `(${x1},${y1})x(${x2},${y2})`;
@@ -126,7 +126,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
             <% if (screenshotStrings.length) { %>
                 <div class="list-group mb-3">
                     <% _.each(screenshotStrings, screenshotString => { %>
-                        <div class="string list-group-item list-group-item-action <%= activeScreenshotString === screenshotString.string.name ? 'active' : null %>">
+                        <div class="string list-group-item list-group-item-action <%= activeScreenshotStringName === screenshotString.string.name ? 'active' : null %>">
                             <% if (screenshotString.string.valueOne) { %>
                                 <h5 class="mb-1">
                                     <%= screenshotString.string.valueOne %>
@@ -139,7 +139,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
                                     <span class="text-muted">(Other)</span>
                                 <% } %>
                             </h5>
-                            <small class="string-name <%= activeScreenshotString === screenshotString.string.name ? null : 'text-muted' %>"><%= screenshotString.string.name %></small>
+                            <small class="string-name <%= activeScreenshotStringName === screenshotString.string.name ? null : 'text-muted' %>"><%= screenshotString.string.name %></small>
                         </div>
                     <% }) %>
                 </div>
@@ -147,13 +147,13 @@ Localizappion.ProjectScreenshotDetailView = (function () {
         `),
 
         events: {
-            'click .string': 'setActiveScreenshotString',
+            'click .string': 'setActiveScreenshotStringName',
             'mouseenter .string': 'setPointedScreenshotString',
             'mouseleave .string': 'unsetPointedScreenshotString',
         },
 
         initialize(options) {
-            this.listenTo(this.model, 'change:activeScreenshotString', this.render);
+            this.listenTo(this.model, 'change:activeScreenshotStringName', this.render);
             this.listenTo(this.model, 'change:screenshotStrings', this.render);
         },
 
@@ -161,10 +161,10 @@ Localizappion.ProjectScreenshotDetailView = (function () {
             this.$el.html(this.template(this.model.attributes));
         },
 
-        setActiveScreenshotString(event) {
+        setActiveScreenshotStringName(event) {
             var stringName = $(event.target).closest('.string').find('> .string-name').text();
             this.model.set({
-                activeScreenshotString: stringName
+                activeScreenshotStringName: stringName
             });
         },
 
@@ -226,7 +226,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
 
             this.model.set({
                 screenshotStrings,
-                activeScreenshotString: stringName
+                activeScreenshotStringName: stringName
             });
 
             $(event.target).closest('.modal').modal('hide');
@@ -294,7 +294,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
                 projectStrings: null,
                 screenshot: null,
                 screenshotStrings: null,
-                activeScreenshotString: null,
+                activeScreenshotStringName: null,
                 pointedScreenshotString: null,
                 availableStringsFilter: ''
             });
@@ -441,7 +441,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
 
                 this.model.set({
                     screenshotStrings: response.data.updateProjectScreenshotStrings.screenshot.strings,
-                    activeScreenshotString: null
+                    activeScreenshotStringName: null
                 });
             });
         },
