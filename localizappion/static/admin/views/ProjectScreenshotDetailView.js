@@ -23,7 +23,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
     var ScreenshotAreas = Backbone.View.extend({
         initialize(options) {
             this.listenTo(this.model, 'change:activeScreenshotStringName', this.render);
-            this.listenTo(this.model, 'change:pointedScreenshotString', this.render);
+            this.listenTo(this.model, 'change:pointedScreenshotStringName', this.render);
             this.listenTo(this.model, 'change:screenshotStrings', this.render);
         },
 
@@ -37,6 +37,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
             this.$el.empty();
 
             var activeScreenshotStringName = this.model.get('activeScreenshotStringName');
+            var pointedScreenshotStringName = this.model.get('pointedScreenshotStringName');
             var screenshotStrings = this.model.get('screenshotStrings');
 
             _.each(screenshotStrings, screenshotString => {
@@ -44,6 +45,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
 
                 $('<div class="area" />')
                     .addClass(screenshotString.string.name === activeScreenshotStringName ? 'active' : null)
+                    .addClass(screenshotString.string.name === pointedScreenshotStringName ? 'pointed' : null)
                     .css({
                         left: area[1] + '%',
                         top: area[2] + '%',
@@ -148,8 +150,8 @@ Localizappion.ProjectScreenshotDetailView = (function () {
 
         events: {
             'click .string': 'setActiveScreenshotStringName',
-            'mouseenter .string': 'setPointedScreenshotString',
-            'mouseleave .string': 'unsetPointedScreenshotString',
+            'mouseenter .string': 'setPointedScreenshotStringName',
+            'mouseleave .string': 'unsetPointedScreenshotStringName',
         },
 
         initialize(options) {
@@ -168,16 +170,16 @@ Localizappion.ProjectScreenshotDetailView = (function () {
             });
         },
 
-        setPointedScreenshotString(event) {
+        setPointedScreenshotStringName(event) {
             var stringName = $(event.target).closest('.string').find('> .string-name').text();
             this.model.set({
-                pointedScreenshotString: stringName
+                pointedScreenshotStringName: stringName
             });
         },
 
-        unsetPointedScreenshotString() {
+        unsetPointedScreenshotStringName() {
             this.model.set({
-                pointedScreenshotString: null
+                pointedScreenshotStringName: null
             });
         }
     });
@@ -295,7 +297,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
                 screenshot: null,
                 screenshotStrings: null,
                 activeScreenshotStringName: null,
-                pointedScreenshotString: null,
+                pointedScreenshotStringName: null,
                 availableStringsFilter: ''
             });
 
