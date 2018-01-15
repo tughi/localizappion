@@ -124,6 +124,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
     });
 
     var ScreenshotStrings = Backbone.View.extend({
+        // TODO: add remove button for each string
         template: _.template(`
             <% if (screenshotStrings.length) { %>
                 <div class="list-group mb-3">
@@ -166,7 +167,7 @@ Localizappion.ProjectScreenshotDetailView = (function () {
         setActiveScreenshotStringName(event) {
             var stringName = $(event.target).closest('.string').find('> .string-name').text();
             this.model.set({
-                activeScreenshotStringName: stringName
+                activeScreenshotStringName: this.model.get('activeScreenshotStringName') === stringName ? null : stringName
             });
         },
 
