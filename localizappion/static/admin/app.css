@@ -62,12 +62,12 @@
 
 #project-screenshot-list .screenshot > .area {
     position: absolute;
-    background: rgba(255, 193, 7, .5);
-    border: 1px solid rgba(255, 193, 7, 1);
+    background: rgba(0, 123, 255, .75);
+    opacity: 1;
 }
 
-#project-screenshot-list .screenshot:hover > .area.hidden-on-hover {
-    display: none;
+#project-screenshot-list .screenshot > .area:hover {
+    opacity: 0;
 }
 
 #project-screenshot-list .screenshot.without-strings {

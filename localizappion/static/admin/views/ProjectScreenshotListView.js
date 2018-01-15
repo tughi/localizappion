@@ -28,7 +28,7 @@ Localizappion.ProjectScreenshotListView = Localizappion.ProjectBaseView.extend({
                         <% _.each(screenshot.strings, string => {
                             area = string.area.match('\\\\(([0-9.]+),([0-9.]+)\\\\)x\\\\(([0-9.]+),([0-9.]+)\\\\)');
                             %>
-                            <div class="area hidden-on-hover" style="left: <%= area[1] %>%; top: <%= area[2] %>%; right: <%= 100 - area[3] %>%; bottom: <%= 100 - area[4] %>%;"></div>
+                            <div class="area" style="left: <%= area[1] %>%; top: <%= area[2] %>%; right: <%= 100 - area[3] %>%; bottom: <%= 100 - area[4] %>%;"></div>
                         <% }) %>
                     </a>
                 <% }) %>
