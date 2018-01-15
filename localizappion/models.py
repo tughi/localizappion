@@ -125,7 +125,7 @@ Project.screenshots = relationship(Screenshot)
 class ScreenshotString(db.Model):
     screenshot_id = Column(INTEGER, ForeignKey(Screenshot.id), primary_key=True)
     string_id = Column(INTEGER, ForeignKey(String.id), primary_key=True)
-    area = Column(VARCHAR(27), nullable=False, default='(25,25)x(75,75)')
+    area = Column(VARCHAR(27), nullable=False, default='(0,0)x(0,0)')
 
     screenshot = relationship(Screenshot)
     string = relationship(String)

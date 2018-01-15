@@ -169,25 +169,45 @@ class CreateScreenshot(graphene.Mutation):
         return CreateScreenshot(project=project)
 
 
-class AddProjectScreenshotString(graphene.Mutation):
+class ScreenshotStringInputType(graphene.InputObjectType):
+    area = graphene.String(required=True)
+    string_id = graphene.ID(required=True)
+
+
+class UpdateProjectScreenshotStrings(graphene.Mutation):
     class Arguments:
         project_id = graphene.ID(required=True)
         screenshot_id = graphene.ID(required=True)
-        string_id = graphene.ID(required=True)
+        screenshot_strings = graphene.List(ScreenshotStringInputType, required=True)
 
     project = graphene.Field(ProjectType)
+    screenshot = graphene.Field(ScreenshotType)
 
-    def mutate(self, info, project_id, screenshot_id, string_id):
+    def mutate(self, info, project_id, screenshot_id, screenshot_strings):
         screenshot = Screenshot.query.filter(Screenshot.id == screenshot_id, Screenshot.project_id == project_id).first()
-        string = String.query.filter(String.id == string_id, String.project_id == project_id).first()
 
-        if screenshot and string:
-            db.session.add(ScreenshotString(screenshot=screenshot, string=string))
+        # TODO: validate all string areas
+        if screenshot:
+            for screenshot_string in screenshot.strings:
+                screenshot_string_found = False
+                for updated_screenshot_string in screenshot_strings:
+                    if screenshot_string.string_id == updated_screenshot_string['string_id']:
+                        screenshot_string_found = True
+                        screenshot_string.area = updated_screenshot_string['area']
+                        db.session.add(screenshot_string)
+                        screenshot_strings.remove(updated_screenshot_string)
+                        break
+                if not screenshot_string_found:
+                    db.session.delete(screenshot_string)
+            for new_screenshot_string in screenshot_strings:
+                string = String.query.filter(String.id == new_screenshot_string['string_id'], String.project_id == project_id).first()
+                if string:
+                    db.session.add(ScreenshotString(area=new_screenshot_string['area'], screenshot=screenshot, string=string))
             db.session.commit()
 
-            return AddProjectScreenshotString(project=screenshot.project)
+            return UpdateProjectScreenshotStrings(project=screenshot.project, screenshot=screenshot)
 
-        return AddProjectScreenshotString(project=None)
+        return UpdateProjectScreenshotStrings(project=None, screenshot=screenshot)
 
 
 class DeleteProjectScreenshot(graphene.Mutation):
@@ -215,7 +235,7 @@ class DeleteProjectScreenshot(graphene.Mutation):
 
 class Mutation(graphene.ObjectType):
     create_screenshot = CreateScreenshot.Field()
-    add_project_screenshot_string = AddProjectScreenshotString.Field()
+    update_project_screenshot_strings = UpdateProjectScreenshotStrings.Field()
     delete_project_screenshot = DeleteProjectScreenshot.Field()
 
 

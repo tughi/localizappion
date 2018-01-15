@@ -17,8 +17,33 @@
     }
 }
 
-#project-screenshot-detail #screenshot img {
+#project-screenshot-detail #screenshot {
+    position: relative;
+}
+
+#project-screenshot-detail #screenshot > img {
     width: 100%;
+}
+
+#project-screenshot-detail #screenshot > #screenshot-areas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#project-screenshot-detail #screenshot > #screenshot-areas > .area {
+    position: absolute;
+    background: rgba(0, 123, 255, .25);
+}
+
+#project-screenshot-detail #screenshot > #screenshot-areas > .area.active {
+    background: rgba(0, 123, 255, .75);
+}
+
+#project-screenshot-detail #screenshot-strings .string {
+    cursor: pointer;
 }
 
 #project-screenshot-detail .modal .string {

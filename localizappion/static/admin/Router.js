@@ -1,5 +1,5 @@
 if (!Localizappion) {
-    var Localizappion = {}
+    var Localizappion = {};
 }
 
 Localizappion.Router = Backbone.Router.extend({
@@ -16,7 +16,7 @@ Localizappion.Router = Backbone.Router.extend({
 
     execute(callback, args, name) {
         if (this.view) {
-            this.view.remove()
+            this.view.remove();
         }
 
         if (callback) {
@@ -29,18 +29,18 @@ Localizappion.Router = Backbone.Router.extend({
     },
 
     showProjectList() {
-        return new Localizappion.ProjectListView()
+        return new Localizappion.ProjectListView();
     },
 
     showProjectDetail(projectId) {
-        return new Localizappion.ProjectDetailView(projectId)
+        return new Localizappion.ProjectDetailView(projectId);
     },
 
     showProjectScreenshotList(projectId) {
-        return new Localizappion.ProjectScreenshotListView(projectId)
+        return new Localizappion.ProjectScreenshotListView(projectId);
     },
 
     showProjectScreenshotDetail(projectId, screenshotId) {
-        return new Localizappion.ProjectScreenshotDetailView(projectId, screenshotId)
+        return new Localizappion.ProjectScreenshotDetailView({ projectId, screenshotId });
     }
-})
+});
