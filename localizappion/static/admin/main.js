@@ -23,11 +23,11 @@ require.config({
 });
 
 require(['jquery', 'knockout', 'router', 'bootstrap'], function ($, ko, router) {
-    $(function () {
-        $('html').on('dragover drop', event => {
-            event.preventDefault();
-        });
-
-        ko.applyBindings({ route: router.currentRoute });
+    $('html').on('dragover drop', event => {
+        event.preventDefault();
     });
+
+    ko.components.register('navigation-bar', { require: 'components/navigation-bar' });
+
+    ko.applyBindings({ route: router.currentRoute });
 });

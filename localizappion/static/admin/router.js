@@ -13,6 +13,7 @@ define(['knockout', 'crossroads', 'hasher'], function (ko, crossroads, hasher) {
 
     var router = new Router({
         routes: [
+            { url: '', params: { page: 'projects' } },
             { url: 'projects', params: { page: 'projects' } },
             { url: 'projects/{projectId}', params: { page: 'project-detail' } },
             { url: 'projects/{projectId}/screenshots', params: { page: 'project-screenshots' } },
@@ -24,7 +25,9 @@ define(['knockout', 'crossroads', 'hasher'], function (ko, crossroads, hasher) {
 
     crossroads.normalizeFn = crossroads.NORM_AS_OBJECT;
     hasher.initialized.add(hash => crossroads.parse(hash));
-    hasher.changed.add(hash => crossroads.parse(hash));
+    hasher.changed.add(hash => {
+        crossroads.parse(hash);
+    });
     hasher.init();
 
     return router;

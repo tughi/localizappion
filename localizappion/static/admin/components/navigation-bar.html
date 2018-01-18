@@ -1,0 +1,19 @@
+<div class="bg-dark">
+    <div class="container-fluid">
+        <div class="navbar navbar-expand-md navbar-dark">
+            <div class="btn-group">
+                <a class="btn btn-secondary" href="#" data-bind="attr: { href: `#/projects/${route().projectId}` }, text: currentProject() ? currentProject().name : null">Loading...</a>
+                <a class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                <div class="dropdown-menu">
+                    <h6 class="dropdown-header">Projects</h6>
+                    <!-- ko foreach: projects() -->
+                    <a class="dropdown-item" href="#" data-bind="attr: { href: `#/projects/${id}` }, css: { active: id === $parent.route().projectId }, text: name"></a>
+                    <!-- /ko -->
+                    <div class="dropdown-divider"></div>
+                    <!-- TODO: implement 'new project' feature -->
+                    <a class="dropdown-item" href="#/projects/new" data-bind="css: { active: !$parent.route().projectId }">Create new</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
