@@ -8,8 +8,22 @@ define(['knockout', 'text!./navigation-bar.html', 'graphql', 'hasher'], function
         this.currentProject = ko.computed(() => {
             var projectId = this.route().projectId;
             if (projectId) {
-                return this.projects().find(project => project.id === projectId);
+                var project = this.projects().find(project => project.id === projectId);
+                if (project) {
+                    return {
+                        id: project.id,
+                        name: project.name,
+                        screenshotsUrl: `projects/${project.id}/screenshots`,
+                        stringsUrl: `projects/${project.id}/strings`,
+                        translationsUrl:`projects/${project.id}/translations`
+                    }
+                }
             }
+            return {
+                screenshotsUrl: '',
+                stringsUrl: '',
+                translationsUrl: ''
+            };
         });
 
         this.projects.subscribe(projects => {

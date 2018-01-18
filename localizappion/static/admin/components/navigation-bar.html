@@ -1,7 +1,7 @@
 <div class="bg-dark">
     <div class="container-fluid">
         <div class="navbar navbar-expand-md navbar-dark">
-            <div class="btn-group">
+            <div class="btn-group mr-3">
                 <a class="btn btn-secondary" href="#" data-bind="attr: { href: `#/projects/${route().projectId}` }, text: currentProject() ? currentProject().name : null">Loading...</a>
                 <a class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                 <div class="dropdown-menu">
@@ -13,6 +13,30 @@
                     <!-- TODO: implement 'new project' feature -->
                     <a class="dropdown-item" href="#/projects/new" data-bind="css: { active: !$parent.route().projectId }">Create new</a>
                 </div>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-options" aria-controls="navbar-options" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="navbar-body" class="collapse navbar-collapse">
+                <!-- ko with: currentProject() -->
+                <ul class="navbar-nav invisible" data-bind="css: { invisible: !$data }">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bind="attr: { href: `#/${stringsUrl}` }, css: { active: $parent.route().request_.indexOf(stringsUrl) === 0 }">Strings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bind="attr: { href: `#/${screenshotsUrl}` }, css: { active: $parent.route().request_.indexOf(screenshotsUrl) === 0 }">Screenshots</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bind="attr: { href: `#/${translationsUrl}` }, css: { active: $parent.route().request_.indexOf(translationsUrl) === 0 }">Translations</a>
+                    </li>
+                </ul>
+                <!-- /ko -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin/logout">Logout</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
