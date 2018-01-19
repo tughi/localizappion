@@ -1,3 +1,22 @@
 .container-fluid {
   max-width: 960px;
 }
+
+.screenshot {
+    position: relative;
+}
+
+.screenshot > .area {
+    position: absolute;
+    background: rgba(0, 123, 255, .75);
+}
+
+#project-screenshots .screenshot {
+    display: inline-block;
+}
+
+#project-screenshots .screenshot > img {
+    width: auto;
+    height: 360px;
+}
+

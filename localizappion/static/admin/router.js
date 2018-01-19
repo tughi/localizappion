@@ -15,9 +15,9 @@ define(['knockout', 'crossroads', 'hasher'], function (ko, crossroads, hasher) {
         routes: [
             { url: 'projects/{projectId}', params: { page: 'project-detail' } },
             { url: 'projects/{projectId}/screenshots', params: { page: 'project-screenshots' } },
-            { url: 'projects/{projectId}/screenshots/{screenshotId}', params: { page: 'project-screenshot' } },
-            { url: 'projects/{projectId}/strings', params: { page: 'project-strings' } },
-            { url: 'projects/{projectId}/translations', params: { page: 'project-translations' } },
+            // { url: 'projects/{projectId}/screenshots/{screenshotId}', params: { page: 'project-screenshot' } },
+            // { url: 'projects/{projectId}/strings', params: { page: 'project-strings' } },
+            // { url: 'projects/{projectId}/translations', params: { page: 'project-translations' } },
             { url: '{url*}', params: { page: null } },
         ]
     });
