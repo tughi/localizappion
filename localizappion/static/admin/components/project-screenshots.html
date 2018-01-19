@@ -2,13 +2,13 @@
 <div class="input-group mt-3">
     <input data-bind="textInput: screenshotName" class="form-control" placeholder="Screenshot name" />
     <div class="input-group-append">
-        <button data-bind="click: createScreenshot, enable: filteredScreenshots().length == 0" class="btn btn-primary">Create screenshot</button>
+        <a data-bind="attr: { href: `#/projects/${project().id}/screenshots/new/${screenshotName() || ''}` }, enable: filteredScreenshots().length == 0" class="btn btn-primary" href="#">Create screenshot</a>
     </div>
 </div>
 
 <div data-bind="if: filteredScreenshots().length">
     <div data-bind="foreach: filteredScreenshots()" class="d-flex justify-content-center flex-wrap">
-        <a data-bind="attr: { href: `#/projects/${$parent.project().id}/screenshots/${id}` }, css: { 'without-strings': strings.length == 0 }" class="m-2">
+        <a data-bind="attr: { href: `#/projects/${$parent.project().id}/screenshots/${id}` }, css: { 'without-strings': strings.length == 0 }" class="m-2" href="#">
             <div class="card bg-light">
                 <screenshot params="url: url, screenshotStrings: strings" class="p-2 text-center"></screenshot>
                 <div class="card-footer">

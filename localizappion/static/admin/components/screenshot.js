@@ -2,13 +2,15 @@ define(['knockout', 'text!./screenshot.html'], function (ko, template) {
     'use strict';
 
     function Screenshot(params) {
-        this.url = ko.observable(params.url);
-        this.screenshotStrings = ko.observableArray((params.screenshotStrings || []).map(screenshotString => new ScreenshotString(screenshotString)));
+        this.url = params.url;
+        this.screenshotStrings = (params.screenshotStrings || []).map(screenshotString => new ScreenshotString(screenshotString));
+        this.activeScreenshotString = params.activeScreenshotString;
+        this.hoveredScreenshotString = params.hoveredScreenshotString;
     }
 
     function ScreenshotString(data) {
         this.area = ko.observable(data.area);
-        this.string = ko.observable(data.string);
+        this.string = data.string;
         this.areaStyle = ko.computed(function () {
             var match = this.area().match(/\(([0-9.]+),([0-9.]+)\)x\(([0-9.]+),([0-9.]+)\)/);
             if (match) {

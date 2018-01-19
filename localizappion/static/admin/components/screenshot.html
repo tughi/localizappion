@@ -1,6 +1,6 @@
 <div class="screenshot">
-    <img data-bind="attr: { src: url }" src="" />
+    <img data-bind="attr: { src: url || 'static/admin/images/screenshot_placeholder.png' }" src="" />
     <!-- ko foreach: screenshotStrings -->
-    <div data-bind="attr: { style: areaStyle }" class="area"></div>
+    <div data-bind="attr: { style: areaStyle }, css: { active: $parent.activeScreenshotString && ($parent.activeScreenshotString.string == string), hovered: $parent.hoveredScreenshotString && ($parent.hoveredScreenshotString.string == string) }" class="area"></div>
     <!-- /ko -->
 </div>

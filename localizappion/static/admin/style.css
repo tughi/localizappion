@@ -11,6 +11,23 @@
     background: rgba(0, 123, 255, .75);
 }
 
+#project-screenshot .screenshot > img {
+    width: 100%;
+    height: auto;
+}
+
+#project-screenshot .screenshot > .area {
+    background: rgba(0, 123, 255, .25);
+}
+
+#project-screenshot .screenshot > .area.active {
+    background: rgba(0, 123, 255, .75);
+}
+
+#project-screenshot .screenshot > .area.hovered {
+    border: 1px solid rgba(0, 123, 255, 1);
+}
+
 #project-screenshots .screenshot {
     display: inline-block;
 }

@@ -1,0 +1,38 @@
+<!-- ko if: project() -->
+<input data-bind="value: screenshotName" class="form-control my-3" placeholder="Screenshot name" />
+
+<div class="row">
+    <div class="col-sm-12 col-md-5 col-xl-4 mb-3">
+        <div data-bind="component: { name: 'screenshot', params: { url: screenshotUrl(), screenshotStrings: screenshotStrings(), activeScreenshotString: activeScreenshotString(), hoveredScreenshotString: hoveredScreenshotString() } }"></div>
+    </div>
+    <div data-bind="if: screenshotStrings().length" class="col-sm-12 col-md-7 col-xl-8">
+        <div data-bind="foreach: screenshotStrings()" class="list-group mb-3">
+            <div data-bind="click: $parent.activeScreenshotString, css: { active: $parent.activeScreenshotString() && ($parent.activeScreenshotString().string == string) }, event: { mouseover: $parent.hoveredScreenshotString, mouseout: $parent.clearHoveredScreenshotString }" class="string list-group-item list-group-item-action">
+                <h5 data-bind="if: string.valueOne" class="mb-1">
+                    <span data-bind="text: string.valueOne"></span>
+                    <span class="text-muted">(One)</span>
+                </h5>
+                <h5 class="mb-1">
+                    <span data-bind="text: string.valueOther"></span>
+                    <span data-bind="if: string.valueOne" class="text-muted">(Other)</span>
+                </h5>
+                <small data-bind="text: string.name" class="string-name"> </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="card bg-light">
+            <div class="card-body">
+                <button class="btn btn-danger mr-3">Delete</button>
+                <span class="float-right">
+                    <button class="btn btn-secondary mr-1">Add string</button>
+                    <button class="btn btn-primary mr-3">Save</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /ko -->

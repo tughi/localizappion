@@ -14,10 +14,6 @@ define(['knockout', 'text!./project-screenshots.html', 'graphql'], function (ko,
             return this.screenshots();
         }, this);
 
-        this.createScreenshot = function () {
-            // TODO: change page
-        };
-
         graphql({
             query: `
                 query ($projectId: ID!) {
