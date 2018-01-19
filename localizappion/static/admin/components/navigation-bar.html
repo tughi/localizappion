@@ -1,17 +1,18 @@
+<!-- ko with: currentProject() -->
 <div class="bg-dark">
     <div class="container-fluid">
         <div class="navbar navbar-expand-md navbar-dark">
             <div class="btn-group mr-3">
-                <a class="btn btn-secondary" href="#" data-bind="attr: { href: `#/projects/${route().projectId}` }, text: currentProject() ? currentProject().name : null">Loading...</a>
+                <a class="btn btn-secondary" href="#" data-bind="attr: { href: `#/projects/${id}` }, text: name ? name : null">Loading...</a>
                 <a class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                 <div class="dropdown-menu">
                     <h6 class="dropdown-header">Projects</h6>
-                    <!-- ko foreach: projects() -->
-                    <a class="dropdown-item" href="#" data-bind="attr: { href: `#/projects/${id}` }, css: { active: id === $parent.route().projectId }, text: name"></a>
+                    <!-- ko foreach: $parent.projects() -->
+                    <a class="dropdown-item" href="#" data-bind="attr: { href: `#/projects/${id}` }, css: { active: id === $parent.id }, text: name"></a>
                     <!-- /ko -->
                     <div class="dropdown-divider"></div>
                     <!-- TODO: implement 'new project' feature -->
-                    <a class="dropdown-item" href="#/projects/new" data-bind="css: { active: !$parent.route().projectId }">Create new</a>
+                    <a class="dropdown-item" href="#/projects/new">Create new</a>
                 </div>
             </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-options" aria-controls="navbar-options" aria-expanded="false">
@@ -19,7 +20,6 @@
             </button>
 
             <div id="navbar-body" class="collapse navbar-collapse">
-                <!-- ko with: currentProject() -->
                 <ul class="navbar-nav invisible" data-bind="css: { invisible: !$data }">
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bind="attr: { href: `#/${stringsUrl}` }, css: { active: $parent.route().request_.indexOf(stringsUrl) === 0 }">Strings</a>
@@ -31,7 +31,6 @@
                         <a class="nav-link" href="#" data-bind="attr: { href: `#/${translationsUrl}` }, css: { active: $parent.route().request_.indexOf(translationsUrl) === 0 }">Translations</a>
                     </li>
                 </ul>
-                <!-- /ko -->
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="admin/logout">Logout</a>
@@ -41,3 +40,23 @@
         </div>
     </div>
 </div>
+<!-- /ko -->
+<!-- ko ifnot: currentProject() -->
+<div class="jumbotron">
+    <div class="container-fluid text-center">
+        <h1>Oops!...</h1>
+        <span>Your last action was unexpected.</span>
+        <br>
+        <span>You can either go back... or start again.</span>
+    </div>
+</div>
+<div class="container-fluid" style="max-width: 320px">
+    <div class="list-group">
+        <!-- ko foreach: projects() -->
+        <a class="list-group-item list-group-item-action" href="#" data-bind="attr: { href: `#/projects/${id}` }, text: name"></a>
+        <!-- /ko -->
+        <a class="list-group-item list-group-item-action" href="#/projects/new">Create new project</a>
+    </div>
+</div>
+<!-- /ko -->
+<!-- /ko -->

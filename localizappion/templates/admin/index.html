@@ -11,7 +11,7 @@
 </head>
 <body>
 <navigation-bar params="route: route"></navigation-bar>
-<div class="container-fluid"></div>
+<div class="container-fluid" data-bind="if: route().page"></div>
 
 <script data-main="{{ url_for('static', filename='admin/main') }}" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.min.js"></script>
 </body>
