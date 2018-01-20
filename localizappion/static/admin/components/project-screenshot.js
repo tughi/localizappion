@@ -9,6 +9,30 @@ define(['knockout', 'text!./project-screenshot.html', 'graphql'], function (ko, 
         this.screenshotStrings = ko.observableArray([]);
         this.activeScreenshotString = ko.observable();
         this.hoveredScreenshotString = ko.observable();
+        this.showAddStringDialog = ko.observable(false);
+        this.availableStringsFilter = ko.observable();
+
+        this.availableStrings = ko.computed(function () {
+            let availableStringsFilter = this.availableStringsFilter();
+            if (availableStringsFilter) {
+                return ko.utils.arrayFilter(this.project().strings, string => {
+                    // TODO: exclude already added strings
+                    return string.valueOther.indexOf(availableStringsFilter) >= 0 || (string.valueOne && string.valueOne.indexOf(availableStringsFilter) >= 0);
+                });
+            }
+            return [];
+        }, this);
+
+        this.addString = (string) => {
+            const screenshotString = {
+                area: '(0,0)x(5,5)',
+                string
+            };
+            this.screenshotStrings.push(screenshotString);
+            this.activeScreenshotString(screenshotString);
+
+            this.showAddStringDialog(false);
+        };
 
         graphql({
             query: params.screenshotId ? `

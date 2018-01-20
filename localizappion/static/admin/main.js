@@ -27,6 +27,7 @@ require(['jquery', 'knockout', 'router', 'bootstrap'], function ($, ko, router) 
         event.preventDefault();
     });
 
+    ko.components.register('modal', { require: 'components/modal' });
     ko.components.register('navigation-bar', { require: 'components/navigation-bar' });
     ko.components.register('project-screenshot', { require: 'components/project-screenshot' });
     ko.components.register('project-screenshots', { require: 'components/project-screenshots' });

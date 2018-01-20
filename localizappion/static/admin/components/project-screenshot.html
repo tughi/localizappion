@@ -30,11 +30,33 @@
                 <button class="btn btn-danger mr-3">Delete</button>
                 <!-- /ko -->
                 <span class="float-right">
-                    <button class="btn btn-secondary mr-1">Add string</button>
-                    <button data-bind="enable: screenshotName && screenshotUrl && screenshotStrings.length" class="btn btn-primary mr-3">Save</button>
+                    <button data-bind="click: function () { showAddStringDialog(true); }" class="btn btn-secondary mr-1">Add string</button>
+                    <button data-bind="enable: screenshotName && screenshotUrl && screenshotStrings().length" class="btn btn-primary mr-3">Save</button>
                 </span>
             </div>
         </div>
     </div>
 </div>
+
+<modal params="title: 'Add string', trigger: showAddStringDialog, data: $data">
+    <input data-bind="textInput: data.availableStringsFilter" type="text" placeholder="Filter" class="form-control" />
+
+    <!-- ko if: data.availableStrings().length -->
+    <div data-bind="foreach: data.availableStrings" class="list-group mt-3">
+        <div data-bind="click: $parent.data.addString" class="list-group-item list-group-item-action string">
+            <h5 data-bind="if: valueOne" class="mb-1">
+                <span data-bind="text: valueOne"></span>
+                <span class="text-muted">(One)</span>
+            </h5>
+            <h5 class="mb-1">
+                <span data-bind="text: valueOther"></span>
+                <span data-bind="if: valueOne" class="text-muted">(Other)</span>
+            </h5>
+            <small class="string-name text-muted">
+                <span data-bind="text: name"></span>
+            </small>
+        </div>
+    </div>
+    <!-- /ko -->
+</modal>
 <!-- /ko -->
