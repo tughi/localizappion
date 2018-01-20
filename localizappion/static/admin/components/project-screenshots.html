@@ -2,7 +2,7 @@
 <div class="input-group mt-3">
     <input data-bind="textInput: screenshotName" class="form-control" placeholder="Screenshot name" />
     <div class="input-group-append">
-        <a data-bind="attr: { href: `#/projects/${project().id}/screenshots/new/${screenshotName() || ''}` }, enable: filteredScreenshots().length == 0" class="btn btn-primary" href="#">Create screenshot</a>
+        <a data-bind="attr: { href: `#/projects/${project().id}/screenshots/new/${screenshotName() || ''}` }, css: { disabled: filteredScreenshots().length != 0 }" class="btn btn-primary" href="#">Create screenshot</a>
     </div>
 </div>
 

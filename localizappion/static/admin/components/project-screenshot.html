@@ -1,5 +1,5 @@
 <!-- ko if: project() -->
-<input data-bind="value: screenshotName" class="form-control my-3" placeholder="Screenshot name" />
+<input data-bind="textInput: screenshotName" class="form-control my-3" placeholder="Screenshot name" />
 
 <div class="row">
     <div class="col-sm-12 col-md-5 col-xl-4 mb-3">
@@ -31,7 +31,7 @@
                 <!-- /ko -->
                 <span class="float-right">
                     <button class="btn btn-secondary mr-1">Add string</button>
-                    <button class="btn btn-primary mr-3">Save</button>
+                    <button data-bind="enable: screenshotName && screenshotUrl && screenshotStrings.length" class="btn btn-primary mr-3">Save</button>
                 </span>
             </div>
         </div>
