@@ -11,6 +11,14 @@
     background: rgba(0, 123, 255, .75);
 }
 
+.screenshot.drop-zone {
+    background: #343a40;
+}
+
+.screenshot.drop-zone > img {
+    opacity: .25;
+}
+
 #project-screenshot .screenshot > img {
     width: 100%;
     height: auto;
