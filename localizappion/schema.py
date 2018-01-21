@@ -1,4 +1,5 @@
 import base64
+import hashlib
 import os
 
 import graphene
@@ -25,12 +26,14 @@ class LanguageType(graphene_sqlalchemy.SQLAlchemyObjectType):
 
 
 class ProjectType(graphene_sqlalchemy.SQLAlchemyObjectType):
-    screenshot = graphene.Field(lambda: ScreenshotType, id=graphene.ID(required=True))
+    screenshot = graphene.Field(lambda: ScreenshotType, id=graphene.ID(required=False))
     screenshots_count = graphene.Field(graphene.Int)
     strings_count = graphene.Field(graphene.Int)
 
-    def resolve_screenshot(self: Project, info, id):
-        return Screenshot.query.filter(Screenshot.id == id, Screenshot.project_id == self.id).one()
+    def resolve_screenshot(self: Project, info, id=None):
+        if id:
+            return Screenshot.query.filter(Screenshot.id == id, Screenshot.project_id == self.id).one()
+        return None
 
     def resolve_screenshots_count(self: Project, info):
         return Screenshot.query.filter(Screenshot.project_id == self.id).count()
@@ -49,7 +52,7 @@ class ScreenshotType(graphene_sqlalchemy.SQLAlchemyObjectType):
     url = graphene.Field(graphene.String)
 
     def resolve_url(self: Screenshot, info):
-        return url_for('static', filename='screenshots/{uuid}/{name}'.format(uuid=self.project.uuid, name=self.name))
+        return url_for('static', filename='screenshots/{uuid}/{file_name}'.format(uuid=self.project.uuid, file_name=self.file_name))
 
     class Meta:
         model = Screenshot
@@ -129,85 +132,68 @@ class Query(graphene.ObjectType):
         return translations
 
 
-class CreateScreenshot(graphene.Mutation):
-    class Arguments:
-        project_id = graphene.ID(required=True)
-        name = graphene.String(required=True)
-        content = graphene.String(required=True)
-
-    project = graphene.Field(ProjectType)
-
-    def mutate(self, info, project_id, name, content: str):
-        project = Project.query.get(project_id)
-
-        data, content = content.split(':', 1)
-        assert data == 'data'
-
-        content_type, content = content.split(';', 1)
-
-        encoding, content = content.split(',', 1)
-        assert encoding == 'base64'
-
-        content = base64.b64decode(content)
-
-        screenshots_dir = os.path.join(os.path.dirname(__file__), 'static', 'screenshots', project.uuid)
-        os.makedirs(screenshots_dir, exist_ok=True)
-        screenshot_file = os.path.join(screenshots_dir, name)
-        if os.path.exists(screenshot_file):
-            raise FileExistsError('Screenshot file already exists')
-        with open(screenshot_file, mode='wb') as file:
-            file.write(content)
-
-        db.session.add(Screenshot(
-            project_id=project_id,
-            name=name,
-            content_length=len(content),
-            content_type=content_type,
-        ))
-        db.session.commit()
-
-        return CreateScreenshot(project=project)
-
-
 class ScreenshotStringInputType(graphene.InputObjectType):
+    id = graphene.ID(required=False)
     area = graphene.String(required=True)
     string_id = graphene.ID(required=True)
 
 
-class UpdateProjectScreenshotStrings(graphene.Mutation):
+class SaveProjectScreenshot(graphene.Mutation):
     class Arguments:
         project_id = graphene.ID(required=True)
-        screenshot_id = graphene.ID(required=True)
+        screenshot_id = graphene.ID(required=False)
+        screenshot_name = graphene.String(required=True)
+        screenshot_data = graphene.String(required=False)
         screenshot_strings = graphene.List(ScreenshotStringInputType, required=True)
 
-    project = graphene.Field(ProjectType)
     screenshot = graphene.Field(ScreenshotType)
 
-    def mutate(self, info, project_id, screenshot_id, screenshot_strings):
-        screenshot = Screenshot.query.filter(Screenshot.id == screenshot_id, Screenshot.project_id == project_id).first()
+    def mutate(self, info, project_id, screenshot_id=None, screenshot_name=None, screenshot_data=None, screenshot_strings=None):
+        project = Project.query.get(project_id)
+        if screenshot_id:
+            screenshot = Screenshot.query.filter(Screenshot.id == screenshot_id, Screenshot.project == project).one()
+        else:
+            screenshot = Screenshot(project=project)
 
-        # TODO: validate all string areas
-        if screenshot:
-            for screenshot_string in screenshot.strings:
-                screenshot_string_found = False
-                for updated_screenshot_string in screenshot_strings:
-                    if screenshot_string.string_id == updated_screenshot_string['string_id']:
-                        screenshot_string_found = True
-                        screenshot_string.area = updated_screenshot_string['area']
-                        db.session.add(screenshot_string)
-                        screenshot_strings.remove(updated_screenshot_string)
-                        break
-                if not screenshot_string_found:
-                    db.session.delete(screenshot_string)
-            for new_screenshot_string in screenshot_strings:
-                string = String.query.filter(String.id == new_screenshot_string['string_id'], String.project_id == project_id).first()
-                if string:
-                    db.session.add(ScreenshotString(area=new_screenshot_string['area'], screenshot=screenshot, string=string))
-            db.session.commit()
+        screenshot.name = screenshot_name
 
-            return UpdateProjectScreenshotStrings(project=screenshot.project, screenshot=screenshot)
+        if screenshot_data:
+            data, screenshot_data = screenshot_data.split(':', 1)
+            assert data == 'data'
 
-        return UpdateProjectScreenshotStrings(project=None, screenshot=screenshot)
+            screenshot.file_type, screenshot_data = screenshot_data.split(';', 1)
+            assert screenshot.file_type.startswith('image/')
+
+            encoding, screenshot_data = screenshot_data.split(',', 1)
+            assert encoding == 'base64'
+
+            screenshot_data = base64.b64decode(screenshot_data)
+
+            screenshot.file_name = hashlib.md5(screenshot_data).hexdigest() + '.' + screenshot.file_type.split('/', 1)[1]
+            screenshot.file_size = len(screenshot_data)
+
+            screenshots_dir = os.path.join(os.path.dirname(__file__), 'static', 'screenshots', project.uuid)
+            os.makedirs(screenshots_dir, exist_ok=True)
+            screenshot_file = os.path.join(screenshots_dir, screenshot.file_name)
+            if os.path.exists(screenshot_file):
+                raise FileExistsError('Screenshot file already exists')
+            with open(screenshot_file, mode='wb') as file:
+                file.write(screenshot_data)
+
+        db.session.add(screenshot)
+        db.session.flush()
+
+        for screenshot_string_data in screenshot_strings:
+            screenshot_string_id = screenshot_string_data.id
+            screenshot_string = ScreenshotString.query.get(screenshot_string_id) if screenshot_string_id else ScreenshotString(id=screenshot_string_id)
+            screenshot_string.screenshot = screenshot
+            screenshot_string.string = String.query.filter(String.id == screenshot_string_data.string_id, String.project == project).one()
+            screenshot_string.area = screenshot_string_data.area
+            db.session.add(screenshot_string)
+
+        db.session.commit()
+
+        return SaveProjectScreenshot(screenshot=screenshot)
 
 
 class DeleteProjectScreenshot(graphene.Mutation):
@@ -234,8 +220,7 @@ class DeleteProjectScreenshot(graphene.Mutation):
 
 
 class Mutation(graphene.ObjectType):
-    create_screenshot = CreateScreenshot.Field()
-    update_project_screenshot_strings = UpdateProjectScreenshotStrings.Field()
+    save_project_screenshot = SaveProjectScreenshot.Field()
     delete_project_screenshot = DeleteProjectScreenshot.Field()
 
 

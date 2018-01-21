@@ -3,7 +3,7 @@ define(['knockout', 'text!./project-screenshot.html', 'graphql'], function (ko, 
 
     function ViewModel(params) {
         this.project = ko.observable();
-        this.screenshotId = params.screenshotId;
+        this.screenshotId = ko.observable(params.screenshotId);
         this.screenshotName = ko.observable(params.name);
         this.screenshotUrl = ko.observable();
         this.screenshotStrings = ko.observableArray([]);
@@ -34,15 +34,66 @@ define(['knockout', 'text!./project-screenshot.html', 'graphql'], function (ko, 
             this.showAddStringDialog(false);
         };
 
+        this.save = () => {
+            graphql({
+                query: `
+                    mutation ($projectId: ID!, $screenshotId: ID, $screenshotName: String!, $screenshotData: String, $screenshotStrings: [ScreenshotStringInputType]!) {
+                        saveProjectScreenshot(projectId: $projectId, screenshotId: $screenshotId, screenshotName: $screenshotName, screenshotData: $screenshotData, screenshotStrings: $screenshotStrings) {
+                            screenshot {
+                                id
+                                url
+                                name
+                                screenshotStrings {
+                                    id
+                                    area
+                                    string {
+                                        id
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `,
+                variables: {
+                    projectId: params.projectId,
+                    screenshotId: this.screenshotId() || undefined,
+                    screenshotName: this.screenshotName(),
+                    screenshotData: this.screenshotUrl().indexOf('data:') == 0 && this.screenshotUrl() || undefined,
+                    screenshotStrings: ko.utils.arrayMap(this.screenshotStrings(), screenshotString => {
+                        return {
+                            id: screenshotString.id || null,
+                            area: screenshotString.area,
+                            stringId: screenshotString.string.id,
+                        };
+                    })
+                }
+            }).then(response => {
+                let projectStrings = this.project().strings;
+                let screenshot = response.data.saveProjectScreenshot.screenshot;
+                this.screenshotId(screenshot.id);
+                this.screenshotName(screenshot.name);
+                this.screenshotUrl(screenshot.url);
+                this.screenshotStrings(screenshot.screenshotStrings.map(screenshotString => {
+                    return {
+                        id: screenshotString.id,
+                        area: screenshotString.area,
+                        string: projectStrings.find(projectString => projectString.id === screenshotString.string.id)
+                    };
+                }));
+            });
+        };
+
         graphql({
-            query: params.screenshotId ? `
-                query ($projectId: ID!, $screenshotId: ID!) {
+            query: `
+                query ($projectId: ID!, $screenshotId: ID) {
                     project(id: $projectId) {
                         id
                         screenshot(id: $screenshotId) {
+                            id
                             url
                             name
-                            strings {
+                            screenshotStrings {
+                                id
                                 area
                                 string {
                                     id
@@ -57,29 +108,22 @@ define(['knockout', 'text!./project-screenshot.html', 'graphql'], function (ko, 
                         }
                     }
                 }
-            ` : `
-                query ($projectId: ID!) {
-                    project(id: $projectId) {
-                        id
-                        strings {
-                            id
-                            name
-                            valueOne
-                            valueOther
-                        }
-                    }
-                }
             `,
-            variables: ko.utils.extend({ projectId: params.projectId }, params.screenshotId ? { screenshotId: params.screenshotId } : null),
+            variables: {
+                projectId: params.projectId,
+                screenshotId: this.screenshotId() || null
+            }
         }).then(response => {
             const project = response.data.project;
             this.project(project);
             const screenshot = project.screenshot;
             if (screenshot) {
+                this.screenshotId(screenshot.id);
                 this.screenshotName(screenshot.name);
                 this.screenshotUrl(screenshot.url);
-                this.screenshotStrings(screenshot.strings.map(screenshotString => {
+                this.screenshotStrings(screenshot.screenshotStrings.map(screenshotString => {
                     return {
+                        id: screenshotString.id,
                         area: screenshotString.area,
                         string: project.strings.find(projectString => projectString.id === screenshotString.string.id)
                     };

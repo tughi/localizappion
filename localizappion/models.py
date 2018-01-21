@@ -113,8 +113,9 @@ class Screenshot(db.Model):
     id = Column(INTEGER, primary_key=True, nullable=False)
     project_id = Column(INTEGER, ForeignKey(Project.id), nullable=False)
     name = Column(VARCHAR(128), nullable=False)
-    content_length = Column(INTEGER, nullable=False)
-    content_type = Column(VARCHAR(64), nullable=False)
+    file_name = Column(VARCHAR(64), nullable=False)
+    file_size = Column(INTEGER, nullable=False)
+    file_type = Column(VARCHAR(16), nullable=False)
 
     project = relationship(Project)
 
@@ -123,15 +124,20 @@ Project.screenshots = relationship(Screenshot)
 
 
 class ScreenshotString(db.Model):
-    screenshot_id = Column(INTEGER, ForeignKey(Screenshot.id), primary_key=True)
-    string_id = Column(INTEGER, ForeignKey(String.id), primary_key=True)
+    __table_args__ = (
+        UniqueConstraint('screenshot_id', 'string_id'),
+    )
+
+    id = Column(INTEGER, primary_key=True, nullable=False)
+    screenshot_id = Column(INTEGER, ForeignKey(Screenshot.id), nullable=False)
+    string_id = Column(INTEGER, ForeignKey(String.id), nullable=False)
     area = Column(VARCHAR(27), nullable=False, default='(0,0)x(0,0)')
 
     screenshot = relationship(Screenshot)
     string = relationship(String)
 
 
-Screenshot.strings = relationship(ScreenshotString)
+Screenshot.screenshot_strings = relationship(ScreenshotString)
 
 
 class Translation(db.Model):

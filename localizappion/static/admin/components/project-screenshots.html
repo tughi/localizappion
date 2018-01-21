@@ -8,9 +8,9 @@
 
 <div data-bind="if: filteredScreenshots().length">
     <div data-bind="foreach: filteredScreenshots()" class="d-flex justify-content-center flex-wrap">
-        <a data-bind="attr: { href: `#/projects/${$parent.project().id}/screenshots/${id}` }, css: { 'without-strings': strings.length == 0 }" class="m-2" href="#">
+        <a data-bind="attr: { href: `#/projects/${$parent.project().id}/screenshots/${id}` }, css: { 'without-strings': screenshotStrings.length == 0 }" class="m-2" href="#">
             <div class="card bg-light">
-                <screenshot params="url: url, screenshotStrings: strings" class="p-2 text-center"></screenshot>
+                <screenshot params="url: url, screenshotStrings: screenshotStrings" class="p-2 text-center"></screenshot>
                 <div class="card-footer">
                     <span data-bind="text: name"></span>
                 </div>

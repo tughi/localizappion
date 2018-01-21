@@ -31,7 +31,7 @@
                 <!-- /ko -->
                 <span class="float-right">
                     <button data-bind="click: function () { showAddStringDialog(true); }" class="btn btn-secondary mr-1">Add string</button>
-                    <button data-bind="enable: screenshotName && screenshotUrl && screenshotStrings().length" class="btn btn-primary mr-3">Save</button>
+                    <button data-bind="click: save, enable: screenshotName() && screenshotUrl() && screenshotStrings().length" class="btn btn-primary mr-3">Save</button>
                 </span>
             </div>
         </div>

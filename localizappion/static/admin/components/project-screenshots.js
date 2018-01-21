@@ -24,7 +24,7 @@ define(['knockout', 'text!./project-screenshots.html', 'graphql'], function (ko,
                             id
                             url
                             name
-                            strings {
+                            screenshotStrings {
                                 area
                             }
                         }
