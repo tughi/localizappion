@@ -9,6 +9,7 @@
 .screenshot > .area {
     position: absolute;
     background: rgba(0, 123, 255, .75);
+    pointer-events: none;
 }
 
 .screenshot.drop-zone {

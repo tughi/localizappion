@@ -25,7 +25,7 @@ define(['knockout', 'text!./project-screenshot.html', 'graphql'], function (ko, 
 
         this.addString = (string) => {
             const screenshotString = {
-                area: '(0,0)x(5,5)',
+                area: ko.observable('(0,0)x(5,5)'),
                 string
             };
             this.screenshotStrings.push(screenshotString);
@@ -62,7 +62,7 @@ define(['knockout', 'text!./project-screenshot.html', 'graphql'], function (ko, 
                     screenshotStrings: ko.utils.arrayMap(this.screenshotStrings(), screenshotString => {
                         return {
                             id: screenshotString.id || null,
-                            area: screenshotString.area,
+                            area: screenshotString.area(),
                             stringId: screenshotString.string.id,
                         };
                     })
@@ -76,7 +76,7 @@ define(['knockout', 'text!./project-screenshot.html', 'graphql'], function (ko, 
                 this.screenshotStrings(screenshot.screenshotStrings.map(screenshotString => {
                     return {
                         id: screenshotString.id,
-                        area: screenshotString.area,
+                        area: ko.observable(screenshotString.area),
                         string: projectStrings.find(projectString => projectString.id === screenshotString.string.id)
                     };
                 }));
@@ -124,7 +124,7 @@ define(['knockout', 'text!./project-screenshot.html', 'graphql'], function (ko, 
                 this.screenshotStrings(screenshot.screenshotStrings.map(screenshotString => {
                     return {
                         id: screenshotString.id,
-                        area: screenshotString.area,
+                        area: ko.observable(screenshotString.area),
                         string: project.strings.find(projectString => projectString.id === screenshotString.string.id)
                     };
                 }));
