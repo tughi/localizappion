@@ -1,0 +1,20 @@
+<div data-bind="if: project()" class="my-3">
+    <input data-bind="textInput: filter" class="form-control" placeholder="Filter" />
+    
+    <div data-bind="foreach: filteredStrings" class="list-group mt-3">
+        <div class="list-group-item list-group-item-action">
+            <!-- ko if: valueOne -->
+            <h5 class="mb-1">
+                <span data-bind="text: valueOne"></span>
+                <span class="text-muted">(One)</span>
+            </h5>
+            <!-- /ko -->
+            <h5 class="mb-1">
+                <span data-bind="text: valueOther"></span>
+                <span data-bind="if: valueOne" class="text-muted">(Other)</span>
+            </h5>
+            <small data-bind="text: name" class="text-muted"> </small>
+        </div>
+    </div>
+</div>
+

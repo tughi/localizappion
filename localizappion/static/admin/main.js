@@ -32,6 +32,7 @@ require(['jquery', 'knockout', 'router', 'bootstrap'], function ($, ko, router) 
     ko.components.register('project-detail', { require: 'components/project-detail' });
     ko.components.register('project-screenshot', { require: 'components/project-screenshot' });
     ko.components.register('project-screenshots', { require: 'components/project-screenshots' });
+    ko.components.register('project-strings', { require: 'components/project-strings' });
     ko.components.register('screenshot', { require: 'components/screenshot' });
 
     ko.applyBindings({ route: router.currentRoute });
