@@ -23,6 +23,10 @@ define(['knockout', 'text!./project-screenshot.html', 'graphql'], function (ko, 
             return [];
         }, this);
 
+        this.clearHoveredScreenshotString = (event) => {
+            this.hoveredScreenshotString(null);
+        };
+
         this.addString = (string) => {
             const screenshotString = {
                 area: ko.observable('(0,0)x(5,5)'),
@@ -80,6 +84,7 @@ define(['knockout', 'text!./project-screenshot.html', 'graphql'], function (ko, 
                         string: projectStrings.find(projectString => projectString.id === screenshotString.string.id)
                     };
                 }));
+                this.activeScreenshotString(null);
             });
         };
 

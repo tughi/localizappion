@@ -2,13 +2,19 @@
   max-width: 960px;
 }
 
+.text-muted {
+    color: inherit !important;
+    opacity: .5;
+}
+
 .screenshot {
     position: relative;
 }
 
 .screenshot > .area {
     position: absolute;
-    background: rgba(0, 123, 255, .75);
+    background: rgb(255, 127, 0);
+    mix-blend-mode: hard-light;
     pointer-events: none;
 }
 
@@ -26,15 +32,15 @@
 }
 
 #project-screenshot .screenshot > .area {
-    background: rgba(0, 123, 255, .25);
+    background: rgb(159, 79, 0);
 }
 
 #project-screenshot .screenshot > .area.active {
-    background: rgba(0, 123, 255, .75);
+    background: rgb(191, 95, 0);
 }
 
 #project-screenshot .screenshot > .area.hovered {
-    border: 1px solid rgba(0, 123, 255, 1);
+    border: 2px solid rgb(255, 127, 0);
 }
 
 #project-screenshots .screenshot {
