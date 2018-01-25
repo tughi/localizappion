@@ -22,14 +22,26 @@ define(['knockout', 'graphql', 'text!./project-strings.html'], function (ko, gra
             }
         });
 
+        this.hasScreenshotStrings = (string) => {
+            return string.screenshotStrings && string.screenshotStrings.length;
+        };
+
         graphql({
             query: `
                 query ($projectId: ID!) {
                     project(id: $projectId) {
+                        id
                         strings {
                             name
                             valueOne
                             valueOther
+                            screenshotStrings {
+                                area
+                                screenshot {
+                                    id
+                                    url
+                                }
+                            }
                         }
                     }
                 }

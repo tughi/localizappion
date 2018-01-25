@@ -138,6 +138,7 @@ class ScreenshotString(db.Model):
 
 
 Screenshot.screenshot_strings = relationship(ScreenshotString)
+String.screenshot_strings = relationship(ScreenshotString)
 
 
 class Translation(db.Model):
