@@ -1,6 +1,4 @@
-import base64
 from datetime import datetime
-from hashlib import sha512
 
 import flask
 from flask_mail import Message
@@ -9,13 +7,9 @@ from localizappion.models import Project
 from localizappion.models import Translator
 from localizappion.models import TranslatorSession
 from localizappion.models import db
+from localizappion.utils import create_hash
 
 blueprint = flask.Blueprint(__name__.split('.')[-1], __name__)
-
-
-def create_email_hash(email):
-    hash_data = '{0}+{1}'.format(email, flask.current_app.config['REGISTRATION_MAIL_SALT'])
-    return base64.standard_b64encode(sha512(hash_data.encode()).digest()).decode()
 
 
 @blueprint.route('/translators/register', methods=['POST'])
@@ -31,7 +25,7 @@ def register():
     if len(email) < 3 or email.find('@', 1) < 0:
         return flask.jsonify(message='Invalid email address')
 
-    email_hash = create_email_hash(email)
+    email_hash = create_hash(email)
 
     translator = db.session.query(Translator).filter(Translator.email_hash == email_hash).first()
     if not translator:

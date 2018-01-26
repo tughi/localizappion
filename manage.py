@@ -12,6 +12,14 @@ manager.add_command("shell", Shell())
 
 
 @manager.command
+def makehash():
+    from getpass import getpass
+    from localizappion.utils import create_hash
+
+    print('Secret hash: {0}'.format(create_hash(getpass('Secret: '))))
+
+
+@manager.command
 def createdb():
     from localizappion.models import db
 
@@ -27,7 +35,7 @@ def createdb():
     from localizappion.models import Translator
     from localizappion.models import Suggestion
     from localizappion.models import SuggestionVote
-    from localizappion.registration import create_email_hash
+    from localizappion.utils import create_hash
 
     languages = {}
     with open(os.path.join(os.path.dirname(__file__), 'db_data', 'languages.txt')) as data_file:
@@ -81,7 +89,7 @@ def createdb():
         for line in data_file:
             alias, email = map(str.strip, line.split('|'))
             translator = Translator(
-                email_hash=create_email_hash(email),
+                email_hash=create_hash(email),
                 alias=alias,
             )
             db.session.add(translator)
