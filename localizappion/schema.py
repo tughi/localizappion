@@ -5,6 +5,7 @@ import os
 import graphene
 import graphene_sqlalchemy
 from flask import url_for
+from sqlalchemy.exc import DatabaseError
 
 from .models import Language
 from .models import Project
@@ -157,6 +158,7 @@ class SaveProjectScreenshot(graphene.Mutation):
 
         screenshot.name = screenshot_name
 
+        screenshot_file = None
         if screenshot_data:
             data, screenshot_data = screenshot_data.split(':', 1)
             assert data == 'data'
@@ -180,18 +182,23 @@ class SaveProjectScreenshot(graphene.Mutation):
             with open(screenshot_file, mode='wb') as file:
                 file.write(screenshot_data)
 
-        db.session.add(screenshot)
-        db.session.flush()
+        try:
+            db.session.add(screenshot)
+            db.session.flush()
 
-        for screenshot_string_data in screenshot_strings:
-            screenshot_string_id = screenshot_string_data.id
-            screenshot_string = ScreenshotString.query.get(screenshot_string_id) if screenshot_string_id else ScreenshotString(id=screenshot_string_id)
-            screenshot_string.screenshot = screenshot
-            screenshot_string.string = String.query.filter(String.id == screenshot_string_data.string_id, String.project == project).one()
-            screenshot_string.area = screenshot_string_data.area
-            db.session.add(screenshot_string)
+            for screenshot_string_data in screenshot_strings:
+                screenshot_string_id = screenshot_string_data.id
+                screenshot_string = ScreenshotString.query.get(screenshot_string_id) if screenshot_string_id else ScreenshotString(id=screenshot_string_id)
+                screenshot_string.screenshot = screenshot
+                screenshot_string.string = String.query.filter(String.id == screenshot_string_data.string_id, String.project == project).one()
+                screenshot_string.area = screenshot_string_data.area
+                db.session.add(screenshot_string)
 
-        db.session.commit()
+            db.session.commit()
+        except DatabaseError as error:
+            if screenshot_file:
+                os.remove(screenshot_file)
+                raise error
 
         return SaveProjectScreenshot(screenshot=screenshot)
 
