@@ -4,7 +4,6 @@ from flask_mail import Mail
 
 app = flask.Flask(__name__)
 app.config.from_object('settings.Config')
-app.secret_key = app.config['SECRET']
 
 Mail().init_app(app)
 
