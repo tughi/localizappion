@@ -1,3 +1,5 @@
+from functools import wraps
+
 import flask
 from flask import render_template
 
@@ -6,13 +8,17 @@ from localizappion.utils import create_hash
 blueprint = flask.Blueprint(__name__.split('.')[-1], __name__)
 
 
-def requires_admin(view):
-    def wrapped_view(*args, **kwargs):
-        if create_hash(flask.session.get('username')) == flask.current_app.config['ADMIN_USERNAME']:
-            return view(*args, **kwargs)
-        return flask.redirect(flask.url_for('admin.login'))
+def requires_admin():
+    def decorator(view):
+        @wraps(view)
+        def wrapped_view(*args, **kwargs):
+            if create_hash(flask.session.get('username')) == flask.current_app.config['ADMIN_USERNAME']:
+                return view(*args, **kwargs)
+            return flask.redirect(flask.url_for('admin.login'))
 
-    return wrapped_view
+        return wrapped_view
+
+    return decorator
 
 
 @blueprint.route('/admin/login', methods=('GET', 'POST'))
@@ -34,8 +40,8 @@ def logout():
     return flask.redirect(flask.url_for('admin.login'))
 
 
-@requires_admin
 @blueprint.route('/admin')
+@requires_admin()
 def index():
     return render_template(
         'admin/index.html',
