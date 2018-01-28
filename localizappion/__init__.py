@@ -4,6 +4,7 @@ from flask_mail import Mail
 
 app = flask.Flask(__name__)
 app.config.from_object('settings.Config')
+app.secret_key = app.config['SECRET']
 
 Mail().init_app(app)
 
@@ -18,7 +19,7 @@ app.add_url_rule(
     view_func=GraphQLView.as_view(
         'graphql',
         schema=schema,
-        graphiql=True,
+        graphiql=app.config['DEBUG'],
     )
 )
 
