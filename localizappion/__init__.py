@@ -15,10 +15,12 @@ from localizappion.schema import schema
 
 app.add_url_rule(
     '/graphql',
-    view_func=GraphQLView.as_view(
-        'graphql',
-        schema=schema,
-        graphiql=app.config['DEBUG'],
+    view_func=admin.requires_admin()(
+        GraphQLView.as_view(
+            'graphql',
+            schema=schema,
+            graphiql=app.config['DEBUG'],
+        )
     )
 )
 
