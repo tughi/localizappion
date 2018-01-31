@@ -12,7 +12,7 @@ manager.add_command("shell", Shell())
 
 
 @manager.command
-def makehash():
+def make_hash():
     from getpass import getpass
     from localizappion.utils import create_hash
 
@@ -20,7 +20,19 @@ def makehash():
 
 
 @manager.command
-def createdb():
+def show_db_schema():
+    from localizappion.models import db
+    from sqlalchemy import create_engine
+
+    def dump(sql, *args, **kwargs):
+        print(sql.compile(dialect=engine.dialect))
+
+    engine = create_engine(db.engine.url, strategy='mock', executor=dump)
+    db.metadata.create_all(engine)
+
+
+@manager.command
+def create_db():
     from localizappion.models import db
 
     db.drop_all()
