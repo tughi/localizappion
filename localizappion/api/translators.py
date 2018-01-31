@@ -69,16 +69,14 @@ def __get_translator_translation__(translator, translation):
     # TODO: select only the suggestions made in this translation
     voted_suggestions = set(result[0] for result in SuggestionVote.query.filter(SuggestionVote.translator == translator).values(SuggestionVote.suggestion_id))
 
-    def _as_suggestion_data(suggestion):
+    def _as_suggestion_data(suggestion, plural_forms=None):
         suggestion_data = dict(
-            value=suggestion.value,
+            value={plural_form: suggestion.get_value(plural_form) for plural_form in plural_forms} if plural_forms else suggestion.value_other,
             votes=suggestion.votes_value,
         )
         if suggestion.id in voted_suggestions:
             suggestion_data['voted'] = True
         return suggestion_data
-
-    ignored_suggestions = {plural_form: Void('Discarded "{}" suggestion: '.format(plural_form)) for plural_form, plural_form_name in PLURAL_FORMS}
 
     strings_data = []
     for string in strings:
@@ -87,24 +85,12 @@ def __get_translator_translation__(translator, translation):
         )
         if string.markers:
             string_data['markers'] = json.loads(string.markers)
-        if string.value_one:
-            string_data.update(dict(
-                value=dict(
-                    one=string.value_one,
-                    other=string.value_other,
-                )
-            ))
-            suggestions_data = string_data['suggestions'] = {plural_form: [] for plural_form in language_plural_forms}
-            for suggestion in string.suggestions:
-                suggestions_data.get(suggestion.plural_form, ignored_suggestions[suggestion.plural_form]).append(_as_suggestion_data(suggestion))
-        else:
-            string_data.update(dict(
-                value=string.value_other,
-            ))
-            suggestions_data = string_data['suggestions'] = []
-            for suggestion in string.suggestions:
-                if suggestion.plural_form == 'other':
-                    suggestions_data.append(_as_suggestion_data(suggestion))
+        string_data.update(dict(
+            value=dict(one=string.value_one, other=string.value_other) if string.value_one else string.value_other,
+        ))
+        suggestions_data = string_data['suggestions'] = []
+        for suggestion in string.suggestions:
+            suggestions_data.append(_as_suggestion_data(suggestion, plural_forms=language_plural_forms if string.value_one else None))
 
         strings_data.append(string_data)
 

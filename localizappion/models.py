@@ -174,15 +174,19 @@ class TranslatorSession(db.Model):
 
 class Suggestion(db.Model):
     __table_args__ = (
-        UniqueConstraint('translation_id', 'string_id', 'value', 'plural_form'),
+        UniqueConstraint('translation_id', 'string_id', 'value_zero', 'value_one', 'value_two', 'value_few', 'value_many', 'value_other'),
     )
 
     id = Column(INTEGER, primary_key=True, nullable=False)
     translation_id = Column(INTEGER, ForeignKey(Translation.id), nullable=False)
     translator_id = Column(INTEGER, ForeignKey(Translator.id), nullable=False)
     string_id = Column(INTEGER, ForeignKey(String.id), nullable=False)
-    value = Column(TEXT, nullable=False)
-    plural_form = Column(VARCHAR(8), default='other')  # choices=PLURAL_FORMS
+    value_zero = Column(TEXT, nullable=True)
+    value_one = Column(TEXT, nullable=True)
+    value_two = Column(TEXT, nullable=True)
+    value_few = Column(TEXT, nullable=True)
+    value_many = Column(TEXT, nullable=True)
+    value_other = Column(TEXT, nullable=False)
     uuid = Column(VARCHAR(40), nullable=False, unique=True, default=generate_uuid)
     google_translation = Column(TEXT, nullable=True)
     accepted = Column(BOOLEAN, nullable=True)
@@ -191,6 +195,20 @@ class Suggestion(db.Model):
     string = relationship(String, back_populates='suggestions')
     translation = relationship(Translation, back_populates='suggestions')
     translator = relationship(Translator, back_populates='suggestions')
+
+    def get_value(self, plural_form):
+        if plural_form == 'other':
+            return self.value_other
+        if plural_form == 'one':
+            return self.value_one
+        if plural_form == 'zero':
+            return self.value_zero
+        if plural_form == 'few':
+            return self.value_few
+        if plural_form == 'two':
+            return self.value_two
+        if plural_form == 'many':
+            return self.value_many
 
 
 String.suggestions = relationship(Suggestion)

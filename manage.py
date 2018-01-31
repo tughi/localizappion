@@ -112,7 +112,7 @@ def create_db():
     suggestions = {}
     with open(os.path.join(os.path.dirname(__file__), 'db_data', 'suggestions.txt')) as data_file:
         for line in data_file:
-            project_uuid, string_name, language_code, translator_alias, plural_form, value = map(str.strip, line.split('|', 5))
+            project_uuid, string_name, language_code, translator_alias, value_other, value_one = map(str.strip, line.split('|', 5))
             project_id = projects[project_uuid]
             language_id = languages[language_code]
             translation_id = translations.get((project_id, language_id))
@@ -126,19 +126,19 @@ def create_db():
                 translations[(project_id, language_id)] = translation_id = translation.id
             translator_id = translators[translator_alias]
             string_id = strings[(project_id, string_name)]
-            suggestion_id = suggestions.get((translation_id, string_id, value, plural_form))
+            suggestion_id = suggestions.get((translation_id, string_id, value_other))
             if not suggestion_id:
                 suggestion = Suggestion(
                     translation_id=translation_id,
                     translator_id=translator_id,
                     string_id=string_id,
-                    value=value,
-                    plural_form=plural_form,
+                    value_one=value_one or None,
+                    value_other=value_other,
                     accepted=True,
                 )
                 db.session.add(suggestion)
                 db.session.flush()
-                suggestions[(translation_id, string_id, value, plural_form)] = suggestion_id = suggestion.id
+                suggestions[(translation_id, string_id, value_other)] = suggestion_id = suggestion.id
             db.session.add(SuggestionVote(
                 suggestion_id=suggestion_id,
                 translator_id=translator_id,
