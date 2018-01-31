@@ -56,6 +56,24 @@
     height: 360px;
 }
 
+#project-strings .string {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+
+#project-strings .string > .string-screenshot {
+    display: table-cell;
+    width: 64px;
+    vertical-align: top;
+}
+
+#project-strings .string > .string-text {
+    display: table-cell;
+    padding-left: 1em;
+    vertical-align: top;
+}
+
 #project-strings .screenshot > img {
     width: 100%;
 }

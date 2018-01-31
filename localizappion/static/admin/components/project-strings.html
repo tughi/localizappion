@@ -3,8 +3,8 @@
 
     <div data-bind="foreach: filteredStrings" class="list-group mt-3">
         <div data-bind="css: { 'list-group-item-warning': !$parent.hasScreenshotStrings($data) }" class="list-group-item">
-            <div class="row">
-                <div class="col-4">
+            <div class="string">
+                <div class="string-screenshot">
                     <!-- ko if: $parent.hasScreenshotStrings($data) -->
                     <a data-bind="attr: { href: `#/projects/${$parent.project().id}/screenshots/${screenshotStrings[0].screenshot.id}` }" class="d-block">
                         <div data-bind="component: { name: 'screenshot', params: { url: screenshotStrings[0].screenshot.url, screenshotStrings: [screenshotStrings[0]] } }"></div>
@@ -16,7 +16,7 @@
                     </a>
                     <!-- /ko -->
                 </div>
-                <div class="col-8">
+                <div class="string-text">
                     <!-- ko if: valueOne -->
                     <h5 class="mb-1">
                         <span data-bind="text: valueOne"></span>
