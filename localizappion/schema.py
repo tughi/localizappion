@@ -133,6 +133,21 @@ class Query(graphene.ObjectType):
         return translations
 
 
+class CreateProject(graphene.Mutation):
+    class Arguments:
+        name = graphene.String(required=True)
+
+    project = graphene.Field(ProjectType)
+
+    def mutate(self, info, name):
+        project = Project(name=name)
+
+        db.session.add(project)
+        db.session.commit()
+
+        return CreateProject(project=project)
+
+
 class ScreenshotStringInputType(graphene.InputObjectType):
     id = graphene.ID(required=False)
     area = graphene.String(required=True)
@@ -227,6 +242,7 @@ class DeleteProjectScreenshot(graphene.Mutation):
 
 
 class Mutation(graphene.ObjectType):
+    create_project = CreateProject.Field()
     save_project_screenshot = SaveProjectScreenshot.Field()
     delete_project_screenshot = DeleteProjectScreenshot.Field()
 

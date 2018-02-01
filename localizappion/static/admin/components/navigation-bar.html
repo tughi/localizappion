@@ -44,19 +44,7 @@
 <!-- ko ifnot: currentProject() -->
 <div class="jumbotron">
     <div class="container-fluid text-center">
-        <h1>Oops!...</h1>
-        <span>Your last action was unexpected.</span>
-        <br>
-        <span>You can either go back... or start again.</span>
+        <h1>Localizappion</h1>
     </div>
 </div>
-<div class="container-fluid" style="max-width: 320px">
-    <div class="list-group">
-        <!-- ko foreach: projects() -->
-        <a class="list-group-item list-group-item-action" href="#" data-bind="attr: { href: `#/projects/${id}` }, text: name"></a>
-        <!-- /ko -->
-        <a class="list-group-item list-group-item-action" href="#/projects/new">Create new project</a>
-    </div>
-</div>
-<!-- /ko -->
 <!-- /ko -->
