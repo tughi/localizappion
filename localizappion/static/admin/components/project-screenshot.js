@@ -2,6 +2,7 @@ define(['knockout', 'text!./project-screenshot.html', 'graphql'], function (ko, 
     'use strict';
 
     function ViewModel(params) {
+        this.allProjects = ko.observable();
         this.project = ko.observable();
         this.screenshotId = ko.observable(params.screenshotId);
         this.screenshotName = ko.observable(params.name);
@@ -112,6 +113,10 @@ define(['knockout', 'text!./project-screenshot.html', 'graphql'], function (ko, 
                             valueOther
                         }
                     }
+                    allProjects: projects {
+                        id
+                        name
+                    }
                 }
             `,
             variables: {
@@ -119,6 +124,7 @@ define(['knockout', 'text!./project-screenshot.html', 'graphql'], function (ko, 
                 screenshotId: this.screenshotId() || null
             }
         }).then(response => {
+            this.allProjects(response.data.allProjects);
             const project = response.data.project;
             this.project(project);
             const screenshot = project.screenshot;

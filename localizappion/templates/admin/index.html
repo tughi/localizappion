@@ -10,21 +10,15 @@
     <title>Localizappion</title>
 </head>
 <body>
-<!-- ko if: route().page -->
-<navigation-bar params="route: route"></navigation-bar>
-<div class="container-fluid">
-    <div data-bind="attr: { id: route().page }, component: { name: route().page, params: route() }" class="px-3"></div>
+<div data-bind="if: route().page">
+    <div data-bind="attr: { id: route().page }, component: { name: route().page, params: route() }"></div>
 </div>
-<!-- /ko -->
-
-<!-- ko ifnot: route().page -->
-<div class="jumbotron">
+<div data-bind="css: { 'd-none': route().page }, ifnot: route().page" class="jumbotron d-none">
     <div class="container-fluid text-center">
         <h1>Oops!...</h1>
         <span>Your last action was unexpected.</span>
     </div>
 </div>
-<!-- /ko -->
 
 <script data-main="{{ url_for('static', filename='admin/main') }}" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.min.js"></script>
 </body>

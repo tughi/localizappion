@@ -6,6 +6,7 @@ define(['knockout', 'graphql', 'text!./project-strings.html'], function (ko, gra
     };
 
     function ViewModel(params) {
+        this.allProjects = ko.observable();
         this.project = ko.observable();
         this.filter = ko.observable();
 
@@ -44,12 +45,17 @@ define(['knockout', 'graphql', 'text!./project-strings.html'], function (ko, gra
                             }
                         }
                     }
+                    allProjects: projects {
+                        id
+                        name
+                    }
                 }
             `,
             variables: {
                 projectId: params.projectId
             }
         }).then(response => {
+            this.allProjects(response.data.allProjects);
             this.project(response.data.project);
         });
     }

@@ -1,62 +1,66 @@
 <!-- ko if: project() -->
-<input data-bind="textInput: screenshotName" class="form-control my-3" placeholder="Screenshot name" />
+<navigation-bar params="projects: allProjects, projectId: project().id, activeTab: 'screenshots'"></navigation-bar>
 
-<div class="row">
-    <div class="col-sm-12 col-md-5 col-xl-4 mb-3">
-        <div data-bind="component: { name: 'screenshot', params: { editable: true, url: screenshotUrl, screenshotStrings: screenshotStrings, activeScreenshotString: activeScreenshotString, hoveredScreenshotString: hoveredScreenshotString } }"></div>
+<div class="container-fluid">
+    <input data-bind="textInput: screenshotName" class="form-control my-3" placeholder="Screenshot name" />
+
+    <div class="row">
+        <div class="col-sm-12 col-md-5 col-xl-4 mb-3">
+            <div data-bind="component: { name: 'screenshot', params: { editable: true, url: screenshotUrl, screenshotStrings: screenshotStrings, activeScreenshotString: activeScreenshotString, hoveredScreenshotString: hoveredScreenshotString } }"></div>
+        </div>
+        <div data-bind="if: screenshotStrings().length" class="col-sm-12 col-md-7 col-xl-8">
+            <div data-bind="foreach: screenshotStrings()" class="list-group mb-3">
+                <div data-bind="click: $parent.activeScreenshotString, css: { active: $parent.activeScreenshotString() == $data }, event: { mouseover: $parent.hoveredScreenshotString, mouseout: $parent.clearHoveredScreenshotString }" class="string list-group-item list-group-item-action">
+                    <h5 data-bind="if: string.valueOne" class="mb-1">
+                        <span data-bind="text: string.valueOne"></span>
+                        <span class="text-muted">(One)</span>
+                    </h5>
+                    <h5 class="mb-1">
+                        <span data-bind="text: string.valueOther"></span>
+                        <span data-bind="if: string.valueOne" class="text-muted">(Other)</span>
+                    </h5>
+                    <small data-bind="text: string.name" class="string-name text-muted"> </small>
+                </div>
+            </div>
+        </div>
     </div>
-    <div data-bind="if: screenshotStrings().length" class="col-sm-12 col-md-7 col-xl-8">
-        <div data-bind="foreach: screenshotStrings()" class="list-group mb-3">
-            <div data-bind="click: $parent.activeScreenshotString, css: { active: $parent.activeScreenshotString() == $data }, event: { mouseover: $parent.hoveredScreenshotString, mouseout: $parent.clearHoveredScreenshotString }" class="string list-group-item list-group-item-action">
-                <h5 data-bind="if: string.valueOne" class="mb-1">
-                    <span data-bind="text: string.valueOne"></span>
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <!-- ko if: screenshotId > 0 -->
+                    <button class="btn btn-danger mr-3">Delete</button>
+                    <!-- /ko -->
+                    <span class="float-right">
+                        <button data-bind="click: function () { showAddStringDialog(true); }" class="btn btn-secondary mr-1">Add string</button>
+                        <button data-bind="click: save, enable: screenshotName() && screenshotUrl() && screenshotStrings().length" class="btn btn-primary mr-3">Save</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <modal params="title: 'Add string', trigger: showAddStringDialog, data: $data">
+        <input data-bind="textInput: data.availableStringsFilter" type="text" placeholder="Filter" class="form-control" />
+
+        <!-- ko if: data.availableStrings().length -->
+        <div data-bind="foreach: data.availableStrings" class="list-group mt-3">
+            <div data-bind="click: $parent.data.addString" class="list-group-item list-group-item-action string">
+                <h5 data-bind="if: valueOne" class="mb-1">
+                    <span data-bind="text: valueOne"></span>
                     <span class="text-muted">(One)</span>
                 </h5>
                 <h5 class="mb-1">
-                    <span data-bind="text: string.valueOther"></span>
-                    <span data-bind="if: string.valueOne" class="text-muted">(Other)</span>
+                    <span data-bind="text: valueOther"></span>
+                    <span data-bind="if: valueOne" class="text-muted">(Other)</span>
                 </h5>
-                <small data-bind="text: string.name" class="string-name text-muted"> </small>
+                <small class="string-name text-muted">
+                    <span data-bind="text: name"></span>
+                </small>
             </div>
         </div>
-    </div>
+        <!-- /ko -->
+    </modal>
 </div>
-
-<div class="row mb-3">
-    <div class="col-12">
-        <div class="card bg-light">
-            <div class="card-body">
-                <!-- ko if: screenshotId > 0 -->
-                <button class="btn btn-danger mr-3">Delete</button>
-                <!-- /ko -->
-                <span class="float-right">
-                    <button data-bind="click: function () { showAddStringDialog(true); }" class="btn btn-secondary mr-1">Add string</button>
-                    <button data-bind="click: save, enable: screenshotName() && screenshotUrl() && screenshotStrings().length" class="btn btn-primary mr-3">Save</button>
-                </span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<modal params="title: 'Add string', trigger: showAddStringDialog, data: $data">
-    <input data-bind="textInput: data.availableStringsFilter" type="text" placeholder="Filter" class="form-control" />
-
-    <!-- ko if: data.availableStrings().length -->
-    <div data-bind="foreach: data.availableStrings" class="list-group mt-3">
-        <div data-bind="click: $parent.data.addString" class="list-group-item list-group-item-action string">
-            <h5 data-bind="if: valueOne" class="mb-1">
-                <span data-bind="text: valueOne"></span>
-                <span class="text-muted">(One)</span>
-            </h5>
-            <h5 class="mb-1">
-                <span data-bind="text: valueOther"></span>
-                <span data-bind="if: valueOne" class="text-muted">(Other)</span>
-            </h5>
-            <small class="string-name text-muted">
-                <span data-bind="text: name"></span>
-            </small>
-        </div>
-    </div>
-    <!-- /ko -->
-</modal>
 <!-- /ko -->

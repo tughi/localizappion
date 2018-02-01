@@ -1,7 +1,8 @@
-define(['knockout', 'text!./project-screenshots.html', 'graphql'], function (ko, template, graphql) {
+define(['knockout', 'text!./project-screenshots.html', 'graphql', 'hasher'], function (ko, template, graphql, hasher) {
     'use strict';
 
     function ViewModel(params) {
+        this.allProjects = ko.observable();
         this.project = ko.observable();
         this.screenshots = ko.observableArray();
         this.screenshotName = ko.observable();
@@ -13,6 +14,10 @@ define(['knockout', 'text!./project-screenshots.html', 'graphql'], function (ko,
 
             return this.screenshots();
         }, this);
+
+        this.createScreenshot = function (self) {
+            hasher.setHash(`projects/${self.project().id}/screenshots/new/${self.screenshotName() || 'unnamed'}`);
+        };
 
         graphql({
             query: `
@@ -29,12 +34,17 @@ define(['knockout', 'text!./project-screenshots.html', 'graphql'], function (ko,
                             }
                         }
                     }
+                    allProjects: projects {
+                        id
+                        name
+                    }
                 }
             `,
             variables: {
                 projectId: params.projectId
             }
         }).then(response => {
+            this.allProjects(response.data.allProjects);
             this.project(response.data.project);
             this.screenshots(response.data.project.screenshots);
         });
