@@ -1,0 +1,26 @@
+version: "3.4"
+
+services: 
+  db:
+    image: postgres:9.6-alpine
+    networks:
+      - backend
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  
+  backend:
+    build:
+      context: .
+    networks:
+      - backend
+    ports: 
+      - 5000:5000
+    volumes:
+      - screenshots:/app/localizappion/static/screenshots
+  
+networks:
+  backend:
+
+volumes:
+  db-data:
+  screenshots:

@@ -1,0 +1,7 @@
+/.git
+/.gitignore
+/.idea
+/docker-compose.yml
+/localizappion/static/screenshots
+
+__pycache__
