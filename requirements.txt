@@ -1,4 +1,4 @@
-SQLAlchemy==1.1.15
+SQLAlchemy==1.2.2
 alembic==0.9.7
 
 Flask==0.12.2
