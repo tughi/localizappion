@@ -1,11 +1,16 @@
 import flask
 from flask_graphql import GraphQLView
 from flask_mail import Mail
+from flask_migrate import Migrate
 
 app = flask.Flask(__name__)
 app.config.from_object('settings.Config')
 
 Mail().init_app(app)
+
+from localizappion.models import db
+
+Migrate(app, db)
 
 from localizappion import admin
 from localizappion import registration

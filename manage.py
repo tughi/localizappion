@@ -2,6 +2,7 @@
 from flask_script import Manager
 from flask_script import Server
 from flask_script import Shell
+from flask_migrate import MigrateCommand
 
 from localizappion import app
 
@@ -9,6 +10,7 @@ manager = Manager(app)
 
 manager.add_command("runserver", Server())
 manager.add_command("shell", Shell())
+manager.add_command("db", MigrateCommand)
 
 
 @manager.command
@@ -20,7 +22,7 @@ def make_hash():
 
 
 @manager.command
-def show_db_schema():
+def db_schema():
     from localizappion.models import db
     from sqlalchemy import create_engine
 
@@ -29,123 +31,6 @@ def show_db_schema():
 
     engine = create_engine(db.engine.url, strategy='mock', executor=dump)
     db.metadata.create_all(engine)
-
-
-@manager.command
-def create_db():
-    from localizappion.models import db
-
-    db.drop_all()
-    db.create_all()
-
-    import os
-    from localizappion.models import db
-    from localizappion.models import Language
-    from localizappion.models import Project
-    from localizappion.models import String
-    from localizappion.models import Translation
-    from localizappion.models import Translator
-    from localizappion.models import Suggestion
-    from localizappion.models import SuggestionVote
-    from localizappion.utils import create_hash
-
-    languages = {}
-    with open(os.path.join(os.path.dirname(__file__), 'db_data', 'languages.txt')) as data_file:
-        for line in data_file:
-            code, name, plurals_zero, plurals_one, plurals_two, plurals_few, plurals_many, plurals_other = map(str.strip, line.split('|'))
-            language = Language(
-                code=code,
-                name=name,
-                plurals_zero=plurals_zero or None,
-                plurals_one=plurals_one or None,
-                plurals_two=plurals_two or None,
-                plurals_few=plurals_few or None,
-                plurals_many=plurals_many or None,
-                plurals_other=plurals_other or None,
-            )
-            db.session.add(language)
-            db.session.flush()
-            languages[language.code] = language.id
-
-    projects = {}
-    with open(os.path.join(os.path.dirname(__file__), 'db_data', 'projects.txt')) as data_file:
-        for line in data_file:
-            project_uuid, project_name = map(str.strip, line.split('|', 1))
-            project = Project(
-                uuid=project_uuid,
-                name=project_name,
-            )
-            db.session.add(project)
-            db.session.flush()
-            projects[project.uuid] = project.id
-
-    strings = {}
-    with open(os.path.join(os.path.dirname(__file__), 'db_data', 'strings.txt')) as data_file:
-        for position, line in enumerate(data_file):
-            project_uuid, string_name, string_value_one, string_value_other, string_markers = map(str.strip, line.split('|'))
-            project_id = projects[project_uuid]
-            string = String(
-                project_id=project_id,
-                name=string_name,
-                value_one=string_value_one or None,
-                value_other=string_value_other,
-                position=position,
-                markers=string_markers or None,
-            )
-            db.session.add(string)
-            db.session.flush()
-            strings[(project_id, string_name)] = string.id
-
-    translators = {}
-    with open(os.path.join(os.path.dirname(__file__), 'db_data', 'translators.txt')) as data_file:
-        for line in data_file:
-            alias, email = map(str.strip, line.split('|'))
-            translator = Translator(
-                email_hash=create_hash(email),
-                alias=alias,
-            )
-            db.session.add(translator)
-            db.session.flush()
-            translators[translator.alias] = translator.id
-
-    translations = {}
-    suggestions = {}
-    with open(os.path.join(os.path.dirname(__file__), 'db_data', 'suggestions.txt')) as data_file:
-        for line in data_file:
-            project_uuid, string_name, language_code, translator_alias, value_other, value_one = map(str.strip, line.split('|', 5))
-            project_id = projects[project_uuid]
-            language_id = languages[language_code]
-            translation_id = translations.get((project_id, language_id))
-            if not translation_id:
-                translation = Translation(
-                    project_id=project_id,
-                    language_id=language_id,
-                )
-                db.session.add(translation)
-                db.session.flush()
-                translations[(project_id, language_id)] = translation_id = translation.id
-            translator_id = translators[translator_alias]
-            string_id = strings[(project_id, string_name)]
-            suggestion_id = suggestions.get((translation_id, string_id, value_other))
-            if not suggestion_id:
-                suggestion = Suggestion(
-                    translation_id=translation_id,
-                    translator_id=translator_id,
-                    string_id=string_id,
-                    value_one=value_one or None,
-                    value_other=value_other,
-                    accepted=True,
-                )
-                db.session.add(suggestion)
-                db.session.flush()
-                suggestions[(translation_id, string_id, value_other)] = suggestion_id = suggestion.id
-            db.session.add(SuggestionVote(
-                suggestion_id=suggestion_id,
-                translator_id=translator_id,
-                value=1,
-            ))
-
-    db.session.commit()
 
 
 manager.run()
