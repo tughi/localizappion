@@ -6,8 +6,6 @@ import graphene
 import graphene_sqlalchemy
 from flask import url_for
 from sqlalchemy.exc import DatabaseError
-from sqlalchemy.sql.expression import case
-from sqlalchemy.sql.functions import sum
 
 from .models import Language
 from .models import Project
@@ -29,10 +27,16 @@ class LanguageType(graphene_sqlalchemy.SQLAlchemyObjectType):
 
 
 class ProjectType(graphene_sqlalchemy.SQLAlchemyObjectType):
+    new_suggestion = graphene.Field(lambda: SuggestionType)
     new_suggestions_count = graphene.Field(graphene.Int)
     screenshot = graphene.Field(lambda: ScreenshotType, id=graphene.ID(required=False))
     screenshots_count = graphene.Field(graphene.Int)
     strings_count = graphene.Field(graphene.Int)
+
+    def resolve_new_suggestion(self: Project, info):
+        return Suggestion.query.join(Suggestion.translation) \
+            .filter(Translation.project_id == self.id, Suggestion.accepted.__eq__(None)) \
+            .first()
 
     def resolve_new_suggestions_count(self: Project, info):
         return db.session.query(Suggestion.id) \
@@ -258,10 +262,29 @@ class DeleteProjectScreenshot(graphene.Mutation):
         return DeleteProjectScreenshot(ok=False)
 
 
+class UpdateSuggestion(graphene.Mutation):
+    class Arguments:
+        suggestion_id = graphene.ID(required=True)
+        accepted = graphene.Boolean(required=True)
+
+    project = graphene.Field(ProjectType)
+
+    def mutate(self, info, suggestion_id, accepted):
+        suggestion = Suggestion.query.get(suggestion_id)
+
+        suggestion.accepted = accepted
+
+        db.session.add(suggestion)
+        db.session.commit()
+
+        return UpdateSuggestion(project=suggestion.translation.project)
+
+
 class Mutation(graphene.ObjectType):
     create_project = CreateProject.Field()
     save_project_screenshot = SaveProjectScreenshot.Field()
     delete_project_screenshot = DeleteProjectScreenshot.Field()
+    update_suggestion = UpdateSuggestion.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
