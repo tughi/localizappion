@@ -14,6 +14,13 @@ define(['knockout', 'graphql', 'text!./project-detail.html'], function (ko, grap
                         newSuggestionsCount
                         screenshotsCount
                         stringsCount
+                        translations {
+                            id
+                            language {
+                                name
+                            }
+                            translatedStringsCount
+                        }
                     }
                     allProjects: projects {
                         id

@@ -6,6 +6,8 @@ import graphene
 import graphene_sqlalchemy
 from flask import url_for
 from sqlalchemy.exc import DatabaseError
+from sqlalchemy.sql.expression import case
+from sqlalchemy.sql.functions import sum
 
 from .models import Language
 from .models import Project
@@ -94,6 +96,14 @@ class TranslatorType(graphene_sqlalchemy.SQLAlchemyObjectType):
 
 
 class TranslationType(graphene_sqlalchemy.SQLAlchemyObjectType):
+    translated_strings_count = graphene.Field(graphene.Int)
+
+    def resolve_translated_strings_count(self: Translation, info):
+        return db.session.query(Suggestion.string_id) \
+            .filter(Suggestion.translation_id == self.id, Suggestion.accepted.__eq__(True)) \
+            .distinct() \
+            .count()
+
     class Meta:
         model = Translation
 
