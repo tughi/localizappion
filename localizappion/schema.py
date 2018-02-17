@@ -27,9 +27,16 @@ class LanguageType(graphene_sqlalchemy.SQLAlchemyObjectType):
 
 
 class ProjectType(graphene_sqlalchemy.SQLAlchemyObjectType):
+    new_suggestions_count = graphene.Field(graphene.Int)
     screenshot = graphene.Field(lambda: ScreenshotType, id=graphene.ID(required=False))
     screenshots_count = graphene.Field(graphene.Int)
     strings_count = graphene.Field(graphene.Int)
+
+    def resolve_new_suggestions_count(self: Project, info):
+        return db.session.query(Suggestion.id) \
+            .join(Suggestion.translation) \
+            .filter(Translation.project_id == self.id, Suggestion.accepted.__eq__(None)) \
+            .count()
 
     def resolve_screenshot(self: Project, info, id=None):
         if id:

@@ -11,6 +11,7 @@ define(['knockout', 'graphql', 'text!./project-detail.html'], function (ko, grap
                     project(id: $projectId) {
                         id
                         uuid
+                        newSuggestionsCount
                         screenshotsCount
                         stringsCount
                     }
