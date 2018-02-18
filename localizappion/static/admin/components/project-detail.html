@@ -24,9 +24,14 @@
         <!-- ko with: newSuggestion -->
         <div class="card bg-warning mt-3">
             <div class="card-body">
-                New
-                <strong data-bind="text: translation.language.name"></strong>
-                suggestion
+                <div>
+                    New
+                    <strong data-bind="text: translation.language.name"></strong>
+                    suggestion
+                </div>
+                <div data-bind="if: $parent.newSuggestionsCount > 1">
+                    <small data-bind="text: `${$parent.newSuggestionsCount - 1} more`" class="text-small text-muted">0</small>
+                </div>
             </div>
             <div class="list-group list-group-flush">
                 <div class="list-group-item list-group-item-warning">
@@ -129,7 +134,6 @@
             <div class="card-footer">
                 <button data-bind="click: $component.acceptSuggestion, disable: $component.updatingSuggestion" class="btn btn-success">Accept</button>
                 <button data-bind="click: $component.rejectSuggestion, disable: $component.updatingSuggestion" class="btn btn-danger">Reject</button>
-                <!-- TODO: show new suggestions count -->
             </div>
         </div>
         <!-- /ko -->
