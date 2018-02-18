@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/style.css') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/style.css') }}" />
 
     <title>Localizappion</title>
 </head>
-<body>
-<div data-bind="if: route().page">
-    <div data-bind="attr: { id: route().page }, component: { name: route().page, params: route() }"></div>
-</div>
-<div data-bind="css: { 'd-none': route().page }, ifnot: route().page" class="jumbotron d-none">
-    <div class="container-fluid text-center">
-        <h1>Oops!...</h1>
-        <span>Your last action was unexpected.</span>
-    </div>
-</div>
 
-<script data-main="{{ url_for('static', filename='admin/main') }}" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.min.js"></script>
+<body>
+    <div data-bind="if: route().page" class="mb-5">
+        <div data-bind="attr: { id: route().page }, component: { name: route().page, params: route() }"></div>
+    </div>
+    <div data-bind="css: { 'd-none': route().page }, ifnot: route().page" class="jumbotron d-none">
+        <div class="container-fluid text-center">
+            <h1>Oops!...</h1>
+            <span>Your last action was unexpected.</span>
+        </div>
+    </div>
+
+    <script data-main="{{ url_for('static', filename='admin/main') }}" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.min.js"></script>
 </body>
+
 </html>
