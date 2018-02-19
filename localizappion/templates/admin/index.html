@@ -12,8 +12,8 @@
 </head>
 
 <body>
-    <div data-bind="if: route().page" class="mb-5">
-        <div data-bind="attr: { id: route().page }, component: { name: route().page, params: route() }"></div>
+    <div data-bind="if: route().page">
+        <div data-bind="attr: { id: route().page }, component: { name: route().page, params: route() }" class="mb-5"></div>
     </div>
     <div data-bind="css: { 'd-none': route().page }, ifnot: route().page" class="jumbotron d-none">
         <div class="container-fluid text-center">
