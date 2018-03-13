@@ -1,0 +1,37 @@
+<!-- ko with: string -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <div class="page-header">
+                <h1 data-bind="text: $parent.translation.project().name"></h1>
+            </div>
+                  
+            <p>How do you say the following in <strong data-bind="text: $parent.translation.language().name">language</strong>?</p>
+            <ul class="list-group">
+                <!-- ko if: value instanceof Object -->
+                <li class="list-group-item"><span data-bind="html: $component.formatValue(value.one)"></span></li>
+                <li class="list-group-item"><span data-bind="html: $component.formatValue(value.other)"></span></li>
+                <!-- /ko -->
+                <!-- ko ifnot: value instanceof Object -->
+                <li class="list-group-item"><span data-bind="html: $component.formatValue(value)"></span></li>
+                <!-- /ko -->
+                <!-- ko if: $data.markers -->
+                <li class="list-group-item list-group-item-info">
+                  <span data-bind="html: $component.markersInfoText()"></span>
+                </li>
+                <!-- ko foreach: $component.annotatedMarkers() -->
+                <li class="list-group-item list-group-item-info">
+                    <strong data-bind="text: $data[1]"></strong> - <span data-bind="text: $data[2].id"></span>
+                </li>
+                <!-- /ko -->
+                <!-- /ko -->
+            </ul>
+
+            <div class="pt-2">
+                <button data-bind="click: $component.skipString" class="btn btn-default">Skip</button>
+                <button data-bind="click: $component.submit, enable: $component.isSuggestionValid()" class="btn btn-primary float-right">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /ko -->

@@ -1,10 +1,11 @@
 import json
+from functools import wraps
 
 import flask
+from flask import render_template
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
 
-from localizappion.models import PLURAL_FORMS
 from localizappion.models import String
 from localizappion.models import Suggestion
 from localizappion.models import SuggestionVote
@@ -15,42 +16,63 @@ from localizappion.models import db
 blueprint = flask.Blueprint(__name__.split('.')[-1], __name__)
 
 
-class Void:
-    def __init__(self, prefix=None):
-        self.prefix = prefix
-
-    def append(self, item):
-        flask.current_app.logger.warning('{prefix}{item}'.format(prefix=self.prefix, item=item))
-
-
-@blueprint.route('/translators/<uuid:translator_session_uuid>/translations/<uuid:translation_uuid>')
-def get_translation(translator_session_uuid, translation_uuid):
-    translator_session = TranslatorSession.query.join(
-        TranslatorSession.translator
-    ).options(
-        contains_eager(TranslatorSession.translator)
-    ).filter(
-        TranslatorSession.activated_time.isnot(None),
-        TranslatorSession.uuid == str(translator_session_uuid)
-    ).first()
-    if not translator_session:
-        return flask.abort(404)
-
-    translator = translator_session.translator
-
-    translation = Translation.query.options(
-        joinedload(Translation.project),
-        joinedload(Translation.language),
-    ).filter(
-        Translation.uuid == str(translation_uuid)
-    ).first()
-    if not translation:
-        return flask.abort(404)
-
-    return __get_translator_translation__(translator, translation)
+@blueprint.route('/translator/')
+def index():
+    return render_template(
+        'translators/index.html',
+    )
 
 
-def __get_translator_translation__(translator, translation):
+@blueprint.route('/translator/start-translating/<uuid:translator_session_uuid>-<uuid:translation_uuid>')
+def translating_start(translator_session_uuid, translation_uuid):
+    response = flask.make_response(flask.redirect('/translator/'))
+    response.set_cookie('translator_session', str(translator_session_uuid))
+    response.set_cookie('translation', str(translation_uuid))
+    return response
+
+
+def requires_translating_start():
+    def decorator(view):
+        @wraps(view)
+        def wrapped_view(*args, **kwargs):
+            translator_session_uuid = flask.request.cookies.get('translator_session')
+            translation_uuid = flask.request.cookies.get('translation')
+
+            if translator_session_uuid and translation_uuid:
+                translator_session = TranslatorSession.query.join(
+                    TranslatorSession.translator
+                ).options(
+                    contains_eager(TranslatorSession.translator)
+                ).filter(
+                    TranslatorSession.activated_time.isnot(None),
+                    TranslatorSession.uuid == str(translator_session_uuid)
+                ).first()
+
+                if translator_session:
+                    translation = Translation.query.options(
+                        joinedload(Translation.project),
+                        joinedload(Translation.language),
+                    ).filter(
+                        Translation.uuid == str(translation_uuid)
+                    ).first()
+
+                    if translation:
+                        return view(translator_session.translator, translation, *args, **kwargs)
+
+            return flask.abort(403)
+
+        return wrapped_view
+
+    return decorator
+
+
+@blueprint.route('/translator/get-translation')
+@requires_translating_start()
+def get_translation(translator, translation):
+    return __get_translation__(translator, translation)
+
+
+def __get_translation__(translator, translation):
     project = translation.project
 
     language = translation.language
@@ -109,7 +131,8 @@ def __get_translator_translation__(translator, translation):
     )
 
 
-@blueprint.route('/translators/<uuid:translator_session_uuid>/translations/<uuid:translation_uuid>', methods=['POST'])
+@blueprint.route('/translator/add-suggestion', methods=['POST'])
+@requires_translating_start()
 def add_suggestion(translator_session_uuid, translation_uuid):
     translator_session = TranslatorSession.query.join(
         TranslatorSession.translator
@@ -192,4 +215,4 @@ def add_suggestion(translator_session_uuid, translation_uuid):
 
     db.session.commit()
 
-    return __get_translator_translation__(translator, translation)
+    return __get_translation__(translator, translation)
