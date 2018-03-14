@@ -10,11 +10,19 @@
                 How do you say the following in <strong data-bind="text: $parent.translation.language().name">language</strong>?
                 <ul class="list-group pt-2">
                     <!-- ko if: value instanceof Object -->
-                    <li class="list-group-item"><span data-bind="html: $component.formatValue(value.one)"></span></li>
-                    <li class="list-group-item"><span data-bind="html: $component.formatValue(value.other)"></span></li>
+                    <li class="list-group-item">
+                        <div>
+                            <span data-bind="html: $component.formatValue(value.one)"></span><span class="text-muted ml-2">(one)</span>
+                        </div>
+                        <div>
+                            <span data-bind="html: $component.formatValue(value.other)"></span><span class="text-muted ml-2">(other)</span>
+                        </div>
+                    </li>
                     <!-- /ko -->
                     <!-- ko ifnot: value instanceof Object -->
-                    <li class="list-group-item"><span data-bind="html: $component.formatValue(value)"></span></li>
+                    <li class="list-group-item">
+                        <span data-bind="html: $component.formatValue(value)"></span>
+                    </li>
                     <!-- /ko -->
                     <!-- ko if: $data.markers -->
                     <li class="list-group-item list-group-item-info">
@@ -33,13 +41,35 @@
                 <span data-bind="text: `Already submitted suggestion${ suggestions.length > 1 ? 's' : '' }:`"></span>
                 <div class="list-group pt-2">
                     <!-- ko foreach: suggestions -->
-                    <div class="d-flex suggestion list-group-item list-group-item-action" data-bind="click: $component.votedSuggestion, css: {'active': $data == $component.votedSuggestion()}">
+                    <div class="d-flex list-group-item list-group-item-action" data-bind="click: $component.votedSuggestion, css: {'active': $data == $component.votedSuggestion()}">
                         <span class="pr-3" data-bind="css: {'ion-android-checkbox-outline-blank': $data != $component.votedSuggestion(), 'ion-android-checkbox-outline': $data == $component.votedSuggestion()}"></span>
-                        <span data-bind="text: value"></span>
+                        <div data-bind="if: value instanceof Object">
+                            <div data-bind="if: 'zero' in $component.translation.language().plurals">
+                                <span data-bind="text: value.zero"></span><span class="text-muted ml-2">(zero)</span>
+                            </div>
+                            <div data-bind="if: 'one' in $component.translation.language().plurals">
+                                <span data-bind="text: value.one"></span><span class="text-muted ml-2">(one)</span>
+                            </div>
+                            <div data-bind="if: 'two' in $component.translation.language().plurals">
+                                <span data-bind="text: value.two"></span><span class="text-muted ml-2">(two)</span>
+                            </div>
+                            <div data-bind="if: 'few' in $component.translation.language().plurals">
+                                <span data-bind="text: value.few"></span><span class="text-muted ml-2">(few)</span>
+                            </div>
+                            <div data-bind="if: 'many' in $component.translation.language().plurals">
+                                <span data-bind="text: value.many"></span><span class="text-muted ml-2">(many)</span>
+                            </div>
+                            <div data-bind="if: 'other' in $component.translation.language().plurals">
+                                <span data-bind="text: value.other"></span><span class="text-muted ml-2">(other)</span>
+                            </div>
+                        </div>
+                        <!-- ko ifnot: value instanceof Object -->
+                        <span data-bind="html: $component.formatValue(value)"></span>
+                        <!-- /ko -->
                     </div>
                     <!-- /ko -->
                     <!-- ko with: $component.newSuggestion() -->
-                    <span class="d-flex suggestion list-group-item list-group-item list-group-item-action" data-bind="click: $component.votedSuggestion, css: {'active': $data == $component.votedSuggestion()}">
+                    <span class="d-flex list-group-item list-group-item-action" data-bind="click: $component.votedSuggestion, css: {'active': $data == $component.votedSuggestion()}">
                         <span class="pr-3" data-bind="css: {'ion-android-checkbox-outline-blank': $data != $component.votedSuggestion(), 'ion-android-checkbox-outline': $data == $component.votedSuggestion()}"></span>
                         <strong>I have a better suggestion...</strong>
                     </span>
@@ -51,7 +81,7 @@
             <div class="pt-3">
                 My suggestion:
                 <div class="form-group pt-2">
-                    <input v-model.trim="suggestionValue" type="text" class="form-control" placeholder="Suggestion" :disabled="disabled">
+                    <input class="form-control" type="text" v-model.trim="suggestionValue" placeholder="Suggestion" :disabled="disabled">
                 </div>
             </div>
             <!-- /ko -->

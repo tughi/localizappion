@@ -5,3 +5,8 @@ html {
 .container-fluid {
     max-width: 960px;
 }
+
+.text-muted {
+    color: inherit !important;
+    opacity: .5;
+}
