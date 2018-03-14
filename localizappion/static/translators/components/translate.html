@@ -80,9 +80,51 @@
             <!-- ko if: $component.newSuggestion() == $component.votedSuggestion() -->
             <div class="pt-3">
                 My suggestion:
-                <div class="form-group pt-2">
-                    <input class="form-control" type="text" v-model.trim="suggestionValue" placeholder="Suggestion" :disabled="disabled">
+                <!-- ko if: value instanceof Object -->
+                <!-- ko with: $component.translation.language().plurals -->
+                <!-- ko if: 'zero' in $data -->
+                <div class="pt-2">
+                    <strong>Zero</strong> <small class="text-muted" data-bind="text: `(${$data.zero})`"></small>
+                    <input class="form-control" type="text" placeholder="Suggestion for zero">
                 </div>
+                <!-- /ko -->
+                <!-- ko if: 'one' in $data -->
+                <div class="pt-2">
+                    <strong>One</strong> <small class="text-muted" data-bind="text: `(${$data.one})`"></small>
+                    <input class="form-control" type="text" placeholder="Suggestion for one">
+                </div>
+                <!-- /ko -->
+                <!-- ko if: 'two' in $data -->
+                <div class="pt-2">
+                    <strong>Two</strong> <small class="text-muted" data-bind="text: `(${$data.two})`"></small>
+                    <input class="form-control" type="text" placeholder="Suggestion for two">
+                </div>
+                <!-- /ko -->
+                <!-- ko if: 'few' in $data -->
+                <div class="pt-2">
+                    <strong>Few</strong> <small class="text-muted" data-bind="text: `(${$data.few})`"></small>
+                    <input class="form-control" type="text" placeholder="Suggestion for few">
+                </div>
+                <!-- /ko -->
+                <!-- ko if: 'many' in $data -->
+                <div class="pt-2">
+                    <strong>Many</strong> <small class="text-muted" data-bind="text: `(${$data.many})`"></small>
+                    <input class="form-control" type="text" placeholder="Suggestion for many">
+                </div>
+                <!-- /ko -->
+                <!-- ko if: 'other' in $data -->
+                <div class="pt-2">
+                    <strong>Other</strong> <small class="text-muted" data-bind="text: `(${$data.other})`"></small>
+                    <input class="form-control" type="text" placeholder="Suggestion for other">
+                </div>
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko ifnot: value instanceof Object -->
+                <div class="form-group pt-2">
+                    <input class="form-control" type="text" placeholder="Suggestion">
+                </div>
+                <!-- /ko -->
             </div>
             <!-- /ko -->
 
