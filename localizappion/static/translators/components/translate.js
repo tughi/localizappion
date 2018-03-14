@@ -16,14 +16,20 @@ define(['jquery', 'hasher', 'knockout', 'text!./translate.html', 'translation', 
         this.translation = translation;
         this.string = ko.observable();
         this.stringIndex = -1;
+        this.newSuggestion = ko.observable({});
+        this.votedSuggestion = ko.observable();
 
         this.onTranslationLoaded = () => {
             let strings = this.translation.strings();
             let stringName = params.stringName;
             let stringIndex = strings.findIndex(string => string.name === stringName);
             if (stringIndex >= 0) {
-                this.string(strings[stringIndex]);
+                let string = strings[stringIndex];
+                this.string(string);
                 this.stringIndex = stringIndex;
+                if (string.suggestions.length) {
+                    this.votedSuggestion(string.suggestions.find(suggestion => suggestion.voted));
+                }
             } else {
                 this.goToNextTranslatableString(0);
             }

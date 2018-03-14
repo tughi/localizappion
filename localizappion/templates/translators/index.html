@@ -5,17 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='translators/style.css') }}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css" rel="stylesheet">
+    <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='translators/style.css') }}" rel="stylesheet">
 
     <title>Localizappion</title>
 </head>
 
 <body>
     <div data-bind="if: route().page">
-        <div data-bind="attr: { id: route().page }, component: { name: route().page, params: route() }" class="mb-5"></div>
+        <div class="mb-5" data-bind="attr: { id: route().page }, component: { name: route().page, params: route() }"></div>
     </div>
-    <div data-bind="css: { 'd-none': route().page }, ifnot: route().page" class="jumbotron d-none">
+    <div class="jumbotron d-none" data-bind="css: { 'd-none': route().page }, ifnot: route().page">
         <div class="container-fluid text-center">
             <h1>Oops!...</h1>
             <span>Your last action was unexpected.</span>

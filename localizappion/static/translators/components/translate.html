@@ -1,35 +1,64 @@
 <!-- ko with: string -->
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-offset-2 col-md-8">
+        <div class="offset-md-2 col-md-8">
             <div class="page-header">
                 <h1 data-bind="text: $parent.translation.project().name"></h1>
             </div>
                   
-            <p>How do you say the following in <strong data-bind="text: $parent.translation.language().name">language</strong>?</p>
-            <ul class="list-group">
-                <!-- ko if: value instanceof Object -->
-                <li class="list-group-item"><span data-bind="html: $component.formatValue(value.one)"></span></li>
-                <li class="list-group-item"><span data-bind="html: $component.formatValue(value.other)"></span></li>
-                <!-- /ko -->
-                <!-- ko ifnot: value instanceof Object -->
-                <li class="list-group-item"><span data-bind="html: $component.formatValue(value)"></span></li>
-                <!-- /ko -->
-                <!-- ko if: $data.markers -->
-                <li class="list-group-item list-group-item-info">
-                  <span data-bind="html: $component.markersInfoText()"></span>
-                </li>
-                <!-- ko foreach: $component.annotatedMarkers() -->
-                <li class="list-group-item list-group-item-info">
-                    <strong data-bind="text: $data[1]"></strong> - <span data-bind="text: $data[2].id"></span>
-                </li>
-                <!-- /ko -->
-                <!-- /ko -->
-            </ul>
+            <div class="pt-3">
+                How do you say the following in <strong data-bind="text: $parent.translation.language().name">language</strong>?
+                <ul class="list-group pt-2">
+                    <!-- ko if: value instanceof Object -->
+                    <li class="list-group-item"><span data-bind="html: $component.formatValue(value.one)"></span></li>
+                    <li class="list-group-item"><span data-bind="html: $component.formatValue(value.other)"></span></li>
+                    <!-- /ko -->
+                    <!-- ko ifnot: value instanceof Object -->
+                    <li class="list-group-item"><span data-bind="html: $component.formatValue(value)"></span></li>
+                    <!-- /ko -->
+                    <!-- ko if: $data.markers -->
+                    <li class="list-group-item list-group-item-info">
+                    <span data-bind="html: $component.markersInfoText()"></span>
+                    </li>
+                    <!-- ko foreach: $component.annotatedMarkers() -->
+                    <li class="list-group-item list-group-item-info">
+                        <strong data-bind="text: $data[1]"></strong> - <span data-bind="text: $data[2].id"></span>
+                    </li>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </ul>
+            </div>
 
-            <div class="pt-2">
-                <button data-bind="click: $component.skipString" class="btn btn-default">Skip</button>
-                <button data-bind="click: $component.submit, enable: $component.isSuggestionValid()" class="btn btn-primary float-right">Submit</button>
+            <div class="pt-3" data-bind="if: suggestions.length">
+                <span data-bind="text: `Already submitted suggestion${ suggestions.length > 1 ? 's' : '' }:`"></span>
+                <div class="list-group pt-2">
+                    <!-- ko foreach: suggestions -->
+                    <div class="d-flex suggestion list-group-item list-group-item-action" data-bind="click: $component.votedSuggestion, css: {'active': $data == $component.votedSuggestion()}">
+                        <span class="pr-3" data-bind="css: {'ion-android-checkbox-outline-blank': $data != $component.votedSuggestion(), 'ion-android-checkbox-outline': $data == $component.votedSuggestion()}"></span>
+                        <span data-bind="text: value"></span>
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko with: $component.newSuggestion() -->
+                    <span class="d-flex suggestion list-group-item list-group-item list-group-item-action" data-bind="click: $component.votedSuggestion, css: {'active': $data == $component.votedSuggestion()}">
+                        <span class="pr-3" data-bind="css: {'ion-android-checkbox-outline-blank': $data != $component.votedSuggestion(), 'ion-android-checkbox-outline': $data == $component.votedSuggestion()}"></span>
+                        <strong>I have a better suggestion...</strong>
+                    </span>
+                    <!-- /ko -->
+                </div>
+            </div>
+
+            <!-- ko if: $component.newSuggestion() == $component.votedSuggestion() -->
+            <div class="pt-3">
+                My suggestion:
+                <div class="form-group pt-2">
+                    <input v-model.trim="suggestionValue" type="text" class="form-control" placeholder="Suggestion" :disabled="disabled">
+                </div>
+            </div>
+            <!-- /ko -->
+
+            <div class="pt-3">
+                <button class="btn btn-default" data-bind="click: $component.skipString">Skip</button>
+                <button class="btn btn-primary float-right" data-bind="click: $component.submit, enable: $component.isSuggestionValid()">Submit</button>
             </div>
         </div>
     </div>
