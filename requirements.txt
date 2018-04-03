@@ -23,6 +23,6 @@ python-editor==1.0.3
 Rx==1.6.1
 singledispatch==3.4.0.3
 six==1.11.0
-SQLAlchemy==1.2.5
+SQLAlchemy==1.2.6
 typing==3.6.4
 Werkzeug==0.14.1
