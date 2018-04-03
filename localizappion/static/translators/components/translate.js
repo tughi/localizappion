@@ -105,9 +105,20 @@ define(['jquery', 'hasher', 'knockout', 'text!./translate.html', 'translation', 
                 return true;
             }
 
+            let markers = this.string().markers;
+
             function isValid(suggestion) {
-                // TODO: make sure markers are not missing
-                return suggestion.replace(/\s/g, '').length > 0;
+                if (suggestion.replace(/\s/g, '').length === 0) {
+                    return false;
+                }
+                if (markers) {
+                    for (let marker in markers) {
+                        if (suggestion.indexOf(marker) < 0) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
             }
 
             let value = this.string().value;
