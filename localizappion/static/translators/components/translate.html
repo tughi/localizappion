@@ -68,7 +68,7 @@
                         <!-- /ko -->
                     </div>
                     <!-- /ko -->
-                    <!-- ko with: $component.newSuggestion() -->
+                    <!-- ko with: $component.newSuggestion -->
                     <span class="d-flex list-group-item list-group-item-action" data-bind="click: $component.votedSuggestion, css: {'active': $data == $component.votedSuggestion()}">
                         <span class="pr-3" data-bind="css: {'ion-android-checkbox-outline-blank': $data != $component.votedSuggestion(), 'ion-android-checkbox-outline': $data == $component.votedSuggestion()}"></span>
                         <strong>I have a better suggestion...</strong>
@@ -77,7 +77,7 @@
                 </div>
             </div>
 
-            <!-- ko if: $component.newSuggestion() == $component.votedSuggestion() -->
+            <!-- ko if: $component.newSuggestion == $component.votedSuggestion() -->
             <div class="pt-3">
                 My suggestion:
                 <!-- ko if: value instanceof Object -->
@@ -85,44 +85,44 @@
                 <!-- ko if: 'zero' in $data -->
                 <div class="pt-2">
                     <strong>Zero</strong> <small class="text-muted" data-bind="text: `(${$data.zero})`"></small>
-                    <input class="form-control" type="text" placeholder="Suggestion for zero">
+                    <input class="form-control" data-bind="textInput: $component.newSuggestionZero" type="text" placeholder="Suggestion for zero">
                 </div>
                 <!-- /ko -->
                 <!-- ko if: 'one' in $data -->
                 <div class="pt-2">
                     <strong>One</strong> <small class="text-muted" data-bind="text: `(${$data.one})`"></small>
-                    <input class="form-control" type="text" placeholder="Suggestion for one">
+                    <input class="form-control" data-bind="textInput: $component.newSuggestionOne" type="text" placeholder="Suggestion for one">
                 </div>
                 <!-- /ko -->
                 <!-- ko if: 'two' in $data -->
                 <div class="pt-2">
                     <strong>Two</strong> <small class="text-muted" data-bind="text: `(${$data.two})`"></small>
-                    <input class="form-control" type="text" placeholder="Suggestion for two">
+                    <input class="form-control" data-bind="textInput: $component.newSuggestionTwo" type="text" placeholder="Suggestion for two">
                 </div>
                 <!-- /ko -->
                 <!-- ko if: 'few' in $data -->
                 <div class="pt-2">
                     <strong>Few</strong> <small class="text-muted" data-bind="text: `(${$data.few})`"></small>
-                    <input class="form-control" type="text" placeholder="Suggestion for few">
+                    <input class="form-control" data-bind="textInput: $component.newSuggestionFew" type="text" placeholder="Suggestion for few">
                 </div>
                 <!-- /ko -->
                 <!-- ko if: 'many' in $data -->
                 <div class="pt-2">
                     <strong>Many</strong> <small class="text-muted" data-bind="text: `(${$data.many})`"></small>
-                    <input class="form-control" type="text" placeholder="Suggestion for many">
+                    <input class="form-control" data-bind="textInput: $component.newSuggestionMany" type="text" placeholder="Suggestion for many">
                 </div>
                 <!-- /ko -->
                 <!-- ko if: 'other' in $data -->
                 <div class="pt-2">
                     <strong>Other</strong> <small class="text-muted" data-bind="text: `(${$data.other})`"></small>
-                    <input class="form-control" type="text" placeholder="Suggestion for other">
+                    <input class="form-control" data-bind="textInput: $component.newSuggestionOther" type="text" placeholder="Suggestion for other">
                 </div>
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- ko ifnot: value instanceof Object -->
                 <div class="form-group pt-2">
-                    <input class="form-control" type="text" placeholder="Suggestion">
+                    <input class="form-control" data-bind="textInput: $component.newSuggestionOther" type="text" placeholder="Suggestion">
                 </div>
                 <!-- /ko -->
             </div>

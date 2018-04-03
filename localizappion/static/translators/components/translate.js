@@ -16,8 +16,21 @@ define(['jquery', 'hasher', 'knockout', 'text!./translate.html', 'translation', 
         this.translation = translation;
         this.string = ko.observable();
         this.stringIndex = -1;
-        this.newSuggestion = ko.observable({});
         this.votedSuggestion = ko.observable();
+        this.newSuggestionZero = ko.observable('');
+        this.newSuggestionOne = ko.observable('');
+        this.newSuggestionTwo = ko.observable('');
+        this.newSuggestionFew = ko.observable('');
+        this.newSuggestionMany = ko.observable('');
+        this.newSuggestionOther = ko.observable('');
+        this.newSuggestion = {
+            zero: this.newSuggestionZero,
+            one: this.newSuggestionOne,
+            two: this.newSuggestionTwo,
+            few: this.newSuggestionFew,
+            many: this.newSuggestionMany,
+            other: this.newSuggestionOther
+        };
 
         this.onTranslationLoaded = () => {
             let strings = this.translation.strings();
@@ -29,6 +42,8 @@ define(['jquery', 'hasher', 'knockout', 'text!./translate.html', 'translation', 
                 this.stringIndex = stringIndex;
                 if (string.suggestions.length) {
                     this.votedSuggestion(string.suggestions.find(suggestion => suggestion.voted));
+                } else {
+                    this.votedSuggestion(this.newSuggestion);
                 }
             } else {
                 this.goToNextTranslatableString(0);
@@ -82,7 +97,30 @@ define(['jquery', 'hasher', 'knockout', 'text!./translate.html', 'translation', 
         };
 
         this.isSuggestionValid = () => {
-            // TODO: validate suggestion
+            let votedSuggestion = this.votedSuggestion();
+            if (!votedSuggestion) {
+                return false;
+            }
+            if (votedSuggestion !== this.newSuggestion) {
+                return true;
+            }
+
+            function isValid(suggestion) {
+                // TODO: make sure markers are not missing
+                return suggestion.replace(/\s/g, '').length > 0;
+            }
+
+            let value = this.string().value;
+            if (value instanceof Object) {
+                for (let plural in this.translation.language().plurals) {
+                    if (!isValid(this.newSuggestion[plural]())) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            return isValid(this.newSuggestionOther());
         };
 
         if (translation.loaded) {
